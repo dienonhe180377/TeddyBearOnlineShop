@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playwrite+AU+SA&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+}
+
+body {
+    background: pink;
+}
+
+.container {
+    margin: 7%;
+    padding: 62px;
+    background-color: white;
+    border-radius: 55px;
+}
+
+.user-image {
+    width: 50%;
+}
+
+.user-info {
+    width: 50%;
+}
+
+.user-name {
+    justify-content: center;
+    display: flex;
+    margin-right: 65px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    padding: 23px;
+}
+
+.button {
+    display: flex;
+    margin-top: 31px;
+}
+
+.change-image {
+    width: 50%;
+    justify-content: center;
+}
+
+.change-info {
+    width: 50%;
+    justify-content: center;
+}
+
+.change-image-button {
+    border-radius: 13px;
+    padding: 8px;
+    font-size: 16px;
+    margin-left: 194px;
+}
+
+.change-info-button {
+    border-radius: 13px;
+    padding: 8px;
+    font-size: 16px;
+    margin-left: 194px;
+}
+
+.user-image img{
+    border-radius: 146px;
+    width: 88%;
+    height: 94%;
+    object-fit: cover;
+}
