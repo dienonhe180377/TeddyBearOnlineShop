@@ -4,12 +4,19 @@
  */
 package controller;
 
+import dao.CategoryDAO;
+import dao.ProductDAO;
+import entity.Category;
+import entity.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,10 +39,21 @@ public class MenuController extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             String service = request.getParameter("service");
-            
-            if(service.equalsIgnoreCase("productInformation")){
-                
+            CategoryDAO categoryDAO = new CategoryDAO();
+            ProductDAO productDAO = new ProductDAO();
+
+            if (service.equalsIgnoreCase("productInformation")) {
+                ArrayList<Category> categoryList = categoryDAO.getAllCategory();
+                ArrayList<Product> productList = productDAO.getAllProduct();
+                request.setAttribute("categoryList", categoryList);
+                request.setAttribute("productList", productList);
+                request.getRequestDispatcher("jsp/menu.jsp").forward(request, response);
             }
+            
+            
+
+        } catch (Exception ex) {
+            Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -9,10 +9,10 @@ package entity;
  * @author OS
  */
 public class Product {
+
     private int id;
     private String name;
     private String image;
-    private String description;
     private int quantity;
     private int price;
     private int categoryId;
@@ -21,11 +21,10 @@ public class Product {
     public Product() {
     }
 
-    public Product(int id, String name, String image, String description, int quantity, int price, int categoryId, int typeId) {
+    public Product(int id, String name, String image, int quantity, int price, int categoryId, int typeId) {
         this.id = id;
         this.name = name;
         this.image = image;
-        this.description = description;
         this.quantity = quantity;
         this.price = price;
         this.categoryId = categoryId;
@@ -54,14 +53,6 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getQuantity() {
@@ -95,6 +86,5 @@ public class Product {
     public void setTypeId(int typeId) {
         this.typeId = typeId;
     }
-    
-    
+
 }

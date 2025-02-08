@@ -48,7 +48,6 @@ create table [Product](
 	id int primary key identity(1,1),
 	name nvarchar(25),
 	[image] nvarchar(255) not null,
-	description nvarchar(255) not null,
 	quantity int,
 	price int not null,
 	categoryId int foreign key references Category(id),
@@ -65,7 +64,7 @@ create table Assessories(
 
 create table Size(
 	id int primary key identity(1,1),
-	name nvarchar(25) not null unique,
+	name nvarchar(25) not null,
 	productId int foreign key references [Product](id)
 )
 
