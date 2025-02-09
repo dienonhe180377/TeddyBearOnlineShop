@@ -50,6 +50,14 @@ public class MenuController extends HttpServlet {
                 request.getRequestDispatcher("jsp/menu.jsp").forward(request, response);
             }
             
+            if(service.equalsIgnoreCase("allProduct")){
+                int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+                String categoryName = request.getParameter("name");
+                ArrayList<Product> productList = productDAO.getProductByCategory(categoryId);
+                request.setAttribute("productList", productList);
+                request.setAttribute("categoryName", categoryName);
+                request.getRequestDispatcher("jsp/allProduct.jsp").forward(request, response);
+            }
             
 
         } catch (Exception ex) {

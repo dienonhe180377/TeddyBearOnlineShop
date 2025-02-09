@@ -39,7 +39,11 @@
                 </div>
 
                 <div class="view-all-button-container">
-                    <button class="view-all-button">Xem Tất Cả ${category.name}</button>
+                    <form action="MenuController" method="get">
+                        <input type="hidden" name="service" value="allProduct"/>
+                        <input type="hidden" name="name" value="${category.name}"/>
+                        <button name="categoryId" type="submit" class="view-all-button" value="${category.id}">Xem Tất Cả ${category.name}</button>
+                    </form>
                 </div>
             </div>
         </c:forEach>

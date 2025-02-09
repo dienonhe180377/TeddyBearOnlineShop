@@ -1,8 +1,7 @@
 ﻿
 drop database TeddyBearOnlineShop
 
-ALTER TABLE Product
-DROP COLUMN description;
+SELECT * FROM Product where categoryId = 4
 
 select * from ProductType
 --ProductType insert
@@ -33,3 +32,6 @@ insert into Product values(N'Stitch Ôm Tim','images/Gau-Bong-Stitch-Om-Tim-5-50
 insert into Product values(N'Stitch Bông Tím','images/Stitch-tim-nho-5-500x500.jpg',300,193000,4,1)
 insert into Product values(N'Gối Cổ Kèm Mũ Stitch','images/Stitch-mu-4-500x500.jpg',300,265000,4,4)
 insert into Product values(N'Móc Khóa Stitch Bông','images/moc-khoa-stitch-tai-dai-2-500x500.jpg',300,65000,4,3)
+
+select * from Voucher
+--Voucher insert

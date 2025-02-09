@@ -15,12 +15,12 @@ import java.util.ArrayList;
  *
  * @author OS
  */
-public class ProductDAO extends DBConnection{
+public class ProductDAO extends DBConnection {
 
     public ProductDAO() {
     }
-    
-    public ArrayList<Product> getAllProduct() throws Exception{
+
+    public ArrayList<Product> getAllProduct() throws Exception {
         Connection conn = null;
         ResultSet rs = null;
         /* Result set returned by the sqlserver */
@@ -31,20 +31,52 @@ public class ProductDAO extends DBConnection{
         try {
             conn = getConnection();
             pre = conn.prepareStatement(sql);
-            rs = pre.executeQuery();   
-           while (rs.next()) {
-               int id = rs.getInt("id");
-               String name = rs.getString("name");
-               String image = rs.getString("image");
-               int quantity = rs.getInt("quantity");
-               int price = rs.getInt("price");
-               int categoryId = rs.getInt("categoryId");
-               int typeId = rs.getInt("typeId");
-               productList.add(new Product(id, name, image, quantity, price, categoryId, typeId));
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String image = rs.getString("image");
+                int quantity = rs.getInt("quantity");
+                int price = rs.getInt("price");
+                int categoryId = rs.getInt("categoryId");
+                int typeId = rs.getInt("typeId");
+                productList.add(new Product(id, name, image, quantity, price, categoryId, typeId));
             }
-           return productList;
+            return productList;
         } catch (Exception ex) {
             throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+
+    public ArrayList<Product> getProductByCategory(int categoryId) throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ArrayList<Product> productList = new ArrayList<>();
+        String sql = "SELECT * FROM Product where categoryId = " + categoryId;
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String image = rs.getString("image");
+                int quantity = rs.getInt("quantity");
+                int price = rs.getInt("price");
+                int category = rs.getInt("categoryId");
+                int typeId = rs.getInt("typeId");
+                productList.add(new Product(id, name, image, quantity, price, category, typeId));
+            }
+            return productList;
+        } catch (Exception e) {
+            throw e;
         } finally {
             closeResultSet(rs);
             closePreparedStatement(pre);
