@@ -15,7 +15,7 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: linear-gradient(#ECEFFE, #CED6FB);
+    background: linear-gradient(#feecfd, #f3cefb);
 }
 
 .card-item {
