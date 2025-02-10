@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="../css/userProfile.css">
 </head>
 <body>
+    <div class="return-button">
+        <button>Home Page</button>
+    </div>
+    
     <div class="container">
         <div style="display: flex;">
             <div class="user-image">
@@ -50,5 +54,6 @@
             
         </div>
     </div>
+    
 </body>
 </html>

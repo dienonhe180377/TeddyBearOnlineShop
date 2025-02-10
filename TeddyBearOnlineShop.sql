@@ -10,6 +10,7 @@ create table [User](
 	userName nvarchar(255) not null,
 	profilePic nvarchar(255),
 	email nvarchar(255) unique not null,
+	[password] nvarchar(255) not null,
 	phoneNumber nvarchar(12) unique not null,
 	location nvarchar(255),
 	createdDate datetime default GETDATE(),
@@ -103,13 +104,6 @@ create table Attendance(
 	id int primary key identity(1,1),
 	[status] bit not null,
 	userId int foreign key references [User](id),
-	createDate datetime default GETDATE()
-)
-
-create table Report(
-	id int primary key identity(1,1),
-	userId int foreign key references [User](id),
-	content nvarchar(max),
 	createDate datetime default GETDATE()
 )
 

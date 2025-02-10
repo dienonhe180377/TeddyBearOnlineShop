@@ -6,8 +6,10 @@ package controller;
 
 import dao.CategoryDAO;
 import dao.ProductDAO;
+import dao.ProductTypeDAO;
 import entity.Category;
 import entity.Product;
+import entity.ProductType;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -41,6 +43,7 @@ public class MenuController extends HttpServlet {
             String service = request.getParameter("service");
             CategoryDAO categoryDAO = new CategoryDAO();
             ProductDAO productDAO = new ProductDAO();
+            ProductTypeDAO typeDAO = new ProductTypeDAO();
 
             if (service.equalsIgnoreCase("productInformation")) {
                 ArrayList<Category> categoryList = categoryDAO.getAllCategory();
@@ -49,16 +52,52 @@ public class MenuController extends HttpServlet {
                 request.setAttribute("productList", productList);
                 request.getRequestDispatcher("jsp/menu.jsp").forward(request, response);
             }
-            
-            if(service.equalsIgnoreCase("allProduct")){
-                int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+
+            if (service.equalsIgnoreCase("allProduct")) {
                 String categoryName = request.getParameter("name");
-                ArrayList<Product> productList = productDAO.getProductByCategory(categoryId);
+
+                if (categoryName == null) {
+                    ArrayList<Product> productList = productDAO.getAllProduct();
+                    request.setAttribute("categoryName", "Tất cả sản phẩm");
+                    request.setAttribute("productList", productList);
+                    request.getRequestDispatcher("jsp/allProduct.jsp").forward(request, response);
+                } else if (categoryName.equals("1")) {
+                    int typeId = Integer.parseInt(categoryName);
+                    ArrayList<Product> productList = productDAO.getProductByType(typeId);
+                    ProductType productType = typeDAO.getProductTypeById(typeId);
+                    request.setAttribute("categoryName", productType.getName());
+                    request.setAttribute("productList", productList);
+                    request.getRequestDispatcher("jsp/allProduct.jsp").forward(request, response);
+                } else if (categoryName.equals("3")) {
+                    int typeId = Integer.parseInt(categoryName);
+                    ArrayList<Product> productList = productDAO.getProductByType(typeId);
+                    ProductType productType = typeDAO.getProductTypeById(typeId);
+                    request.setAttribute("categoryName", productType.getName());
+                    request.setAttribute("productList", productList);
+                    request.getRequestDispatcher("jsp/allProduct.jsp").forward(request, response);
+                } else if (categoryName.equals("4")) {
+                    int typeId = Integer.parseInt(categoryName);
+                    ArrayList<Product> productList = productDAO.getProductByType(typeId);
+                    ProductType productType = typeDAO.getProductTypeById(typeId);
+                    request.setAttribute("categoryName", productType.getName());
+                    request.setAttribute("productList", productList);
+                    request.getRequestDispatcher("jsp/allProduct.jsp").forward(request, response);
+                } else {
+                    int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+                    ArrayList<Product> productList = productDAO.getProductByCategory(categoryId);
+                    request.setAttribute("productList", productList);
+                    request.setAttribute("categoryName", categoryName);
+                    request.getRequestDispatcher("jsp/allProduct.jsp").forward(request, response);
+                }
+            }
+
+            if (service.equalsIgnoreCase("searchProduct")) {
+                String text = request.getParameter("searchValue");
+                ArrayList<Product> productList = productDAO.getProductByText(text);
                 request.setAttribute("productList", productList);
-                request.setAttribute("categoryName", categoryName);
+                request.setAttribute("categoryName", text);
                 request.getRequestDispatcher("jsp/allProduct.jsp").forward(request, response);
             }
-            
 
         } catch (Exception ex) {
             Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);

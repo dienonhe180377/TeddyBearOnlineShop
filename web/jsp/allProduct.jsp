@@ -17,6 +17,8 @@
         <link href="${contextPath}/css/allProductResponsive.css" rel="stylesheet" />
     </head>
     <body>
+        <jsp:include page="header.jsp"/>
+
         <section class="shop_section layout_padding">
             <div class="container">
                 <div class="heading_container heading_center">
@@ -54,11 +56,13 @@
 
                 </div>
                 <div class="btn-box">
-                    <a href="">
+                    <a href="${contextPath}/MenuController?service=productInformation">
                         Homepage
                     </a>
                 </div>
             </div>
         </section>
+
+        <jsp:include page="footer.jsp"/>
     </body>
 </html>

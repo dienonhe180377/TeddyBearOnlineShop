@@ -12,10 +12,11 @@
 }
 
 body {
+    margin-top: 235px;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: linear-gradient(#feecfd, #f3cefb);
+    background: linear-gradient(#feecfd, #edcefb99);
 }
 
 .card-item {

@@ -10,7 +10,10 @@ body {
 }
 
 .container {
-    margin: 7%;
+    margin-bottom: 7%;
+    margin-top: 3%;
+    margin-left: 7%;
+    margin-right: 7%;
     padding: 62px;
     background-color: white;
     border-radius: 55px;
@@ -70,4 +73,18 @@ body {
     width: 88%;
     height: 94%;
     object-fit: cover;
+}
+
+.return-button button{
+    width: 9%;
+    height: 43px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.return-button button:hover{
+    color: white;
+    background: plum;
 }
