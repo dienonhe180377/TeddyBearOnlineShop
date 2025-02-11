@@ -1,6 +1,9 @@
 .wrap{
     min-height: 55vh;
-    margin: 15%
+    margin-top: 15%;
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-bottom: 10%;
 }
 
 .big-button{

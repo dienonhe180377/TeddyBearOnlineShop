@@ -9,7 +9,10 @@ import entity.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  *
@@ -37,7 +40,11 @@ public class ProductDAO extends DBConnection {
                 String name = rs.getString("name");
                 String image = rs.getString("image");
                 int quantity = rs.getInt("quantity");
-                int price = rs.getInt("price");
+                int priceNumber = rs.getInt("price");
+                DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+                symbols.setGroupingSeparator('.');
+                DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
+                String price = decimalFormat.format(priceNumber);
                 int categoryId = rs.getInt("categoryId");
                 int typeId = rs.getInt("typeId");
                 productList.add(new Product(id, name, image, quantity, price, categoryId, typeId));
@@ -69,7 +76,11 @@ public class ProductDAO extends DBConnection {
                 String name = rs.getString("name");
                 String image = rs.getString("image");
                 int quantity = rs.getInt("quantity");
-                int price = rs.getInt("price");
+                int priceNumber = rs.getInt("price");
+                DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+                symbols.setGroupingSeparator('.');
+                DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
+                String price = decimalFormat.format(priceNumber);
                 int category = rs.getInt("categoryId");
                 int typeId = rs.getInt("typeId");
                 productList.add(new Product(id, name, image, quantity, price, category, typeId));
@@ -101,7 +112,11 @@ public class ProductDAO extends DBConnection {
                 String name = rs.getString("name");
                 String image = rs.getString("image");
                 int quantity = rs.getInt("quantity");
-                int price = rs.getInt("price");
+                int priceNumber = rs.getInt("price");
+                DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+                symbols.setGroupingSeparator('.');
+                DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
+                String price = decimalFormat.format(priceNumber);
                 int category = rs.getInt("categoryId");
                 int typeID = rs.getInt("typeId");
                 productList.add(new Product(id, name, image, quantity, price, category, typeID));
@@ -138,7 +153,11 @@ public class ProductDAO extends DBConnection {
                 String name = rs.getString("name");
                 String image = rs.getString("image");
                 int quantity = rs.getInt("quantity");
-                int price = rs.getInt("price");
+                int priceNumber = rs.getInt("price");
+                DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+                symbols.setGroupingSeparator('.');
+                DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
+                String price = decimalFormat.format(priceNumber);
                 int category = rs.getInt("categoryId");
                 int typeID = rs.getInt("typeId");
                 productList.add(new Product(id, name, image, quantity, price, category, typeID));

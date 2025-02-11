@@ -14,14 +14,14 @@ public class Product {
     private String name;
     private String image;
     private int quantity;
-    private int price;
+    private String price;
     private int categoryId;
     private int typeId;
 
     public Product() {
     }
 
-    public Product(int id, String name, String image, int quantity, int price, int categoryId, int typeId) {
+    public Product(int id, String name, String image, int quantity, String price, int categoryId, int typeId) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -63,11 +63,11 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -87,4 +87,5 @@ public class Product {
         this.typeId = typeId;
     }
 
+    
 }

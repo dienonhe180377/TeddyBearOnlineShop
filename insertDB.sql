@@ -1,5 +1,18 @@
 ﻿
 
+select * from [User]
+--User insert
+insert into [User](userName,profilePic,email,phoneNumber,location,roleId,password)
+values('User1','images/usericon.jpg','User1@gmail.com','0334372394','To Huu',1,'1')
+
+select * from UserRole
+--UserRole insert
+insert into UserRole values('Customer')
+insert into UserRole values('Sale')
+insert into UserRole values('Marketing')
+insert into UserRole values('Manager')
+insert into UserRole values('Admin')
+
 select * from ProductType
 --ProductType insert
 insert into ProductType values(N'Gấu Bông')

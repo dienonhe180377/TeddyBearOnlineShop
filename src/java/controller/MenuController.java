@@ -94,8 +94,9 @@ public class MenuController extends HttpServlet {
             if (service.equalsIgnoreCase("searchProduct")) {
                 String text = request.getParameter("searchValue");
                 ArrayList<Product> productList = productDAO.getProductByText(text);
+                String message = "Đã tìm thấy " + productList.size() + " sản phẩm";
                 request.setAttribute("productList", productList);
-                request.setAttribute("categoryName", text);
+                request.setAttribute("categoryName", message);
                 request.getRequestDispatcher("jsp/allProduct.jsp").forward(request, response);
             }
 
