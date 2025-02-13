@@ -9,15 +9,17 @@ package entity;
  * @author OS
  */
 public class Product {
-
     private int id;
     private String name;
     private String image;
+    private String description;
     private int quantity;
     private String price;
     private int categoryId;
     private int typeId;
 
+    private ProductType productType;
+    private Category category;
     public Product() {
     }
 
@@ -25,6 +27,16 @@ public class Product {
         this.id = id;
         this.name = name;
         this.image = image;
+        this.quantity = quantity;
+        this.price = price;
+        this.categoryId = categoryId;
+        this.typeId = typeId;
+    }
+    public Product(int id, String name, String image, String description, int quantity, String price, int categoryId, int typeId) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.description = description;
         this.quantity = quantity;
         this.price = price;
         this.categoryId = categoryId;
@@ -53,6 +65,14 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getQuantity() {
@@ -87,5 +107,26 @@ public class Product {
         this.typeId = typeId;
     }
 
+    public ProductType getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" + "id=" + id + ", name=" + name + ", image=" + image + ", description=" + description + ", quantity=" + quantity + ", price=" + price + ", categoryId=" + categoryId + ", typeId=" + typeId + ", productType=" + productType + ", category=" + category + '}';
+    }
+    
     
 }

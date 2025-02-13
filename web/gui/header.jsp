@@ -20,7 +20,7 @@
                     <!-- Thay ảnh logo bằng link/logo thực tế của bạn -->
                     <img src="https://img.pikbest.com/origin/09/22/46/12TpIkbEsTG97.png!sw800" alt="Bemori Logo">
                     <c:choose>
-                       <c:when test="${user.getRole().getUserRole() == 'Admin'}">
+                        <c:when test="${user.getRole().getUserRole() == 'Admin'}">
                             <a href="${contextPath}/admin/dashboard" style="text-decoration: none">
                                 <span class="brand-name">TESHO</span>
                             </a>
@@ -42,25 +42,27 @@
                         </c:otherwise>
                     </c:choose>
                 </div>
-
-                <div class="header-search">
-                    <form class="header-search" action="MenuController" method="post">
-                        <input type="hidden" name="service" value="searchProduct"/>
-                        <input name="searchValue" type="text" placeholder="Nhập sản phẩm cần tìm"/>
-                        <button type="submit">Tìm kiếm</button>
-                    </form>
-                </div>
-
                 <div class="header-hotline">
                     <div class="dropdown">
                         <button onclick="toggleDropdown()" class="dropbtn">Menu</button>
                         <div id="myDropdown" class="dropdown-content">
-                            <a href="#">User Info</a>
-                            <a href="#">Cart</a>
-                            <a href="#">Orders</a>
-                             <c:if test="${user == null}">
-                                 <a href="${contextPath}/login">Login</a>
-                                 <a href="${contextPath}/register">Register</a>
+                            <c:choose>
+                                <c:when test="${user.role.userRole == 'Admin'}">
+                                     <a href="${contextPath}/admin/dashboard">Dashboard</a>
+                                </c:when>
+                                <c:when test="${user.role.userRole == 'Manager'}">
+                                      <a href="${contextPath}/manager/dashboard">Dashboard</a>
+                                      <a href="${contextPath}/manager/product-management">Product management</a>
+                                </c:when>
+                                <c:when test="${user.role.userRole == 'Seller'}">
+                                    <a href="${contextPath}/seller/dashboard">Dashboard</a>
+                                </c:when>
+                                <c:otherwise>
+                                </c:otherwise>
+                            </c:choose>
+                            <c:if test="${user == null}">
+                                <a href="${contextPath}/login">Login</a>
+                                <a href="${contextPath}/register">Register</a>
                             </c:if>
                             <c:if test="${user != null}">
                                 <a href="${contextPath}/change-password">Change password</a>
@@ -70,19 +72,6 @@
                     </div>
                 </div>
             </div>
-
-            <nav class="header-nav">
-                <ul>
-                    <li><a href="${contextPath}/MenuController?service=productInformation">Trang chủ</a></li>
-                    <li><a href="${contextPath}/MenuController?service=allProduct&name=1">Gấu bông</a></li>
-                    <li><a href="${contextPath}/MenuController?service=allProduct&name=3">Móc khóa</a></li>
-                    <li><a href="${contextPath}/MenuController?service=allProduct&name=4">Gối Ôm</a></li>
-                    <li><a href="">Góc của Gấu</a></li>
-                    <li><a href="${contextPath}/MenuController?service=allProduct">Tất cả SP</a></li>
-                </ul>
-            </nav>
         </header>
         <script src="${contextPath}/js/header.js"></script>
-    </body>
-</html>
 

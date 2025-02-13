@@ -9,18 +9,20 @@ import entity.ProductType;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author OS
  */
-public class ProductTypeDAO extends DBConnection{
+public class ProductTypeDAO extends DBConnection {
 
     public ProductTypeDAO() {
     }
-    
-    public ProductType getProductTypeById(int typeId) throws Exception{
+
+    public ProductType getProductTypeById(int typeId) throws Exception {
         Connection conn = null;
         ResultSet rs = null;
         /* Result set returned by the sqlserver */
@@ -47,6 +49,41 @@ public class ProductTypeDAO extends DBConnection{
             closeConnection(conn);
         }
     }
-    
-    
+
+    public ProductType getById(int id) {
+        String sql = "SELECT * FROM ProductType WHERE id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    ProductType productType = new ProductType();
+                    productType.setId(rs.getInt("id"));
+                    productType.setName(rs.getString("Name"));
+                    return productType;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error in product type dao " + ex);
+        }
+        return null;
+    }
+
+    public List<ProductType> getAllProductTypes() {
+        List<ProductType> productTypes = new ArrayList<>();
+        String sql = "SELECT * FROM ProductType";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                ProductType productType = new ProductType();
+                productType.setId(rs.getInt("id"));
+                productType.setName(rs.getString("name"));
+                productTypes.add(productType);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error retrieving product types: " + ex);
+        }
+        return productTypes;
+    }
 }
