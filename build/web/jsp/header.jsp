@@ -36,7 +36,7 @@
                     <div class="dropdown">
                         <button onclick="toggleDropdown()" class="dropbtn">Menu</button>
                         <div id="myDropdown" class="dropdown-content">
-                            <a href="#">User Info</a>
+                            <a href="${contextPath}/UserController?service=userInfo">User Info</a>
                             <a href="#">Cart</a>
                             <a href="#">Orders</a>
                             <a href="#">Log out</a>

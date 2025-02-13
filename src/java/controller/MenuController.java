@@ -48,8 +48,16 @@ public class MenuController extends HttpServlet {
             if (service.equalsIgnoreCase("productInformation")) {
                 ArrayList<Category> categoryList = categoryDAO.getAllCategory();
                 ArrayList<Product> productList = productDAO.getAllProduct();
+                ArrayList<Product> products = new ArrayList<>();
+                for (int i = 0; i < categoryList.size(); i++) {
+                    for (int j = 0; j < productList.size(); j++) {
+                        if(categoryList.get(i).getId() == productList.get(j).getCategoryId()){
+                            products.add(productList.get(j));
+                        }
+                    }
+                }
                 request.setAttribute("categoryList", categoryList);
-                request.setAttribute("productList", productList);
+                request.setAttribute("productList", products);
                 request.getRequestDispatcher("jsp/menu.jsp").forward(request, response);
             }
 
