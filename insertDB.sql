@@ -1,9 +1,11 @@
-﻿
+﻿UPDATE [User]
+SET password = 'Minh553311@'
+WHERE id = 2;
 
 select * from [User]
 --User insert
 insert into [User](userName,profilePic,email,phoneNumber,location,roleId,password)
-values('User1','images/usericon.jpg','User1@gmail.com','0334372394','To Huu',1,'1')
+values('User1','images/usericon.jpg','User1@gmail.com','0334372394','To Huu',1,'Minh553311@')
 
 select * from UserRole
 --UserRole insert

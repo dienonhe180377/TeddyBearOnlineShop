@@ -6,12 +6,17 @@ package dao;
 
 import entity.Category;
 import entity.Product;
+import entity.ProductType;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -179,5 +184,132 @@ public class ProductDAO extends DBConnection {
         for (int i = 0; i < productList.size(); i++) {
             System.out.println(productList.get(i).getName());
         }
+    }
+    
+     public List<Product> getProductsWithParam(String searchParam, Integer categoryId, Integer typeId, Integer minPrice, Integer maxPrice) {
+        List<Product> products = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
+        ProductTypeDAO productTypeDAO = new ProductTypeDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
+        try {
+            StringBuilder query = new StringBuilder("SELECT * from Product WHERE 1=1");
+
+            if (searchParam != null && !searchParam.trim().isEmpty()) {
+                query.append(" AND Name LIKE ? ");
+                list.add("%" + searchParam + "%");
+            }
+            if (categoryId != null) {
+                query.append(" AND categoryId = ? ");
+                list.add(categoryId);
+            }
+            if (typeId != null) {
+                query.append(" AND typeId = ? ");
+                list.add(typeId);
+            }
+            if (minPrice != null) {
+                query.append(" AND price >= ? ");
+                list.add(minPrice);
+            }
+            if (maxPrice != null) {
+                query.append(" AND price <= ? ");
+                list.add(maxPrice);
+            }
+
+            query.append(" ORDER BY id DESC");
+            PreparedStatement preparedStatement = connection.prepareStatement(query.toString());
+            mapParams(preparedStatement, list);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    Product product = new Product();
+                    product.setId(rs.getInt("id"));
+                    product.setName(rs.getString("name"));
+                    product.setImage(rs.getString("image"));
+                    product.setDescription(rs.getString("description"));
+                    product.setQuantity(rs.getInt("quantity"));
+                    product.setPrice(rs.getString("price"));
+                    ProductType productType = productTypeDAO.getById(rs.getInt("typeId"));
+                    Category category = categoryDAO.getById(rs.getInt("categoryId"));
+                    product.setCategory(category);
+                    product.setProductType(productType);
+                    products.add(product);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
+    public void addProduct(Product product) {
+        String sql = "INSERT INTO Product (name, image, description, quantity, price, categoryId, typeId) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, product.getName());
+            statement.setString(2, product.getImage());
+            statement.setString(3, product.getDescription());
+            statement.setInt(4, product.getQuantity());
+            statement.setString(5, product.getPrice());
+            statement.setInt(6, product.getCategory().getId());
+            statement.setInt(7, product.getProductType().getId());
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Error adding product: " + ex);
+        }
+    }
+
+    public Product getById(int id) {
+        String sql = "SELECT * FROM Product WHERE id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setName(rs.getString("name"));
+                product.setImage(rs.getString("image"));
+                product.setDescription(rs.getString("description"));
+                product.setQuantity(rs.getInt("quantity"));
+                product.setPrice(rs.getString("price"));
+                product.setCategory(new CategoryDAO().getById(rs.getInt("categoryId")));
+                product.setProductType(new ProductTypeDAO().getById(rs.getInt("typeId")));
+                return product;
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error fetching product: " + ex);
+        }
+        return null;
+    }
+
+    public void mapParams(PreparedStatement ps, List<Object> args) throws SQLException {
+        int i = 1;
+        for (Object arg : args) {
+            if (arg instanceof Date) {
+                ps.setTimestamp(i++, new Timestamp(((Date) arg).getTime()));
+            } else if (arg instanceof Integer) {
+                ps.setInt(i++, (Integer) arg);
+            } else if (arg instanceof Long) {
+                ps.setLong(i++, (Long) arg);
+            } else if (arg instanceof Double) {
+                ps.setDouble(i++, (Double) arg);
+            } else if (arg instanceof Float) {
+                ps.setFloat(i++, (Float) arg);
+            } else {
+                ps.setString(i++, (String) arg);
+            }
+
+        }
+    }
+
+    public List<Product> Paging(List<Product> products, int page, int pageSize) {
+        int fromIndex = (page - 1) * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, products.size());
+
+        if (fromIndex > toIndex) {
+            // Handle the case where fromIndex is greater than toIndex
+            fromIndex = toIndex;
+        }
+
+        return products.subList(fromIndex, toIndex);
     }
 }

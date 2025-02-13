@@ -19,9 +19,28 @@
                 <div class="header-logo">
                     <!-- Thay ảnh logo bằng link/logo thực tế của bạn -->
                     <img src="https://img.pikbest.com/origin/09/22/46/12TpIkbEsTG97.png!sw800" alt="Bemori Logo">
-                    <a href="${contextPath}/MenuController?service=productInformation" style="text-decoration: none">
-                        <span class="brand-name">TESHO</span>
-                    </a>
+                    <c:choose>
+                        <c:when test="${user.getRole().getUserRole() == 'Admin'}">
+                            <a href="${contextPath}/admin/dashboard" style="text-decoration: none">
+                                <span class="brand-name">TESHO</span>
+                            </a>
+                        </c:when>
+                        <c:when test="${user.role.userRole == 'Manager'}">
+                            <a href="${contextPath}/manager/dashboard" style="text-decoration: none">
+                                <span class="brand-name">TESHO</span>
+                            </a>
+                        </c:when>
+                        <c:when test="${user.role.userRole == 'Seller'}">
+                            <a href="${contextPath}/seller/dashboard" style="text-decoration: none">
+                                <span class="brand-name">TESHO</span>
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${contextPath}/MenuController?service=productInformation" style="text-decoration: none">
+                                <span class="brand-name">TESHO</span>
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <div class="header-search">
@@ -36,10 +55,20 @@
                     <div class="dropdown">
                         <button onclick="toggleDropdown()" class="dropbtn">Menu</button>
                         <div id="myDropdown" class="dropdown-content">
-                            <a href="${contextPath}/UserController?service=userInfo">User Info</a>
+                            <c:if test="${user != null}">
+                                <a href="${contextPath}/UserController?service=userInfo">User Info</a>
+                                <a href="#">Orders</a>
+                            </c:if>
                             <a href="#">Cart</a>
-                            <a href="#">Orders</a>
-                            <a href="#">Log out</a>
+                            <c:if test="${user == null}">
+                                <a href="#">Track Orders</a>
+                                <a href="${contextPath}/login">Login</a>
+                                <a href="${contextPath}/register">Register</a>
+                            </c:if>
+                            <c:if test="${user != null}">
+                                <a href="${contextPath}/change-password">Change password</a>
+                                <a href="${contextPath}/logout">Log out</a>
+                            </c:if>
                         </div>
                     </div>
                 </div>

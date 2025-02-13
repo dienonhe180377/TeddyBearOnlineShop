@@ -8,7 +8,9 @@ import entity.Category;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -46,5 +48,40 @@ public class CategoryDAO extends DBConnection{
         }
     }
     
+     public Category getById(int id) {
+        String sql = "SELECT * FROM Category WHERE id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    Category productType = new Category();
+                    productType.setId(rs.getInt("id"));
+                    productType.setName(rs.getString("Name"));
+                    return productType;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error in product type dao " + ex);
+        }
+        return null;
+    }
     
+         public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<>();
+        String sql = "SELECT * FROM Category";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Category category = new Category();
+                category.setId(rs.getInt("id"));
+                category.setName(rs.getString("name"));
+                categories.add(category);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error retrieving categories: " + ex);
+        }
+        return categories;
+    }
 }
