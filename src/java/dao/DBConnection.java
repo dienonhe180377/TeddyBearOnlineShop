@@ -1,4 +1,3 @@
-
 package dao;
 
 import java.sql.*;
@@ -11,6 +10,7 @@ import java.util.logging.Logger;
  * @author NamDH
  */
 public class DBConnection {
+
     Connection connection = null;
 
     public DBConnection() {
@@ -22,8 +22,8 @@ public class DBConnection {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public DBConnection(String URL, String username, String pass){
+
+    public DBConnection(String URL, String username, String pass) {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(URL, username, pass);
@@ -32,8 +32,8 @@ public class DBConnection {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public Connection getConnection(){
+
+    public Connection getConnection() {
         try {
             connection = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=TeddyBearOnlineShop", "sa", "sa");
         } catch (SQLException ex) {
@@ -41,8 +41,8 @@ public class DBConnection {
         }
         return connection;
     }
-    
-    public ResultSet getData(String sql){
+
+    public ResultSet getData(String sql) {
         ResultSet rs = null;
         try {
             Statement stm = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -52,7 +52,7 @@ public class DBConnection {
         }
         return rs;
     }
-    
+
     /**
      * When you are done with using your connection, you need close in order to
      * release any other database resource
@@ -91,5 +91,5 @@ public class DBConnection {
             rs.close();
         }
     }
-    
+  
 }

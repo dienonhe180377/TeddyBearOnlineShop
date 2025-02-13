@@ -9,16 +9,25 @@ import entity.ProductType;
 import java.io.IOException;
 import java.util.List;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.nio.file.Paths;
 
 /**
  * Product Management Controller
  */
 @WebServlet(name = "ProductManagementController", urlPatterns = {"/manager/product-management"})
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024 * 2, 
+    maxFileSize = 1024 * 1024 * 10,        
+    maxRequestSize = 1024 * 1024 * 50        
+)
 public class ProductManagementController extends HttpServlet {
 
     private final ProductDAO productDAO = new ProductDAO();
@@ -41,8 +50,8 @@ public class ProductManagementController extends HttpServlet {
         Integer minPrice = null, maxPrice = null;
 
         if (priceRange != null && !priceRange.isEmpty()) {
-            if (priceRange.equals("1000+")) {
-                minPrice = 1000;
+            if (priceRange.equals("1000000+")) {
+                minPrice = 1000000;
             } else {
                 String[] priceParts = priceRange.split("-");
                 minPrice = Integer.parseInt(priceParts[0]);
@@ -83,32 +92,46 @@ public class ProductManagementController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        // Retrieve form parameters for adding a product
         try {
-
+            // Retrieve form parameters
             String name = request.getParameter("name");
-            String image = request.getParameter("image");
+            // Get the file part for the uploaded image
+            Part imagePart = request.getPart("image");
+            String imagePath = null;
+            if (imagePart != null && imagePart.getSize() > 0) {
+                // Extract file name
+                String fileName = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
+                // Determine the absolute path of the /images folder in your application
+                String uploadPath = request.getServletContext().getRealPath("") + File.separator + "images";
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdir();
+                }
+                imagePath = "images" + File.separator + fileName;
+                // Save the uploaded file to the designated folder
+                imagePart.write(uploadPath + File.separator + fileName);
+            }
+            
             String description = request.getParameter("description");
             String quantityStr = request.getParameter("quantity");
             String priceStr = request.getParameter("price");
             String categoryIdStr = request.getParameter("categoryId");
             String typeIdStr = request.getParameter("typeId");
-            System.out.println(categoryIdStr);
+            
             int quantity = Integer.parseInt(quantityStr);
             int categoryId = Integer.parseInt(categoryIdStr);
             int typeId = Integer.parseInt(typeIdStr);
 
-            System.out.println(categoryId);
             // Create new product
             Product newProduct = new Product();
             newProduct.setName(name);
-            newProduct.setImage(image);
+            newProduct.setImage(imagePath); // Save the relative path of the image
             newProduct.setDescription(description);
             newProduct.setQuantity(quantity);
             newProduct.setPrice(priceStr);
             newProduct.setCategory(categoryDAO.getById(categoryId));
             newProduct.setProductType(productTypeDAO.getById(typeId));
-            System.out.println(newProduct);
+            
             // Save product to database
             productDAO.addProduct(newProduct);
             session.setAttribute("notification", "Product added successfully!");
@@ -116,6 +139,5 @@ public class ProductManagementController extends HttpServlet {
             session.setAttribute("notificationErr", "Error adding product: " + e.getMessage());
         }
         response.sendRedirect("product-management");
-
     }
 }

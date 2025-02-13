@@ -8,10 +8,10 @@
         <title>Product Management</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        
+
         <style>
             body {
-                background-color: #f9ece6 !important; 
+                background-color: #f9ece6 !important;
                 font-family: "Inter", sans-serif;
             }
             .container {
@@ -34,14 +34,14 @@
         </style>
     </head>
     <body style="margin-top: 80px">
-         <jsp:include page="${contextPath}/gui/header.jsp"></jsp:include>
-         <div class="container mt-4" >
-            <h2 class="text-center">Products Management</h2>
+        <jsp:include page="${contextPath}/gui/header.jsp"></jsp:include>
+            <div class="container mt-4" >
+                <h2 class="text-center">Products Management</h2>
 
-            <!-- Filter & Search Form -->
-            <form method="GET" action="product-management" class="row mb-4 filter-section">
-                <div class="col-md-4">
-                    <input type="text" name="search" value="${param.search}" class="form-control" placeholder="Search Product">
+                <!-- Filter & Search Form -->
+                <form method="GET" action="product-management" class="row mb-4 filter-section">
+                    <div class="col-md-4">
+                        <input type="text" name="search" value="${param.search}" class="form-control" placeholder="Search Product">
                 </div>
                 <div class="col-md-2">
                     <select name="categoryId" class="form-control">
@@ -62,12 +62,12 @@
                 <div class="col-md-2">
                     <select name="priceRange" class="form-control">
                         <option value="">Select Price Range</option>
-                        <option value="0-10" ${param.priceRange == '0-10' ? 'selected' : ''}>$0 - $10</option>
-                        <option value="10-50" ${param.priceRange == '10-50' ? 'selected' : ''}>$10 - $50</option>
-                        <option value="50-100" ${param.priceRange == '50-100' ? 'selected' : ''}>$50 - $100</option>
-                        <option value="100-500" ${param.priceRange == '100-500' ? 'selected' : ''}>$100 - $500</option>
-                        <option value="500-1000" ${param.priceRange == '500-1000' ? 'selected' : ''}>$500 - $1000</option>
-                        <option value="1000+" ${param.priceRange == '1000+' ? 'selected' : ''}>$1000+</option>
+                        <option value="0-10000" ${param.priceRange == '0-10000' ? 'selected' : ''}>0 - 10.000đ</option>
+                        <option value="10000-50000" ${param.priceRange == '10000-50000' ? 'selected' : ''}>10.000đ - 50.000đ</option>
+                        <option value="50000-100000" ${param.priceRange == '50000-100000' ? 'selected' : ''}>50.000đ - 100.000đ</option>
+                        <option value="100000-500000" ${param.priceRange == '100000-500000' ? 'selected' : ''}>100.000đ - 500.000đ</option>
+                        <option value="500000-1000000" ${param.priceRange == '500000-1000000' ? 'selected' : ''}>500.000đ - 1.000.000đ</option>
+                        <option value="1000000+" ${param.priceRange == '1000000+' ? 'selected' : ''}>Trên 1.000.000đ</option>
                     </select>
                 </div>
                 <div class="col-md-1">
@@ -118,10 +118,16 @@
                         <tr>
                             <td>${status.index + 1}</td>
                             <td>${product.name}</td>
-                            <td><img src="${product.image}" width="50" height="50"></td>
+                            <td><img src="../${product.image}" width="50" height="50"></td>
                             <td>${product.description}</td>
                             <td>${product.quantity}</td>
-                            <td>$${product.price}</td>
+                            <td>
+                                <fmt:formatNumber 
+                                    value="${product.price}" 
+                                    type="currency" 
+                                    currencyCode="VND" 
+                                    maxFractionDigits="0" />
+                            </td>
                             <td>${product.category.name}</td>
                             <td>${product.productType.name}</td>
                             <td>
@@ -162,16 +168,18 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="addProductForm" method="POST" action="product-management">
+                            <!-- Note the enctype attribute added here -->
+                            <form id="addProductForm" method="POST" action="product-management" enctype="multipart/form-data">
                                 <div class="mb-3">
                                     <label class="form-label">Product Name</label>
                                     <input type="text" name="name" id="productName" class="form-control" required>
                                     <input type="hidden" name="action" value="add" >
                                     <small class="text-danger" id="nameError"></small>
                                 </div>
+                                <!-- Updated image input field -->
                                 <div class="mb-3">
-                                    <label class="form-label">Image URL</label>
-                                    <input type="text" name="image" class="form-control">
+                                    <label class="form-label">Product Image</label>
+                                    <input type="file" name="image" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Description</label>
@@ -203,12 +211,13 @@
                                         </c:forEach>
                                     </select>
                                 </div>
-                                <button style="float: right"type="submit" class="btn btn-primary">Add</button>
+                                <button style="float: right" type="submit" class="btn btn-primary">Add</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+
             <script>
                 document.getElementById("addProductForm").addEventListener("submit", function (event) {
                     let isValid = true;

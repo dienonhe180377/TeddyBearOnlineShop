@@ -75,7 +75,7 @@
         <div class="row align-items-center">
             <!-- Product Image Section -->
             <div class="col-md-6">
-                <img src="${product.image}" class="product-image img-fluid" alt="${product.name}">
+                <img src="../${product.image}" class="product-image img-fluid" alt="${product.name}">
             </div>
 
             <!-- Product Details Section -->
