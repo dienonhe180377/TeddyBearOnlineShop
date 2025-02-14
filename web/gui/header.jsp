@@ -31,7 +31,7 @@
                             </a>
                         </c:when>
                         <c:when test="${user.role.userRole == 'Seller'}">
-                            <a href="${contextPath}/seller/dashboard" style="text-decoration: none">
+                            <a href="${contextPath}/jsp/systemManage.jsp" style="text-decoration: none">
                                 <span class="brand-name">TESHO</span>
                             </a>
                         </c:when>

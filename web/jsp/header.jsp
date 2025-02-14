@@ -31,7 +31,7 @@
                             </a>
                         </c:when>
                         <c:when test="${user.role.userRole == 'Seller'}">
-                            <a href="${contextPath}/seller/dashboard" style="text-decoration: none">
+                            <a href="${contextPath}/jsp/systemManage.jsp" style="text-decoration: none">
                                 <span class="brand-name">TESHO</span>
                             </a>
                         </c:when>
@@ -56,10 +56,12 @@
                         <button onclick="toggleDropdown()" class="dropbtn">Menu</button>
                         <div id="myDropdown" class="dropdown-content">
                             <c:if test="${user != null}">
-                                <a href="${contextPath}/UserController?service=userInfo">User Info</a>
-                                <a href="#">Orders</a>
+                                <a href="${contextPath}/jsp/userProfile.jsp">User Info</a>
                             </c:if>
-                            <a href="#">Cart</a>
+                            <c:if test="${user != null}">
+                                <a href="#">Orders</a>
+                                <a href="#">Cart</a>
+                            </c:if> 
                             <c:if test="${user == null}">
                                 <a href="#">Track Orders</a>
                                 <a href="${contextPath}/login">Login</a>

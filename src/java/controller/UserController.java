@@ -4,12 +4,14 @@
  */
 package controller;
 
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -35,6 +37,7 @@ public class UserController extends HttpServlet {
             
             if(service.equalsIgnoreCase("userInfo")){
                 
+                request.getRequestDispatcher("jsp/userProfile.jsp").forward(request, response);
             }
         }
     }

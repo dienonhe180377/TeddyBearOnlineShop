@@ -1,5 +1,12 @@
+﻿--Tạo database
 create database TeddyBearOnlineShop
 
+--Xóa database
+ALTER DATABASE [TeddyBearOnlineShop] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+DROP DATABASE [TeddyBearOnlineShop]
+
+
+--Từ dòng này xuống là tạo bảng
 create table UserRole(
 	id int primary key identity(1,1),
 	roleName nvarchar(30) unique not null
@@ -8,7 +15,7 @@ create table UserRole(
 create table [User](
 	id int primary key identity(1,1),
 	userName nvarchar(255) not null,
-	profilePic nvarchar(255),
+	profilePic nvarchar(255) default 'images/usericon.jpg',
 	email nvarchar(255) unique not null,
 	[password] nvarchar(255) not null,
 	phoneNumber nvarchar(12) unique not null,

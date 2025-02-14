@@ -1,16 +1,10 @@
-﻿UPDATE [User]
-SET password = 'Minh553311@'
-WHERE id = 2;
+﻿
 
-select * from [User]
---User insert
-insert into [User](userName,profilePic,email,phoneNumber,location,roleId,password)
-values('User1','images/usericon.jpg','User1@gmail.com','0334372394','To Huu',1,'Minh553311@')
 
 select * from UserRole
 --UserRole insert
 insert into UserRole values('Customer')
-insert into UserRole values('Sale')
+insert into UserRole values('Seller')
 insert into UserRole values('Marketing')
 insert into UserRole values('Manager')
 insert into UserRole values('Admin')
@@ -78,6 +72,15 @@ insert into Product values(N'Mihi Cảm Xúc','images/mihi-cam-xuc.jpg',300,6900
 insert into Product values(N'Bạch Tuộc Khổng Lồ','images/bach-tuoc-cam-xuc-khong-lo.jpg',300,125000,6,1)
 insert into Product values(N'Móc Khóa Bạch Tuộc','images/moc-khoa-bach-tuoc-cam-xuc-19-500x500.jpg',300,40000,6,3)
 insert into Product values(N'Bạch Tuộc Siêu To','images/bach-tuoc-cam-xuc-khong-lo-500x500.jpg',300,665000,6,1)
+
+
+select * from [User]
+--User insert
+insert into [User](userName,email,phoneNumber,location,roleId,password)
+values('User1','User1@gmail.com','0334372394','To Huu',1,'Minh553311@')
+insert into [User](userName,email,phoneNumber,location,roleId,password)
+values('Seller1','Seller1@gmail.com','0334372354','To Huu',2,'Minh553311@')
+
 
 select * from Voucher
 --Voucher insert

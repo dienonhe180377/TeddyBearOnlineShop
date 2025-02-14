@@ -19,28 +19,28 @@
             <div class="profile-card">
                 <!-- Ảnh đại diện -->
                 <img 
-                    src="${contextPath}/images/usericon.jpg" 
+                    src="${contextPath}/${user.profilePic}" 
                     alt="Avatar" 
                     class="avatar"
                     />
                 <!-- Thông tin cơ bản -->
                 <div class="profile-info">
-                    <h2>Alex Johnson</h2>
-                    <a href="mailto:alex.johnson@example.com">alex.johnson@example.com</a>
-                </div>
+                    <h2>${user.userName}</h2>
+                    <p href="">${user.email}</p>
+                </div>  
 
                 <!-- Tóm tắt tài khoản -->
                 <div class="account-summary">
-                    <h3>Account Summary</h3>
-                    <p>Member since: January 2021</p>
-                    <p>Last login: October 15, 2023</p>
-                    <p>Subscription: Premium</p>
+                    <h3>Thông tin tài khoản</h3>
+                    <p>Là thành viên từ: ${user.createdDate}</p>
+                    <p>Điện thoại: ${user.phoneNumber}</p>
+                    <p>Địa chỉ: ${user.location}</p>
                 </div>
 
                 <!-- Nút thao tác -->
                 <div class="actions">
-                    <button class="btn">Edit Profile</button>
-                    <button class="btn">Security Settings</button>
+                    <button class="btn">Chỉnh sửa</button>
+                    <button class="btn">Lịch sử giao dịch</button>
                 </div>
             </div>
         </div>
