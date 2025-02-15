@@ -101,6 +101,13 @@ public class MenuController extends HttpServlet {
 
             if (service.equalsIgnoreCase("searchProduct")) {
                 String text = request.getParameter("searchValue");
+                if(text.equalsIgnoreCase("Gấu")){
+                    text = "Gau";
+                } else if(text.equalsIgnoreCase("Chó")){
+                    text = "Cho";
+                } else if(text.equalsIgnoreCase("Mèo")){
+                    text = "Meo";
+                }
                 ArrayList<Product> productList = productDAO.getProductByText(text);
                 String message = "Đã tìm thấy " + productList.size() + " sản phẩm";
                 request.setAttribute("productList", productList);

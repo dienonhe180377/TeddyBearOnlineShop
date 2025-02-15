@@ -63,6 +63,51 @@
                 </a>
             </div>
         </c:if>
+        
+        <c:if test="${user.role.userRole == 'Marketing'}">
+            <div class="wrap text-center">
+                <a href="" style="text-decoration: none;color:black" >
+                    <div class="big-button">
+                        <span class="fas fa-user-shield">Blog List</span>  
+                    </div>
+                </a>
+                <a href="" style="text-decoration: none;color:black" >
+                    <div class="text-center big-button">
+                        <span class="fas fa-user-shield">Campaign List</span>  
+                    </div> 
+                </a>
+                <a href="" style="text-decoration: none;color:black" >
+                    <div class="text-center big-button">
+                        <span class="fas fa-user-shield">Voucher List</span>  
+                    </div> 
+                </a>
+                <a href="" style="text-decoration: none;color:black" >
+                    <div class="text-center big-button">
+                        <span class="fas fa-user-shield">Attendance</span>  
+                    </div> 
+                </a>
+                <a href="" style="text-decoration: none;color:black" >
+                    <div class="text-center big-button">
+                        <span class="fas fa-user-shield">Dashboard</span>  
+                    </div> 
+                </a>
+            </div>
+        </c:if>
+        
+        <c:if test="${user.role.userRole == 'Admin'}">
+            <div class="wrap text-center">
+                <a href="" style="text-decoration: none;color:black" >
+                    <div class="big-button">
+                        <span class="fas fa-user-shield">Setting List</span>  
+                    </div>
+                </a>
+                <a href="" style="text-decoration: none;color:black" >
+                    <div class="text-center big-button">
+                        <span class="fas fa-user-shield">User List</span>  
+                    </div> 
+                </a>
+            </div>
+        </c:if>
 
         <jsp:include page="footer.jsp"/>
     </body>

@@ -16,12 +16,13 @@ import java.util.List;
  *
  * @author OS
  */
-public class CategoryDAO extends DBConnection{
+public class CategoryDAO extends DBConnection {
 
     public CategoryDAO() {
     }
-    
-    public ArrayList<Category> getAllCategory() throws Exception{
+
+    //Get all category
+    public ArrayList<Category> getAllCategory() throws Exception {
         Connection conn = null;
         ResultSet rs = null;
         /* Result set returned by the sqlserver */
@@ -32,13 +33,13 @@ public class CategoryDAO extends DBConnection{
         try {
             conn = getConnection();
             pre = conn.prepareStatement(sql);
-            rs = pre.executeQuery();   
-           while (rs.next()) {
-               int id = rs.getInt("id");
-               String name = rs.getString("name");
-               categoryList.add(new Category(id, name));
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                categoryList.add(new Category(id, name));
             }
-           return categoryList;
+            return categoryList;
         } catch (Exception ex) {
             throw ex;
         } finally {
@@ -47,8 +48,9 @@ public class CategoryDAO extends DBConnection{
             closeConnection(conn);
         }
     }
-    
-     public Category getById(int id) {
+
+    //Get a category with id
+    public Category getById(int id) {
         String sql = "SELECT * FROM Category WHERE id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -66,8 +68,9 @@ public class CategoryDAO extends DBConnection{
         }
         return null;
     }
+
     
-         public List<Category> getAllCategories() {
+    public List<Category> getAllCategories() {
         List<Category> categories = new ArrayList<>();
         String sql = "SELECT * FROM Category";
         try {
