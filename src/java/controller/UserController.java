@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.UserDAO;
 import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -34,12 +35,42 @@ public class UserController extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             String service = request.getParameter("service");
-            
-            if(service.equalsIgnoreCase("userInfo")){
-                
-                request.getRequestDispatcher("jsp/userProfile.jsp").forward(request, response);
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+            UserDAO userDao = new UserDAO();
+
+            if (service.equalsIgnoreCase("userInfo")) {
+                String nameError, emailError, phoneError;
+                String name = request.getParameter("name");
+                if (isValidName(name) == false || userDao.isUsernameExist(name) == true) {
+                    nameError = "Invalid name!";
+                    request.setAttribute(nameError, "nameError");
+                }
+                String email = request.getParameter("email");
+                if (isValidEmail(email) == false) {
+
+                }
+                String phone = request.getParameter("phone");
+                String location = request.getParameter("location");
+
             }
         }
+    }
+
+    private boolean isValidName(String name) {
+        if (name == null || name.length() > 12) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isValidEmail(String email) {
+        if (email == null) {
+            return false;
+        }
+        // Sử dụng regex để kiểm tra email hợp lệ
+        return email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@"
+                + "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

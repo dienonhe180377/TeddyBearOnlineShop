@@ -80,7 +80,12 @@ insert into [User](userName,email,phoneNumber,location,roleId,password)
 values('User1','User1@gmail.com','0334372394','To Huu',1,'Minh553311@')
 insert into [User](userName,email,phoneNumber,location,roleId,password)
 values('Seller1','Seller1@gmail.com','0334372354','To Huu',2,'Minh553311@')
-
+insert into [User](userName,email,phoneNumber,location,roleId,password)
+values('Marketing1','Marketing1@gmail.com','0334372321','To Huu',3,'Minh553311@')
+insert into [User](userName,email,phoneNumber,location,roleId,password)
+values('Manager1','Manager1@gmail.com','0334372621','To Huu',4,'Minh553311@')
+insert into [User](userName,email,phoneNumber,location,roleId,password)
+values('Admin1','Admin1@gmail.com','0334310121','To Huu',5,'Minh553311@')
 
 select * from Voucher
 --Voucher insert

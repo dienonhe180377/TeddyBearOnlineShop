@@ -39,7 +39,7 @@
 
                 <!-- Nút thao tác -->
                 <div class="actions">
-                    <button class="btn">Chỉnh sửa</button>
+                    <a href="${contextPath}/jsp/userDetail.jsp"><button class="btn">Chỉnh sửa</button></a>
                     <button class="btn">Lịch sử giao dịch</button>
                 </div>
             </div>

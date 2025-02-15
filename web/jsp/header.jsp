@@ -58,10 +58,16 @@
                             <c:if test="${user != null}">
                                 <a href="${contextPath}/jsp/userProfile.jsp">User Info</a>
                             </c:if>
-                            <c:if test="${user != null}">
+                            <c:if test="${user.role.userRole == 'Customer'}">
                                 <a href="#">Orders</a>
                                 <a href="#">Cart</a>
-                            </c:if> 
+                            </c:if>
+                            <c:if test="${user.role.userRole == 'Seller' ||
+                                          user.role.userRole == 'Marketing' ||
+                                          user.role.userRole == 'Manager' ||
+                                          user.role.userRole == 'Admin'}">
+                                  <a href="${contextPath}/jsp/systemManage.jsp">System Manage</a>
+                            </c:if>
                             <c:if test="${user == null}">
                                 <a href="#">Track Orders</a>
                                 <a href="${contextPath}/login">Login</a>
