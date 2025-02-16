@@ -11,6 +11,7 @@ import java.sql.Date;
  * @author ADMIN
  */
 public class User {
+
     private int id;
     private String userName;
     private String profilePic;
@@ -97,6 +98,5 @@ public class User {
         this.createdDate = createdDate;
         this.role = role;
     }
-    
-    
+
 }

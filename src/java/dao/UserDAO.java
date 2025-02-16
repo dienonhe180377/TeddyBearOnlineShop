@@ -6,6 +6,36 @@ import java.sql.*;
 
 public class UserDAO extends DBConnection {
 
+    
+
+    //Change current user information
+    public void changeUserInformation(String currentUsername, String username, String email, String phoneNumber, String location) throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        String sql = "UPDATE [User]\n"
+                + "SET userName = ? , email = ?, phoneNumber = ?, location = ?\n"
+                + "WHERE userName = ?;";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            pre.setString(1, username);
+            pre.setString(2, email);
+            pre.setString(3, phoneNumber);
+            pre.setString(4, location);
+            pre.setString(5, currentUsername);
+            pre.executeUpdate();
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+
     // This method retrieves the UserRole associated with a given user ID.
     public UserRole getRoleByUserID(int userId) {
         UserRole role = null;
@@ -96,6 +126,20 @@ public class UserDAO extends DBConnection {
         String sql = "SELECT id FROM [User] WHERE email = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            System.err.println(e);
+        }
+        return false;
+    }
+
+    public boolean isPhoneNumberExist(String phoneNumber) {
+        String sql = "SELECT id FROM [User] WHERE phoneNumber = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, phoneNumber);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return true;
