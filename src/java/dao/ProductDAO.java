@@ -6,7 +6,9 @@ package dao;
 
 import entity.Category;
 import entity.Product;
+import entity.ProductImage;
 import entity.ProductType;
+import entity.Size;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,8 +26,69 @@ import java.util.Locale;
  * @author OS
  */
 public class ProductDAO extends DBConnection {
+    
+    private CategoryDAO categoryDAO = new CategoryDAO();
+    private ProductTypeDAO productTypeDAO = new ProductTypeDAO();
 
     public ProductDAO() {
+    }
+    
+    public ArrayList<ProductImage> getProductImages(int productId) throws Exception{
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        ArrayList<ProductImage> images = new ArrayList<>();
+        String sql = "select * from ProductImage where productId = " + productId;
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String source = rs.getString("source");
+                images.add(new ProductImage(id, source));
+            }
+            return images;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+    
+    public ArrayList<Size> getProductSizes(int productId) throws Exception{
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        ArrayList<Size> sizes = new ArrayList<>();
+        String sql = "select * from Size where productId = " + productId;
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                int quantity = rs.getInt("quantity");
+                int priceNumber = rs.getInt("price");
+                DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+                symbols.setGroupingSeparator('.');
+                DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
+                String price = decimalFormat.format(priceNumber);
+                sizes.add(new Size(id, name, quantity, price));
+            }
+            return sizes;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
     }
 
     public ArrayList<Product> getAllProduct() throws Exception {
@@ -43,16 +106,13 @@ public class ProductDAO extends DBConnection {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
-                String image = rs.getString("image");
-                int quantity = rs.getInt("quantity");
-                int priceNumber = rs.getInt("price");
-                DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
-                symbols.setGroupingSeparator('.');
-                DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
-                String price = decimalFormat.format(priceNumber);
+                ArrayList<ProductImage> images = getProductImages(id);
+                ArrayList<Size> sizes = getProductSizes(id);
                 int categoryId = rs.getInt("categoryId");
                 int typeId = rs.getInt("typeId");
-                productList.add(new Product(id, name, image, quantity, price, categoryId, typeId));
+                Category category = categoryDAO.getById(categoryId);
+                ProductType type = productTypeDAO.getProductTypeById(typeId);
+                productList.add(new Product(id, name, images, sizes, type, category));
             }
             return productList;
         } catch (Exception ex) {
@@ -64,14 +124,14 @@ public class ProductDAO extends DBConnection {
         }
     }
 
-    public ArrayList<Product> getProductByCategory(int categoryId) throws Exception {
+    public ArrayList<Product> getProductByCategory(int categoryID) throws Exception {
         Connection conn = null;
         ResultSet rs = null;
         /* Result set returned by the sqlserver */
         PreparedStatement pre = null;
         /* Prepared statement for executing sql queries */
         ArrayList<Product> productList = new ArrayList<>();
-        String sql = "SELECT * FROM Product where categoryId = " + categoryId;
+        String sql = "SELECT * FROM Product where categoryId = " + categoryID;
         try {
             conn = getConnection();
             pre = conn.prepareStatement(sql);
@@ -79,16 +139,13 @@ public class ProductDAO extends DBConnection {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
-                String image = rs.getString("image");
-                int quantity = rs.getInt("quantity");
-                int priceNumber = rs.getInt("price");
-                DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
-                symbols.setGroupingSeparator('.');
-                DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
-                String price = decimalFormat.format(priceNumber);
-                int category = rs.getInt("categoryId");
+                ArrayList<ProductImage> images = getProductImages(id);
+                ArrayList<Size> sizes = getProductSizes(id);
+                int categoryId = rs.getInt("categoryId");
                 int typeId = rs.getInt("typeId");
-                productList.add(new Product(id, name, image, quantity, price, category, typeId));
+                Category category = categoryDAO.getById(categoryId);
+                ProductType type = productTypeDAO.getProductTypeById(typeId);
+                productList.add(new Product(id, name, images, sizes, type, category));
             }
             return productList;
         } catch (Exception e) {
@@ -100,14 +157,14 @@ public class ProductDAO extends DBConnection {
         }
     }
 
-    public ArrayList<Product> getProductByType(int typeId) throws Exception {
+    public ArrayList<Product> getProductByType(int typeID) throws Exception {
         Connection conn = null;
         ResultSet rs = null;
         /* Result set returned by the sqlserver */
         PreparedStatement pre = null;
         /* Prepared statement for executing sql queries */
         ArrayList<Product> productList = new ArrayList<>();
-        String sql = "SELECT * FROM Product where typeId = " + typeId;
+        String sql = "SELECT * FROM Product where typeId = " + typeID;
         try {
             conn = getConnection();
             pre = conn.prepareStatement(sql);
@@ -115,16 +172,13 @@ public class ProductDAO extends DBConnection {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
-                String image = rs.getString("image");
-                int quantity = rs.getInt("quantity");
-                int priceNumber = rs.getInt("price");
-                DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
-                symbols.setGroupingSeparator('.');
-                DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
-                String price = decimalFormat.format(priceNumber);
-                int category = rs.getInt("categoryId");
-                int typeID = rs.getInt("typeId");
-                productList.add(new Product(id, name, image, quantity, price, category, typeID));
+                ArrayList<ProductImage> images = getProductImages(id);
+                ArrayList<Size> sizes = getProductSizes(id);
+                int categoryId = rs.getInt("categoryId");
+                int typeId = rs.getInt("typeId");
+                Category category = categoryDAO.getById(categoryId);
+                ProductType type = productTypeDAO.getProductTypeById(typeId);
+                productList.add(new Product(id, name, images, sizes, type, category));
             }
             return productList;
         } catch (Exception e) {
@@ -156,16 +210,13 @@ public class ProductDAO extends DBConnection {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
-                String image = rs.getString("image");
-                int quantity = rs.getInt("quantity");
-                int priceNumber = rs.getInt("price");
-                DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
-                symbols.setGroupingSeparator('.');
-                DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
-                String price = decimalFormat.format(priceNumber);
-                int category = rs.getInt("categoryId");
-                int typeID = rs.getInt("typeId");
-                productList.add(new Product(id, name, image, quantity, price, category, typeID));
+                ArrayList<ProductImage> images = getProductImages(id);
+                ArrayList<Size> sizes = getProductSizes(id);
+                int categoryId = rs.getInt("categoryId");
+                int typeId = rs.getInt("typeId");
+                Category category = categoryDAO.getById(categoryId);
+                ProductType type = productTypeDAO.getProductTypeById(typeId);
+                productList.add(new Product(id, name, images, sizes, type, category));
             }
             return productList;
         } catch (Exception e) {
@@ -178,13 +229,6 @@ public class ProductDAO extends DBConnection {
 
     }
 
-    public static void main(String[] args) throws Exception {
-        ProductDAO productDAO = new ProductDAO();
-        ArrayList<Product> productList = productDAO.getProductByText("om");
-        for (int i = 0; i < productList.size(); i++) {
-            System.out.println(productList.get(i).getName());
-        }
-    }
     
      public List<Product> getProductsWithParam(String searchParam, Integer categoryId, Integer typeId, Integer minPrice, Integer maxPrice) {
         List<Product> products = new ArrayList<>();
@@ -312,4 +356,5 @@ public class ProductDAO extends DBConnection {
 
         return products.subList(fromIndex, toIndex);
     }
+    
 }

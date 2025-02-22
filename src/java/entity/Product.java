@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author OS
@@ -11,33 +13,19 @@ package entity;
 public class Product {
     private int id;
     private String name;
-    private String image;
-    private int quantity;
-    private String price;
-    private int categoryId;
-    private int typeId;
+    private ArrayList<ProductImage> images;
+    private ArrayList<Size> sizes;
     private ProductType productType;
     private Category category;
-    
+
     public Product() {
     }
 
-    public Product(int id, String name, String image, int quantity, String price, int categoryId, int typeId) {
+    public Product(int id, String name, ArrayList<ProductImage> images, ArrayList<Size> sizes, ProductType productType, Category category) {
         this.id = id;
         this.name = name;
-        this.image = image;
-        this.quantity = quantity;
-        this.price = price;
-        this.categoryId = categoryId;
-        this.typeId = typeId;
-    }
-
-    public Product(int id, String name, String image, int quantity, String price, ProductType productType, Category category) {
-        this.id = id;
-        this.name = name;
-        this.image = image;
-        this.quantity = quantity;
-        this.price = price;
+        this.images = images;
+        this.sizes = sizes;
         this.productType = productType;
         this.category = category;
     }
@@ -58,44 +46,20 @@ public class Product {
         this.name = name;
     }
 
-    public String getImage() {
-        return image;
+    public ArrayList<ProductImage> getImages() {
+        return images;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImages(ArrayList<ProductImage> images) {
+        this.images = images;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public ArrayList<Size> getSizes() {
+        return sizes;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public int getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
+    public void setSizes(ArrayList<Size> sizes) {
+        this.sizes = sizes;
     }
 
     public ProductType getProductType() {
@@ -113,9 +77,9 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
-
     
-
+    
+    
     
 
     

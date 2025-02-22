@@ -18,7 +18,7 @@
                 <!-- Hình ảnh sản phẩm (bên trái) -->
                 <div class="product-image">
                     <!-- Thay link ảnh của bạn vào src bên dưới -->
-                    <img src="https://via.placeholder.com/500x600?text=HINH+GAU+BONG" alt="Gấu Bông Teddy Socola">
+                    <img src="https://gaubongonline.vn/wp-content/uploads/2024/05/Chuot-capybara-than-tai-2.jpg" alt="Gấu Bông Teddy Socola">
 
                 </div>
 
@@ -50,36 +50,50 @@
                                 <td>650.000đ</td>
                                 <td>Còn hàng</td>
                             </tr>
-                            <tr>
-                                <td>1m4</td>
-                                <td>750.000đ</td>
-                                <td>Còn hàng</td>
-                            </tr>
                         </tbody>
                     </table>
 
-                    <div class="product-price">425.000đ (cho size 80cm)</div>
+                    <div class="product-price">425.000đ </div>
 
                     <div class="product-actions">
-                        <button class="btn btn-buy">Mua hàng</button>
-                        <button class="btn btn-quick-order">Đặt hàng nhanh</button>
+                        <button id="buyButton" class="btn btn-buy">Thêm vào giỏ hàng</button>
+                        <button id="buyButton2" class="btn btn-quick-order">Mua ngay</button>
                     </div>
 
-                    <ul class="product-info-list">
-                        <li>100% bông trắng tinh khiết</li>
-                        <li>Bảo hành đường chỉ 6 tháng</li>
-                        <li>Miễn phí gấu áo</li>
-                        <li>Miễn phí gói quà</li>
-                        <li>100% ảnh chụp thật shop</li>
-                        <li>Hóa đơn bán hàng đổi gấu 6 tháng</li>
-                        <li>Miễn phí tặng thiệp</li>
-                    </ul>
 
                     <p class="note">
                         HÀ NỘI: 8:30 - 23:00 <br>
-                        (Bạn có thể thêm thông tin liên hệ, địa chỉ cửa hàng ở đây)
+                        275 Bạch Mai, Hai Bà Trưng, Hà Nội - 0979896616
                     </p>
                 </div>
+                <!-- Pop-up chọn size -->
+                <div id="sizePopup" class="popup">
+                    <div class="popup-content">
+                        <span class="close" id="closePopup">&times;</span>
+                        <h2>Chọn kích cỡ sản phẩm</h2>
+                        <select id="productSize">
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                        </select>
+                        <button id="addToCart">Thêm vào giỏ hàng</button>
+                    </div>
+                </div>
+                <div id="sizePopup2" class="popup">
+                    <div class="popup-content">
+                        <span class="close" id="closePopup">&times;</span>
+                        <h2>Chọn kích cỡ sản phẩm</h2>
+                        <select id="productSize">
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                        </select>
+                        <button id="addToCart">Mua Ngay</button>
+                    </div>
+                </div>
+                
             </div>
             <div class="small-images">
                 <ul>
@@ -89,23 +103,47 @@
                     <li>
                         <img src="https://gaubongonline.vn/wp-content/uploads/2024/05/Chuot-capybara-than-tai-2.jpg" alt="Gấu Bông Teddy Socola">
                     </li>
-                    <li>
-                        <img src="https://gaubongonline.vn/wp-content/uploads/2024/05/Chuot-capybara-than-tai-2.jpg" alt="Gấu Bông Teddy Socola">
-                    </li>
-                    <li>
-                        <img src="https://gaubongonline.vn/wp-content/uploads/2024/05/Chuot-capybara-than-tai-2.jpg" alt="Gấu Bông Teddy Socola">
-                    </li>
-                    <li>
-                        <img src="https://gaubongonline.vn/wp-content/uploads/2024/05/Chuot-capybara-than-tai-2.jpg" alt="Gấu Bông Teddy Socola">
-                    </li>
-                    <li>
-                        <img src="https://gaubongonline.vn/wp-content/uploads/2024/05/Chuot-capybara-than-tai-2.jpg" alt="Gấu Bông Teddy Socola">
-                    </li>
-                </ul>
 
+                </ul>
             </div>
         </div>
 
-
+        <footer style="margin-top: 151px;">
+            <jsp:include page="footer.jsp" />
+        </footer>
     </body>
+    <script>
+// Lấy các phần tử
+        var buyButton = document.getElementById("buyButton");
+        var buyButton2 = document.getElementById("buyButton2");
+        var sizePopup = document.getElementById("sizePopup");
+        var sizePopup2 = document.getElementById("sizePopup2");
+        var closePopup = document.getElementById("closePopup");
+        var addToCart = document.getElementById("addToCart");
+
+// Khi bấm vào nút Mua hàng, hiển thị pop-up
+        buyButton.onclick = function () {
+            sizePopup.style.display = "block";
+        }
+
+        buyButton2.onclick = function () {
+            sizePopup2.style.display = "block";
+        }
+
+// Khi bấm vào nút đóng pop-up
+        closePopup.onclick = function () {
+            sizePopup.style.display = "none";
+            sizePopup2.style.display = "none";
+        }
+
+// Khi bấm ra ngoài pop-up, đóng pop-up
+        window.onclick = function (event) {
+            if (event.target == sizePopup) {
+                sizePopup.style.display = "none";
+            } else if (event.target == sizePopup2) {
+                sizePopup2.style.display = "none";
+            }
+        }
+
+    </script>
 </html>

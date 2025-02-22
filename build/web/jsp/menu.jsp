@@ -25,12 +25,12 @@
                     <div class="card-wrapper">
                         <ul class="card-list swiper-wrapper">
                             <c:forEach var="product" items="${productList}">
-                                <c:if test="${product.categoryId == category.id}">
+                                <c:if test="${product.category.id == category.id}">
                                     <li class="card-item swiper-slide">
                                         <a href="#" class="card-link" name="productDetail">
-                                            <img src="${contextPath}/${product.image}" alt="Card Image" class="card-image">
+                                            <img src="${contextPath}/${product.images[0].source}" alt="Card Image" class="card-image">
                                             <p class="badge">${product.name}</p>
-                                            <h2 class="card-title">${product.price}₫</h2>
+                                            <h2 class="card-title">${product.sizes[0].price}₫</h2>
                                             <button class="fa-solid fa-arrow-right card-button"></button>
                                         </a>
                                     </li>

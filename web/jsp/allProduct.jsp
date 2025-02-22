@@ -32,7 +32,7 @@
                             <div class="box">
                                 <a href="">
                                     <div class="img-box">
-                                        <img src="${contextPath}/${product.image}" alt="">
+                                        <img src="${contextPath}/${product.images[0].source}" alt="">
                                     </div>
                                     <div class="detail-box">
                                         <h6>
@@ -40,7 +40,7 @@
                                         </h6>
                                         <h6>
                                             <span>
-                                                ${product.price}₫
+                                                ${product.sizes[0].price}₫
                                             </span>
                                         </h6>
                                     </div>
