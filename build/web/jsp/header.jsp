@@ -69,6 +69,7 @@
                                   <a href="${contextPath}/jsp/systemManage.jsp">System Manage</a>
                             </c:if>
                             <c:if test="${user == null}">
+                                <a href="#">Cart</a>
                                 <a href="#">Track Orders</a>
                                 <a href="${contextPath}/login">Login</a>
                                 <a href="${contextPath}/register">Register</a>

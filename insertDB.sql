@@ -11,7 +11,6 @@ insert into UserRole values('Admin')
 select * from ProductType
 --ProductType insert
 insert into ProductType values(N'Gấu Bông')
-insert into ProductType values(N'Phụ Kiện Gấu Bông')
 insert into ProductType values(N'Móc Khóa')
 insert into ProductType values(N'Gối Ôm')
 
