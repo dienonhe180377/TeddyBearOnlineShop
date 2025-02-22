@@ -24,10 +24,25 @@ create table [User](
 	roleId int foreign key references UserRole(id)
 )
 
+create table Attendance(
+	id int primary key identity(1,1),
+	[status] bit not null,
+	userId int foreign key references [User](id),
+	updateTime datetime default GETDATE()
+)
+
+create table Salary(
+	id int primary key identity(1,1),
+	salary int not null,
+	userId int foreign key references [User](id),
+	updateTime datetime
+)
+
 create table Setting(
 	id int primary key identity(1,1),
 	name nvarchar(25) unique not null,
 	status bit not null,
+	content nvarchar(255),
 	createDate datetime default getdate(),
 	[description] nvarchar(max)
 )
@@ -55,25 +70,8 @@ create table Comment(
 create table [Product](
 	id int primary key identity(1,1),
 	name nvarchar(25),
-	[image] nvarchar(255) not null,
-	quantity int,
-	price int not null,
 	categoryId int foreign key references Category(id),
-	typeId int foreign key references ProductType(id),
-)
-
-create table Assessories(
-	id int primary key identity(1,1),
-	name nvarchar(50),
-	quantity int not null,
-	image nvarchar(255) not null,
-	productId int foreign key references [Product](id)
-)
-
-create table Size(
-	id int primary key identity(1,1),
-	name nvarchar(25) not null,
-	productId int foreign key references [Product](id)
+	typeId int foreign key references ProductType(id)
 )
 
 create table Rating(
@@ -85,65 +83,65 @@ create table Rating(
 	productId int foreign key references [Product](id)
 )
 
-create table [Order](
+create table Size(
 	id int primary key identity(1,1),
-	userId int foreign key references [User](id),
-	orderDate datetime default GETDATE(),
-	totalCost int not null,
-	orderStatus nvarchar(10) not null default 'Shipping',
-	paymentMethod nvarchar(20),
-	arrivedAt datetime,
+	name nvarchar(25) not null,
+	quantity int,
+	price int,
+	productId int foreign key references [Product](id)
 )
 
-create table [PurchaseHistory](
+create table ProductImage(
 	id int primary key identity(1,1),
-	userId int foreign key references [User](id),
-	orderId int foreign key references [Order](id)
+	[source] nvarchar(255),
+	productId int foreign key references [Product](id)
 )
 
 create table Cart(
 	id int primary key identity(1,1),
-	userId int foreign key references [User](id),
+	userId int foreign key references [User](id)
+)
+
+create table CartDetail(
+	id int primary key identity(1,1),
+	cartId int foreign key references Cart(id),
 	productId int foreign key references [Product](id)
 )
 
-create table Attendance(
+
+create table [Order](
 	id int primary key identity(1,1),
-	[status] bit not null,
+	totalCost int not null,
+	[status] bit,
 	userId int foreign key references [User](id),
-	createDate datetime default GETDATE()
+	orderDate datetime default GETDATE(),
+	arrivedAt datetime
 )
 
-create table Salary(
+create table OrderDetail(
 	id int primary key identity(1,1),
-	salary int not null,
-	userId int foreign key references [User](id),
-	updateTime datetime
+	orderId int foreign key references [Order](id),
+	productId int foreign key references [Product](id)
 )
+
 
 create table Campaign(
 	id int primary key identity(1,1),
 	[name] nvarchar(25) not null unique,
 	[description] nvarchar(max),
+	[status] bit,
 	startDate datetime default GETDATE(),
 	endDate datetime
-)
-
-create table BlogType(
-	id int primary key identity(1,1),
-	[name] nvarchar(25) not null unique,
 )
 
 create table Blog(
 	id int primary key identity(1,1),
 	title nvarchar(255) not null,
 	content nvarchar(max) not null,
-	userId int foreign key references [User](id),
-	createDate datetime default GETDATE(),
-	updateDate datetime,
-	[status] bit not null,
+	updateDate datetime default GETDATE(),
+	[status] bit,
 	thumbnail nvarchar(255) not null,
-	blogTypeId int foreign key references BlogType(id),
+	blogType nvarchar(25),
 	campaignId int foreign key references Campaign(id)
 )
 
@@ -151,8 +149,20 @@ create table Voucher(
 	id int primary key identity(1,1),
 	[name] nvarchar(25) not null unique,
 	discount int not null,
+	[status] bit,
 	startDate datetime default GETDATE(),
 	endDate datetime,
-	campaignId int foreign key references Campaign(id),
+	campaignId int foreign key references Campaign(id)
+)
+
+create table VoucherProduct(
+	id int primary key identity(1,1),
+	voucherId int foreign key references Voucher(id),
 	productId int foreign key references [Product](id)
+)
+
+create table UserVoucher(
+	id int primary key identity(1,1),
+	voucherId int foreign key references Voucher(id),
+	userId int foreign key references [User](id)
 )
