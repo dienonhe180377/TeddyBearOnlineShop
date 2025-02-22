@@ -93,7 +93,7 @@ create table Size(
 
 create table ProductImage(
 	id int primary key identity(1,1),
-	[source] nvarchar(255),
+	[source] nvarchar(255) not null unique,
 	productId int foreign key references [Product](id)
 )
 

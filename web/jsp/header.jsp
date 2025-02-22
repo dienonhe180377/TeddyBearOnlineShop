@@ -87,8 +87,8 @@
                 <ul>
                     <li><a href="${contextPath}/MenuController?service=productInformation">Trang chủ</a></li>
                     <li><a href="${contextPath}/MenuController?service=allProduct&name=1">Gấu bông</a></li>
-                    <li><a href="${contextPath}/MenuController?service=allProduct&name=3">Móc khóa</a></li>
-                    <li><a href="${contextPath}/MenuController?service=allProduct&name=4">Gối Ôm</a></li>
+                    <li><a href="${contextPath}/MenuController?service=allProduct&name=2">Móc khóa</a></li>
+                    <li><a href="${contextPath}/MenuController?service=allProduct&name=3">Gối Ôm</a></li>
                     <li><a href="">Góc của Gấu</a></li>
                     <li><a href="${contextPath}/MenuController?service=allProduct">Tất cả SP</a></li>
                 </ul>

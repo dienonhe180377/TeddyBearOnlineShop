@@ -20,6 +20,8 @@ public class CategoryDAO extends DBConnection {
 
     public CategoryDAO() {
     }
+    
+   
 
     //Get all category
     public ArrayList<Category> getAllCategory() throws Exception {

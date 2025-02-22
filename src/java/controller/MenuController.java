@@ -51,7 +51,7 @@ public class MenuController extends HttpServlet {
                 ArrayList<Product> products = new ArrayList<>();
                 for (int i = 0; i < categoryList.size(); i++) {
                     for (int j = 0; j < productList.size(); j++) {
-                        if(categoryList.get(i).getId() == productList.get(j).getCategoryId()){
+                        if(categoryList.get(i).getId() == productList.get(j).getCategory().getId()){
                             products.add(productList.get(j));
                         }
                     }
@@ -76,14 +76,14 @@ public class MenuController extends HttpServlet {
                     request.setAttribute("categoryName", productType.getName());
                     request.setAttribute("productList", productList);
                     request.getRequestDispatcher("jsp/allProduct.jsp").forward(request, response);
-                } else if (categoryName.equals("3")) {
+                } else if (categoryName.equals("2")) {
                     int typeId = Integer.parseInt(categoryName);
                     ArrayList<Product> productList = productDAO.getProductByType(typeId);
                     ProductType productType = typeDAO.getProductTypeById(typeId);
                     request.setAttribute("categoryName", productType.getName());
                     request.setAttribute("productList", productList);
                     request.getRequestDispatcher("jsp/allProduct.jsp").forward(request, response);
-                } else if (categoryName.equals("4")) {
+                } else if (categoryName.equals("3")) {
                     int typeId = Integer.parseInt(categoryName);
                     ArrayList<Product> productList = productDAO.getProductByType(typeId);
                     ProductType productType = typeDAO.getProductTypeById(typeId);
@@ -114,9 +114,26 @@ public class MenuController extends HttpServlet {
                 request.setAttribute("categoryName", message);
                 request.getRequestDispatcher("jsp/allProduct.jsp").forward(request, response);
             }
+            
+            if(service.equalsIgnoreCase("productView")){
+                
+            }
 
         } catch (Exception ex) {
             Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void main(String[] args) throws Exception {
+        CategoryDAO categoryDAO = new CategoryDAO();
+        ProductDAO productDAO = new ProductDAO();
+        ArrayList<Category> categoryList = categoryDAO.getAllCategory();
+        ArrayList<Product> productList = productDAO.getAllProduct();
+//        for (int i = 0; i < productList.size(); i++) {
+//            System.out.println(productList.get(i).getCategory().getName());
+//        }
+        for (int i = 0; i < categoryList.size(); i++) {
+            System.out.println(categoryList.get(i).getName());
         }
     }
 
