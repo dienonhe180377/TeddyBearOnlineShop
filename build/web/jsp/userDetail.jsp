@@ -34,9 +34,6 @@
                 <c:if test="${not empty nameError}">
                     <p style="color: red">${nameError}</p>
                 </c:if>
-                <c:if test="${user.getRole().getUserRole() == 'Admin'}">
-                    <input type="text" id="name" name="name" placeholder="Enter name"/>
-                </c:if>
             </div>
 
             <div class="form-group">
@@ -46,9 +43,6 @@
                 </c:if>
                 <c:if test="${not empty emailError}">
                     <p style="color: red">${emailError}</p>
-                </c:if>
-                <c:if test="${user.getRole().getUserRole() == 'Admin'}">
-                    <input type="email" id="email" name="email" placeholder="Enter email"/>
                 </c:if>
             </div>
 
@@ -60,18 +54,12 @@
                 <c:if test="${not empty phoneError}">
                     <p style="color: red">${phoneError}</p>
                 </c:if>
-                <c:if test="${user.getRole().getUserRole() == 'Admin'}">
-                    <input type="tel" id="phone" name="phone" placeholder="Enter phone number"/>
-                </c:if>
             </div>
 
             <div class="form-group">
                 <label for="address">Address</label>
                 <c:if test="${user != null}">
                     <input type="text" id="location" name="location" placeholder="${user.location}"/>
-                </c:if>
-                <c:if test="${user.getRole().getUserRole() == 'Admin'}">
-                    <input type="text" id="location" name="location" placeholder="Enter address"/>
                 </c:if>
             </div>
 

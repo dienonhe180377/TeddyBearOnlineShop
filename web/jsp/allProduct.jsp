@@ -30,7 +30,7 @@
                     <c:forEach var="product" items="${productList}">
                         <div class="col-sm-6 col-md-4 col-lg-3">
                             <div class="box">
-                                <a href="">
+                                <a href="${contextPath}/MenuController?service=productView&productId=${product.id}">
                                     <div class="img-box">
                                         <img src="${contextPath}/${product.images[0].source}" alt="">
                                     </div>
