@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Edit Profile</title>
+    <title>Edit User</title>
     <!-- Font (tuỳ chọn) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,9 +28,16 @@
         <form class="profile-form" action="${contextPath}/UserController" method="post">
             <div class="form-group">
                 <label for="name">Name</label>
-                <c:if test="${user != null}">
-                    <input type="text" id="name" name="name" placeholder="${user.userName}"/>
-                </c:if>
+                <c:choose>
+                    <c:when test="${not empty userInfo}">
+                        <input type="text" id="name" name="name" placeholder="${userInfo.userName}"/>
+                    </c:when>
+                    <c:otherwise>
+                        <c:if test="${user != null}">
+                            <input type="text" id="name" name="name" placeholder="${user.userName}"/>
+                        </c:if>
+                    </c:otherwise>
+                </c:choose>
                 <c:if test="${not empty nameError}">
                     <p style="color: red">${nameError}</p>
                 </c:if>
@@ -38,9 +45,16 @@
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <c:if test="${user != null}">
-                    <input type="email" id="email" name="email" placeholder="${user.email}"/>
-                </c:if>
+                <c:choose>
+                    <c:when test="${not empty userInfo}">
+                        <input type="email" id="email" name="email" placeholder="${userInfo.email}"/>
+                    </c:when>
+                    <c:otherwise>
+                        <c:if test="${user != null}">
+                            <input type="email" id="email" name="email" placeholder="${user.email}"/>
+                        </c:if>
+                    </c:otherwise>
+                </c:choose>
                 <c:if test="${not empty emailError}">
                     <p style="color: red">${emailError}</p>
                 </c:if>
@@ -48,9 +62,17 @@
 
             <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <c:if test="${user != null}">
-                    <input type="tel" id="phone" name="phone" placeholder="${user.phoneNumber}"/>
-                </c:if>
+                <c:choose>
+                    <c:when test="${not empty userInfo}">
+                        <input type="tel" id="phone" name="phone" placeholder="${userInfo.phoneNumber}"/>
+                    </c:when>
+                    <c:otherwise>
+                        <c:if test="${user != null}">
+                            <input type="tel" id="phone" name="phone" placeholder="${user.phoneNumber}"/>
+                        </c:if>
+                    </c:otherwise>
+                </c:choose>
+
                 <c:if test="${not empty phoneError}">
                     <p style="color: red">${phoneError}</p>
                 </c:if>
@@ -58,15 +80,34 @@
 
             <div class="form-group">
                 <label for="address">Address</label>
-                <c:if test="${user != null}">
-                    <input type="text" id="location" name="location" placeholder="${user.location}"/>
-                </c:if>
+                <c:choose>
+                    <c:when test="${not empty userInfo}">
+                        <input type="text" id="location" name="location" placeholder="${userInfo.location}"/>
+                    </c:when>
+                    <c:otherwise>
+                        <c:if test="${user != null}">
+                            <input type="text" id="location" name="location" placeholder="${user.location}"/>
+                        </c:if>
+                    </c:otherwise>
+                </c:choose>
+
             </div>
 
             <div class="form-actions">
                 <button type="button" class="change-image-btn">Change Image</button>
-                <a href="${contextPath}/jsp/userProfile.jsp"><button type="button" class="cancel-btn">Cancel</button></a>
-                <button type="submit" name="service" value="userInfo" class="save-btn">Save</button>
+                <c:choose>
+                    <c:when test="${not empty userInfo}">
+                        <input type="hidden" name="choosenUser" value="${userInfo.id}"/>
+                        <a href="${contextPath}/UserController?service=getAllUser"><button type="button" class="cancel-btn">Cancel</button></a>
+                        <button type="submit" name="service" value="editUser" class="save-btn">Save</button>
+                    </c:when>
+                    <c:otherwise>
+                        <c:if test="${user != null}">
+                            <a href="${contextPath}/jsp/userProfile.jsp"><button type="button" class="cancel-btn">Cancel</button></a>
+                            <button type="submit" name="service" value="userInfo" class="save-btn">Save</button>
+                        </c:if>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </form>
     </section>
