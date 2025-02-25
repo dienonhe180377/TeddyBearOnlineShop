@@ -30,55 +30,49 @@
                         <h2 class="text-center">Filter</h2>
                         <div style="margin-bottom: 20px;">
                             <%-- Start search form --%>
-                            <%--By name--%>
-                            <form action = "" class="navbar-form">
+                            
+                            <form action="${contextPath}/UserController" class="navbar-form" method="get">
+                                
+                                <%--By name--%>
                                 <label>By Name</label><br>
                                 <div class="input-group">
-                                    <input  class="form-control" type="text" id="content" placeholder="Name..." name="criteria"  style="display: inline-block">
-
-                                    <input type="hidden" name="criteriaType" value="userName">
+                                    <input  class="form-control" type="text" id="content" placeholder="Name..." name="nameFilter"  style="display: inline-block">
                                 </div>
-                            </form>
-                            <%--By user Mail--%>
-                            <form action = "" class="navbar-form">
+
+                                <%--By user Mail--%>
+
                                 <label>By Mail</label>
                                 <div class="input-group">
                                     <br>
-                                    <input  class="form-control" type="text" id="content" placeholder="Mail..." name="criteria"  style="display: inline-block">
-
-                                    <input type="hidden" name="criteriaType" value="userMail">
+                                    <input  class="form-control" type="text" id="content" placeholder="Mail..." name="emailFilter"  style="display: inline-block">
                                 </div>
-                            </form>
-                            <%--By User Mobile--%>
-                            <form action = "" class="navbar-form">
+
+                                <%--By User Mobile--%>
                                 <label>By Mobile</label>
                                 <div class="input-group">
                                     <br>
-                                    <input  class="form-control" type="text" id="content" placeholder="Mobile..." name="criteria"  style="display: inline-block">
-
-                                    <input type="hidden" name="criteriaType" value="userMobile">
+                                    <input  class="form-control" type="text" id="content" placeholder="Mobile..." name="phoneFilter"  style="display: inline-block">
                                 </div>
-                            </form>
 
-                            <form action = "" class="filterForm" method="POST">
-                                <%--Role--%>
-                                <div class="row input-group" class="filter-sellection">
-                                    <div class="col-md-6"><label>Role</label></div>
-                                    <div class="col-md-6">
-                                        <select name="roleFilter">
-                                            <option value="-1">Not Specify</option>
-                                            <option id="" value="">Admin</option>
-                                            <option id="" value="">Sale</option>
-                                            <option id="" value="">Manager</option>
-                                        </select>
+                                <div class="filterForm">
+                                    <%--Role--%>
+                                    <div class="row input-group" class="filter-sellection">
+                                        <div class="col-md-6"><label>Role</label></div>
+                                        <div class="col-md-6">
+                                            <select name="roleFilter">
+                                                <option value="">Not Specify</option>
+                                                <c:forEach var="roles" items="${roleList}">
+                                                    <option value="${roles.id}">${roles.userRole}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="hidden" name="service" value="filter">
+                                        <input type="submit" value="Filter" class="btn btn-primary" style="margin: 20px auto;">
                                     </div>
                                 </div>
-                                <div class="input-group">
-                                    <input type="hidden" name="service" value="filter">
-                                    <input type="submit" value="Filter" class="btn btn-primary" style="margin: 20px auto;">
-                                </div>
                             </form>
-
                         </div>
                     </div>
 
@@ -87,7 +81,7 @@
                             <%-- Table Container --%>
                             <div class="form-group" style="max-width: 98%; margin:5px">
                                 <div class="form-group">
-                                    <a href=""><button class="btn btn-success" style="float:right;margin: 5px">Add new User</button></a>
+                                    <a href="${contextPath}/UserController?service=getAddUserFiller"><button class="btn btn-success" style="float:right;margin: 5px">Add new User</button></a>
                                 </div>
                                 <%-- Table of User List--%>
                                 <table id="table-id" class="table table-bordered table-striped">
@@ -99,18 +93,22 @@
                                             <th>Email</th>
                                             <th>Mobile</th>
                                             <th>Role</th>
+                                            <th>Created Date</th>
                                             <th>Manage</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>Expert1</td>
-                                            <td>Expert1@gmail.com</td>
-                                            <td>0969044716</td>
-                                            <td>Expert</td>
-                                            <td><a href=""><div class="btn btn-success">Edit User</div></a></td>
-                                        </tr>
+                                        <c:forEach var="users" items="${userList}">
+                                            <tr>
+                                                <td>${users.id}</td>
+                                                <td>${users.userName}</td>
+                                                <td>${users.email}</td>
+                                                <td>${users.phoneNumber}</td>
+                                                <td>${users.role.userRole}</td>
+                                                <td>${users.createdDate}</td>
+                                                <td><a href="${contextPath}/UserController?service=editUserRedirect&userId=${users.id}"><div class="btn btn-success">Edit User</div></a></td>
+                                            </tr>
+                                        </c:forEach>
                                     </tbody>
                                 </table>
                                 <div class='pagination-container'>

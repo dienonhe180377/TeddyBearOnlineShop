@@ -48,6 +48,7 @@
                         <div id="myDropdown" class="dropdown-content">
                             <c:choose>
                                 <c:when test="${user.role.userRole == 'Admin'}">
+                                    <a href="${contextPath}/jsp/systemManage.jsp">System Manage</a>
                                      <a href="${contextPath}/admin/dashboard">Dashboard</a>
                                 </c:when>
                                 <c:when test="${user.role.userRole == 'Manager'}">

@@ -1,12 +1,210 @@
 package dao;
 
+import entity.Category;
+import entity.Product;
+import entity.ProductImage;
+import entity.ProductType;
+import entity.Size;
 import entity.User;
 import entity.UserRole;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class UserDAO extends DBConnection {
 
-    
+    //Add an user
+    public void addUser(String name, String email, String password, String phone, String location, int role) throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        String sql = "insert into [User](userName,email,phoneNumber,location,roleId,password)\n"
+                + "values(?,?,?,?,?,?)";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            pre.setString(1, name);
+            pre.setString(2, email);
+            pre.setString(3, phone);
+            pre.setString(4, location);
+            pre.setInt(5, role);
+            pre.setString(6, password);
+            pre.executeUpdate();
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+
+    public User getUserById(int userId) throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        String sql = "select * from [User] where id = " + userId;
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String userName = rs.getString("userName");
+                String profilePic = rs.getString("profilePic");
+                String email = rs.getString("email");
+                String phoneNumber = rs.getString("phoneNumber");
+                String location = rs.getString("location");
+                Date createdDate = rs.getDate("createdDate");
+                UserRole role = getRoleByUserID(id);
+                return new User(id, userName, profilePic, email, phoneNumber, location, createdDate, role);
+            }
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+        return null;
+    }
+
+    //Get users by roleId
+    public ArrayList<User> getUserByFilter(String roleId, String usernameFilter, String emailFilter, String phoneFilter) throws Exception {
+        int addedFilter = 0;
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ArrayList<User> users = new ArrayList<>();
+        String sql = "select * from [User]";
+
+        if (!roleId.equals("")) {
+            int role = Integer.parseInt(roleId);
+            if (addedFilter < 1) {
+                sql += " where roleId = " + role;
+                addedFilter++;
+            } else {
+                sql += " and roleId = " + role;
+            }
+        }
+        if (!usernameFilter.equals("")) {
+            if (addedFilter < 1) {
+                String newLine = " where userName like N'%" + usernameFilter + "%'";
+                sql += newLine;
+                addedFilter++;
+            } else {
+                String newLine = " and userName like N'%" + usernameFilter + "%'";
+                sql += newLine;
+            }
+        }
+        if (!emailFilter.equals("")) {
+            if (addedFilter < 1) {
+                sql += " where email like N'%" + emailFilter + "%'";
+                addedFilter++;
+            } else {
+                sql += " and email like N'%" + emailFilter + "%'";
+            }
+        }
+        if (!phoneFilter.equals("")) {
+            if (addedFilter < 1) {
+                sql += " where phoneNumber like N'%" + phoneFilter + "%'";
+                addedFilter++;
+            } else {
+                sql += " and phoneNumber like N'%" + phoneFilter + "%'";
+            }
+        }
+
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String userName = rs.getString("userName");
+                String profilePic = rs.getString("profilePic");
+                String email = rs.getString("email");
+                String phoneNumber = rs.getString("phoneNumber");
+                String location = rs.getString("location");
+                Date createdDate = rs.getDate("createdDate");
+                UserRole role = getRoleByUserID(id);
+                users.add(new User(id, userName, profilePic, email, phoneNumber, location, createdDate, role));
+            }
+            return users;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+
+    //Get all user role
+    public ArrayList<UserRole> getAllUserRole() throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ArrayList<UserRole> roles = new ArrayList<>();
+        String sql = "select * from [UserRole]";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String roleName = rs.getString("roleName");
+                roles.add(new UserRole(id, roleName));
+            }
+            return roles;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+
+    //Get all users
+    public ArrayList<User> getAllUser() throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ArrayList<User> users = new ArrayList<>();
+        String sql = "select * from [User]";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String userName = rs.getString("userName");
+                String profilePic = rs.getString("profilePic");
+                String email = rs.getString("email");
+                String phoneNumber = rs.getString("phoneNumber");
+                String location = rs.getString("location");
+                Date createdDate = rs.getDate("createdDate");
+                UserRole role = getRoleByUserID(id);
+                users.add(new User(id, userName, profilePic, email, phoneNumber, location, createdDate, role));
+            }
+            return users;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
 
     //Change current user information
     public void changeUserInformation(String currentUsername, String username, String email, String phoneNumber, String location) throws Exception {
@@ -108,7 +306,7 @@ public class UserDAO extends DBConnection {
     }
 
     public boolean isUsernameExist(String username) {
-        String sql = "SELECT id FROM [User] WHERE username = ?";
+        String sql = "SELECT id FROM [User] WHERE userName = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
