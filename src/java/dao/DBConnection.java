@@ -16,7 +16,7 @@ public class DBConnection {
     public DBConnection() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            connection = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=TeddyBearOnlineShop", "sa", "sa");
+            connection = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=TeddyBearOnlineShop", "sa", "123");
             System.out.println("Connect successfully !!");
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
@@ -35,7 +35,7 @@ public class DBConnection {
 
     public Connection getConnection() {
         try {
-            connection = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=TeddyBearOnlineShop", "sa", "sa");
+            connection = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=TeddyBearOnlineShop", "sa", "123");
         } catch (SQLException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -91,5 +91,16 @@ public class DBConnection {
             rs.close();
         }
     }
-  
+   public static void main(String[] args) {
+        // Khởi tạo đối tượng DBConnection
+        DBConnection db = new DBConnection();
+
+        // Kiểm tra kết nối
+        Connection conn = db.getConnection();
+        if (conn != null) {
+            System.out.println("Database connected successfully!");
+        } else {
+            System.out.println("Failed to connect to the database.");
+            return;
+        }}
 }

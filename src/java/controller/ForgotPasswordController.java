@@ -19,7 +19,7 @@ public class ForgotPasswordController extends HttpServlet {
     private final String host = "smtp.gmail.com";
     private final String port = "587";
     private final String mailFrom = "teddybearonlineshop6@gmail.com";
-    private final String mailPassword = "012345678930042004123045607890quang1"; 
+    private final String mailPassword = "pxyv ccyi shsw mswt"; 
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
