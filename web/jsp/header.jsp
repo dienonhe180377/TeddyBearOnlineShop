@@ -59,8 +59,20 @@
                                 <a href="${contextPath}/jsp/userProfile.jsp">User Info</a>
                             </c:if>
                             <c:if test="${user.role.userRole == 'Customer'}">
-                                <a href="#">Orders</a>
-                                <a href="#">Cart</a>
+                                <a href="order-list">Orders</a>
+                                <a href="${contextPath}/cart-list"> Cart <c:if test="${not empty cartCount}"> <span class="badge badge-danger">${cartCount}</span> </c:if> </a>
+                                <a href="${contextPath}/manager/order-list">Orders Management</a>
+
+                            </c:if>
+                            <c:if test="${user.role.userRole == 'Seller'}">
+                                 <a href="${contextPath}/seller/dashboard">Dashboard</a>
+                                <a href="${contextPath}/seller/order-list">Orders Management</a>
+                            </c:if>
+                            <c:if test="${user.role.userRole == 'Manager'}">
+                                <a href="${contextPath}/manager/dashboard">Dashboard</a>
+                                <a href="${contextPath}/manager/product-management">Product management</a>
+                                <a href="${contextPath}/manager/order-list">Orders Management</a>
+
                             </c:if>
                             <c:if test="${user.role.userRole == 'Seller' ||
                                           user.role.userRole == 'Marketing' ||

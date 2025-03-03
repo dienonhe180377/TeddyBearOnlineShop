@@ -36,7 +36,7 @@
                             session.removeAttribute("notificationErr");
                         %>
                     </c:if>
-                   <form id="loginForm" action="login" method="post">
+                    <form id="loginForm" action="login" method="post">
                         <div class="mb-3">
                             <input type="text" class="form-control" name="username" placeholder="Enter your username...">
                         </div>
@@ -48,10 +48,13 @@
                             <label class="form-check-label" for="rememberMe">Remember me</label>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Login</button>
-                        <button class="btn btn-danger w-100 mt-2"> <i class="fab fa-google"></i> Login with Google</button>
+                        <a href="google-login" class="btn btn-danger w-100 mt-2">
+                            <i class="fab fa-google"></i> Login with Google
+                        </a>
+
                     </form>
                     <div class="text-center mt-3">
-                        <a href="#" class="text-decoration-none">Forgot Password?</a>
+                        <a href="forgot-password" class="text-decoration-none">Forgot Password?</a>
                         <br>
                         <a href="register" class="text-decoration-none">Create an Account</a>
                     </div>

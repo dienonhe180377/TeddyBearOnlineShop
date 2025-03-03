@@ -3,7 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/SE_Material/SWP391(2)/TeddyBearOnlineShop/TeddyBearOnlineShop/src/java/controller/UserController.java</file>
+            <file>file:/D:/SP2025/TeddyBearOnlineShop/src/java/entity/Order.java</file>
+            <file>file:/D:/SP2025/TeddyBearOnlineShop/web/manager/order-list.jsp</file>
+            <file>file:/D:/SP2025/TeddyBearOnlineShop/src/java/dao/OrderDAO.java</file>
+            <file>file:/D:/SP2025/TeddyBearOnlineShop/web/order-list.jsp</file>
+            <file>file:/D:/SP2025/TeddyBearOnlineShop/src/java/controller/manager/ManagerOrderServlet.java</file>
+            <file>file:/D:/SP2025/TeddyBearOnlineShop/src/java/dao/UserDAO.java</file>
+            <file>file:/D:/SP2025/TeddyBearOnlineShop/src/java/controller/seller/ManagerOrderServlet.java</file>
+            <file>file:/D:/SP2025/TeddyBearOnlineShop/web/gui/header.jsp</file>
+            <file>file:/D:/SP2025/TeddyBearOnlineShop/src/java/controller/LoginController.java</file>
+            <file>file:/D:/SP2025/TeddyBearOnlineShop/web/jsp/header.jsp</file>
+            <file>file:/D:/SP2025/TeddyBearOnlineShop/src/java/controller/OrderDetailServlet.java</file>
+            <file>file:/D:/SP2025/TeddyBearOnlineShop/web/seller/order-list.jsp</file>
+            <file>file:/D:/SP2025/TeddyBearOnlineShop/src/java/entity/Size.java</file>
+            <file>file:/D:/SP2025/TeddyBearOnlineShop/src/java/controller/LoginGoogleController.java</file>
         </group>
     </open-files>
 </project-private>

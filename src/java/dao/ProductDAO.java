@@ -123,39 +123,6 @@ public class ProductDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-    
-    public Product getProductById(int productId) throws Exception {
-        Connection conn = null;
-        ResultSet rs = null;
-        /* Result set returned by the sqlserver */
-        PreparedStatement pre = null;
-        /* Prepared statement for executing sql queries */
-        Product product = null;
-        String sql = "SELECT * FROM Product where id = " + productId;
-        try {
-            conn = getConnection();
-            pre = conn.prepareStatement(sql);
-            rs = pre.executeQuery();
-            if (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                ArrayList<ProductImage> images = getProductImages(id);
-                ArrayList<Size> sizes = getProductSizes(id);
-                int categoryId = rs.getInt("categoryId");
-                int typeId = rs.getInt("typeId");
-                Category category = categoryDAO.getById(categoryId);
-                ProductType type = productTypeDAO.getProductTypeById(typeId);
-                product = new Product(id, name, images, sizes, type, category);
-            }
-            return product;
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            closeResultSet(rs);
-            closePreparedStatement(pre);
-            closeConnection(conn);
-        }
-    }
 
     public ArrayList<Product> getProductByCategory(int categoryID) throws Exception {
         Connection conn = null;
