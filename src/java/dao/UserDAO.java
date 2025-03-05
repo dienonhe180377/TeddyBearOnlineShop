@@ -72,6 +72,22 @@ public class UserDAO extends DBConnection {
         return null;
     }
 
+    public void updateUserAvatar(int userId, String avatarPath) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pre = null;
+        String sql = "UPDATE [User] SET profilePic = ? WHERE Id = ?";
+
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            pre.setString(1, avatarPath);
+            pre.setInt(2, userId);
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+            throw ex;
+        }
+    }
+
     //Get users by roleId
     public ArrayList<User> getUserByFilter(String roleId, String usernameFilter, String emailFilter, String phoneFilter) throws Exception {
         int addedFilter = 0;
