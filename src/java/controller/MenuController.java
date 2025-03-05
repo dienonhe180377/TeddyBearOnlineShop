@@ -9,7 +9,6 @@ import dao.ProductDAO;
 import dao.ProductTypeDAO;
 import entity.Category;
 import entity.Product;
-import entity.ProductImage;
 import entity.ProductType;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -52,7 +51,7 @@ public class MenuController extends HttpServlet {
                 ArrayList<Product> products = new ArrayList<>();
                 for (int i = 0; i < categoryList.size(); i++) {
                     for (int j = 0; j < productList.size(); j++) {
-                        if (categoryList.get(i).getId() == productList.get(j).getCategory().getId()) {
+                        if(categoryList.get(i).getId() == productList.get(j).getCategory().getId()){
                             products.add(productList.get(j));
                         }
                     }
@@ -102,11 +101,11 @@ public class MenuController extends HttpServlet {
 
             if (service.equalsIgnoreCase("searchProduct")) {
                 String text = request.getParameter("searchValue");
-                if (text.equalsIgnoreCase("Gấu")) {
+                if(text.equalsIgnoreCase("Gấu")){
                     text = "Gau";
-                } else if (text.equalsIgnoreCase("Chó")) {
+                } else if(text.equalsIgnoreCase("Chó")){
                     text = "Cho";
-                } else if (text.equalsIgnoreCase("Mèo")) {
+                } else if(text.equalsIgnoreCase("Mèo")){
                     text = "Meo";
                 }
                 ArrayList<Product> productList = productDAO.getProductByText(text);
@@ -115,37 +114,16 @@ public class MenuController extends HttpServlet {
                 request.setAttribute("categoryName", message);
                 request.getRequestDispatcher("jsp/allProduct.jsp").forward(request, response);
             }
-
-            if (service.equalsIgnoreCase("productView")) {
-                String thumbnail = request.getParameter("thumbnail");
-                int productId = Integer.parseInt(request.getParameter("productId"));
-                Product product = productDAO.getProductById(productId);
-                if (thumbnail == null) {
-                    thumbnail = product.getImages().get(0).getSource();
-                    request.setAttribute("thumbnail", thumbnail);
-                    request.setAttribute("product", product);
-                    request.getRequestDispatcher("jsp/productView.jsp").forward(request, response);
-                } else {
-                    int imageId = Integer.parseInt(thumbnail);
-                    ArrayList<ProductImage> images = product.getImages();
-                    for (int i = 0; i < images.size(); i++) {
-                        if (images.get(i).getId() == imageId) {
-                            thumbnail = images.get(i).getSource();
-                            request.setAttribute("thumbnail", thumbnail);
-                        }
-                    }
-                }
-                request.setAttribute("product", product);
-                request.getRequestDispatcher("jsp/productView.jsp").forward(request, response);
+            
+            if(service.equalsIgnoreCase("productView")){
+                
             }
-            
-            
 
         } catch (Exception ex) {
             Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public static void main(String[] args) throws Exception {
         CategoryDAO categoryDAO = new CategoryDAO();
         ProductDAO productDAO = new ProductDAO();

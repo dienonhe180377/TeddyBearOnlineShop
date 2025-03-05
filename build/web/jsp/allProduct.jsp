@@ -30,7 +30,7 @@
                     <c:forEach var="product" items="${productList}">
                         <div class="col-sm-6 col-md-4 col-lg-3">
                             <div class="box">
-                                <a href="${contextPath}/MenuController?service=productView&productId=${product.id}">
+                                <a href="">
                                     <div class="img-box">
                                         <img src="${contextPath}/${product.images[0].source}" alt="">
                                     </div>
@@ -42,8 +42,15 @@
                                             <span>
                                                 ${product.sizes[0].price}₫
                                             </span>
-                                        </h6>
+                                        </h6> 
                                     </div>
+                                    <br>
+                                    <form action="${contextPath}/add-to-cart" method="post">
+                                        <input type="hidden" name="productId" value="${product.id}">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
                                     <div class="new">
                                         <span>
                                             New

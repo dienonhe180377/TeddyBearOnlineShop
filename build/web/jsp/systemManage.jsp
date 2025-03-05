@@ -1,6 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core"%>
-<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -102,7 +101,7 @@
                         <span class="fas fa-user-shield">Setting List</span>  
                     </div>
                 </a>
-                <a href="${contextPath}/UserController?service=getAllUser" style="text-decoration: none;color:black" >
+                <a href="" style="text-decoration: none;color:black" >
                     <div class="text-center big-button">
                         <span class="fas fa-user-shield">User List</span>  
                     </div> 
