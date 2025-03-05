@@ -48,20 +48,15 @@
                         <div id="myDropdown" class="dropdown-content">
                             <c:choose>
                                 <c:when test="${user.role.userRole == 'Admin'}">
-                                    <a href="${contextPath}/admin/dashboard">Dashboard</a>
+                                    <a href="${contextPath}/jsp/systemManage.jsp">System Manage</a>
+                                     <a href="${contextPath}/admin/dashboard">Dashboard</a>
                                 </c:when>
                                 <c:when test="${user.role.userRole == 'Manager'}">
-                                    <a href="${contextPath}/manager/dashboard">Dashboard</a>
-                                    <a href="${contextPath}/manager/product-management">Product management</a>
-                                    <a href="${contextPath}/manager/order-list">Orders Management</a>
+                                      <a href="${contextPath}/manager/dashboard">Dashboard</a>
+                                      <a href="${contextPath}/manager/product-management">Product management</a>
                                 </c:when>
                                 <c:when test="${user.role.userRole == 'Seller'}">
                                     <a href="${contextPath}/seller/dashboard">Dashboard</a>
-                                    <a href="${contextPath}/seller/order-list">Orders Management</a>
-                                </c:when>
-                                <c:when test="${user.role.userRole == 'Customer'}">
-                                    <a href="order-list">Orders</a>
-                                    <a href="${contextPath}/cart-list"> Cart <c:if test="${not empty cartCount}"> <span class="badge badge-danger">${cartCount}</span> </c:if> </a>
                                 </c:when>
                                 <c:otherwise>
                                 </c:otherwise>

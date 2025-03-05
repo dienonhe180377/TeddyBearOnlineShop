@@ -20,7 +20,7 @@ public class User {
     private String location;
     private Date createdDate;
     private UserRole role;
-    private String password;
+
     public int getId() {
         return id;
     }
@@ -97,14 +97,6 @@ public class User {
         this.location = location;
         this.createdDate = createdDate;
         this.role = role;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
 }
