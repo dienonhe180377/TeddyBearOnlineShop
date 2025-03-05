@@ -16,7 +16,7 @@
         <c:if test="${categoryList == null}">
             <c:redirect url="/MenuController?service=productInformation"/>
         </c:if>
-
+        
         <jsp:include page="header.jsp"/>
         <c:forEach var="category" items="${categoryList}">
             <div>
@@ -27,20 +27,11 @@
                             <c:forEach var="product" items="${productList}">
                                 <c:if test="${product.category.id == category.id}">
                                     <li class="card-item swiper-slide">
-                                        <a href="#" class="card-link" name="productDetail">
+                                        <a href="${contextPath}/MenuController?service=productView&productId=${product.id}" class="card-link">
                                             <img src="${contextPath}/${product.images[0].source}" alt="Card Image" class="card-image">
                                             <p class="badge">${product.name}</p>
                                             <h2 class="card-title">${product.sizes[0].price}₫</h2>
-                                            <div class="card-buttons" style="display: flex; justify-content: space-between; margin-top: 5px;">
-                                                <button class="fa-solid fa-arrow-right card-button"></button>
-                                                <!-- Form for adding product to cart -->
-                                                <form action="${contextPath}/add-to-cart" method="post" style="margin: 0;">
-                                                    <input type="hidden" name="productId" value="${product.id}">
-                                                    <button type="submit" class="card-button">
-                                                        <i class="fa fa-cart-plus" aria-hidden="true"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
+                                            <button class="fa-solid fa-arrow-right card-button"></button>
                                         </a>
                                     </li>
                                 </c:if>

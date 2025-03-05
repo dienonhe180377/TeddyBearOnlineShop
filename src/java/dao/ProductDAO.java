@@ -9,7 +9,6 @@ import entity.Product;
 import entity.ProductImage;
 import entity.ProductType;
 import entity.Size;
-import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,22 +20,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author OS
  */
 public class ProductDAO extends DBConnection {
-
+    
     private CategoryDAO categoryDAO = new CategoryDAO();
     private ProductTypeDAO productTypeDAO = new ProductTypeDAO();
 
     public ProductDAO() {
     }
-
-    public ArrayList<ProductImage> getProductImages(int productId) throws Exception {
+    
+    public ArrayList<ProductImage> getProductImages(int productId) throws Exception{
         Connection conn = null;
         ResultSet rs = null;
         /* Result set returned by the sqlserver */
@@ -55,10 +52,14 @@ public class ProductDAO extends DBConnection {
             return images;
         } catch (Exception ex) {
             throw ex;
-        } 
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
     }
-
-    public ArrayList<Size> getProductSizes(int productId) throws Exception {
+    
+    public ArrayList<Size> getProductSizes(int productId) throws Exception{
         Connection conn = null;
         ResultSet rs = null;
         /* Result set returned by the sqlserver */
@@ -83,7 +84,11 @@ public class ProductDAO extends DBConnection {
             return sizes;
         } catch (Exception ex) {
             throw ex;
-        } 
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
     }
 
     public ArrayList<Product> getAllProduct() throws Exception {
@@ -112,6 +117,43 @@ public class ProductDAO extends DBConnection {
             return productList;
         } catch (Exception ex) {
             throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+    
+    public Product getProductById(int productId) throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        Product product = null;
+        String sql = "SELECT * FROM Product where id = " + productId;
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                ArrayList<ProductImage> images = getProductImages(id);
+                ArrayList<Size> sizes = getProductSizes(id);
+                int categoryId = rs.getInt("categoryId");
+                int typeId = rs.getInt("typeId");
+                Category category = categoryDAO.getById(categoryId);
+                ProductType type = productTypeDAO.getProductTypeById(typeId);
+                product = new Product(id, name, images, sizes, type, category);
+            }
+            return product;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
         }
     }
 
@@ -220,50 +262,54 @@ public class ProductDAO extends DBConnection {
 
     }
 
-    public List<Product> getProductsWithParam(String searchParam, Integer categoryId, Integer typeId, Integer minPrice, Integer maxPrice) {
+    
+     public List<Product> getProductsWithParam(String searchParam, Integer categoryId, Integer typeId, Integer minPrice, Integer maxPrice) {
         List<Product> products = new ArrayList<>();
-        List<Object> params = new ArrayList<>();
-        StringBuilder query = new StringBuilder("SELECT * FROM Product p WHERE 1=1 ");
-
-        if (searchParam != null && !searchParam.trim().isEmpty()) {
-            query.append("AND p.name LIKE ? ");
-            params.add("%" + searchParam + "%");
-        }
-        if (categoryId != null) {
-            query.append("AND p.categoryId = ? ");
-            params.add(categoryId);
-        }
-        if (typeId != null) {
-            query.append("AND p.typeId = ? ");
-            params.add(typeId);
-        }
-        if (minPrice != null) {
-            query.append("AND EXISTS (SELECT 1 FROM Size s WHERE s.productId = p.id AND s.price >= ?) ");
-            params.add(minPrice);
-        }
-        if (maxPrice != null) {
-            query.append("AND EXISTS (SELECT 1 FROM Size s WHERE s.productId = p.id AND s.price <= ?) ");
-            params.add(maxPrice);
-        }
-        query.append("ORDER BY p.id DESC");
-
-        PreparedStatement preparedStatement = null;
-        ResultSet rs = null;
+        List<Object> list = new ArrayList<>();
+        ProductTypeDAO productTypeDAO = new ProductTypeDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
         try {
-            preparedStatement = connection.prepareStatement(query.toString());
-            mapParams(preparedStatement, params);
-            rs = preparedStatement.executeQuery();
-            while (rs.next()) {
-                int productId = rs.getInt("id");
-                String name = rs.getString("name");
-                ArrayList<ProductImage> images = getProductImages(productId);
-                ArrayList<Size> sizes = getProductSizes(productId);
-                int catId = rs.getInt("categoryId");
-                int tId = rs.getInt("typeId");
-                ProductType productType = productTypeDAO.getById(tId);
-                Category category = categoryDAO.getById(catId);
-                Product product = new Product(productId, name, images, sizes, productType, category);
-                products.add(product);
+            StringBuilder query = new StringBuilder("SELECT * from Product WHERE 1=1");
+
+            if (searchParam != null && !searchParam.trim().isEmpty()) {
+                query.append(" AND Name LIKE ? ");
+                list.add("%" + searchParam + "%");
+            }
+            if (categoryId != null) {
+                query.append(" AND categoryId = ? ");
+                list.add(categoryId);
+            }
+            if (typeId != null) {
+                query.append(" AND typeId = ? ");
+                list.add(typeId);
+            }
+            if (minPrice != null) {
+                query.append(" AND price >= ? ");
+                list.add(minPrice);
+            }
+            if (maxPrice != null) {
+                query.append(" AND price <= ? ");
+                list.add(maxPrice);
+            }
+
+            query.append(" ORDER BY id DESC");
+            PreparedStatement preparedStatement = connection.prepareStatement(query.toString());
+            mapParams(preparedStatement, list);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    Product product = new Product();
+                    product.setId(rs.getInt("id"));
+                    product.setName(rs.getString("name"));
+                    product.setImage(rs.getString("image"));
+                    product.setDescription(rs.getString("description"));
+                    product.setQuantity(rs.getInt("quantity"));
+                    product.setPrice(rs.getString("price"));
+                    ProductType productType = productTypeDAO.getById(rs.getInt("typeId"));
+                    Category category = categoryDAO.getById(rs.getInt("categoryId"));
+                    product.setCategory(category);
+                    product.setProductType(productType);
+                    products.add(product);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -272,50 +318,17 @@ public class ProductDAO extends DBConnection {
     }
 
     public void addProduct(Product product) {
-        String sql = "INSERT INTO Product (name, categoryId, typeId) VALUES (?, ?, ?)";
-        PreparedStatement statement = null;
-        ResultSet rs = null;
+        String sql = "INSERT INTO Product (name, image, description, quantity, price, categoryId, typeId) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
-            statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, product.getName());
-            statement.setInt(2, product.getCategory().getId());
-            statement.setInt(3, product.getProductType().getId());
+            statement.setString(2, product.getImage());
+            statement.setString(3, product.getDescription());
+            statement.setInt(4, product.getQuantity());
+            statement.setString(5, product.getPrice());
+            statement.setInt(6, product.getCategory().getId());
+            statement.setInt(7, product.getProductType().getId());
             statement.executeUpdate();
-            rs = statement.getGeneratedKeys();
-            int productId = 0;
-            if (rs.next()) {
-                productId = rs.getInt(1);
-            }
-
-            // Insert product images
-            if (product.getImages() != null && !product.getImages().isEmpty()) {
-                String sqlImage = "INSERT INTO ProductImage (productId, source) VALUES (?, ?)";
-                PreparedStatement imgStmt = connection.prepareStatement(sqlImage);
-                for (ProductImage img : product.getImages()) {
-                    imgStmt.setInt(1, productId);
-                    imgStmt.setString(2, img.getSource());
-                    imgStmt.addBatch();
-                }
-                imgStmt.executeBatch();
-                imgStmt.close();
-            }
-
-            // Insert product sizes
-            if (product.getSizes() != null && !product.getSizes().isEmpty()) {
-                String sqlSize = "INSERT INTO Size (productId, name, quantity, price) VALUES (?, ?, ?, ?)";
-                PreparedStatement sizeStmt = connection.prepareStatement(sqlSize);
-                for (Size s : product.getSizes()) {
-                    sizeStmt.setInt(1, productId);
-                    sizeStmt.setString(2, s.getName());
-                    sizeStmt.setInt(3, s.getQuantity());
-                    // Assuming price is stored as a number in the DB; if not, adjust accordingly.
-                    sizeStmt.setInt(4, Integer.parseInt(s.getPrice().replace(".", "")));
-                    sizeStmt.addBatch();
-                }
-                sizeStmt.executeBatch();
-                sizeStmt.close();
-            }
-
         } catch (SQLException ex) {
             System.out.println("Error adding product: " + ex);
         }
@@ -323,29 +336,25 @@ public class ProductDAO extends DBConnection {
 
     public Product getById(int id) {
         String sql = "SELECT * FROM Product WHERE id = ?";
-        PreparedStatement statement = null;
-        ResultSet rs = null;
         try {
-            statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, id);
-            rs = statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                int productId = rs.getInt("id");
-                String name = rs.getString("name");
-                ArrayList<ProductImage> images = getProductImages(productId);
-                ArrayList<Size> sizes = getProductSizes(productId);
-                int categoryId = rs.getInt("categoryId");
-                int typeId = rs.getInt("typeId");
-                Category category = categoryDAO.getById(categoryId);
-                ProductType productType = productTypeDAO.getProductTypeById(typeId);
-                return new Product(productId, name, images, sizes, productType, category);
+                Product product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setName(rs.getString("name"));
+                product.setImage(rs.getString("image"));
+                product.setDescription(rs.getString("description"));
+                product.setQuantity(rs.getInt("quantity"));
+                product.setPrice(rs.getString("price"));
+                product.setCategory(new CategoryDAO().getById(rs.getInt("categoryId")));
+                product.setProductType(new ProductTypeDAO().getById(rs.getInt("typeId")));
+                return product;
             }
         } catch (SQLException ex) {
             System.out.println("Error fetching product: " + ex);
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
-
         return null;
     }
 
@@ -380,5 +389,5 @@ public class ProductDAO extends DBConnection {
 
         return products.subList(fromIndex, toIndex);
     }
-
+    
 }

@@ -18,13 +18,12 @@
                 <!-- Hình ảnh sản phẩm (bên trái) -->
                 <div class="product-image">
                     <!-- Thay link ảnh của bạn vào src bên dưới -->
-                    <img src="https://gaubongonline.vn/wp-content/uploads/2024/05/Chuot-capybara-than-tai-2.jpg" alt="Gấu Bông Teddy Socola">
-
+                    <img src="${contextPath}/${thumbnail}" alt="Gấu Bông Teddy Socola">
                 </div>
 
                 <!-- Thông tin sản phẩm (bên phải) -->
                 <div class="product-details">
-                    <h1 class="product-title">Gấu Bông Teddy Socola</h1>
+                    <h1 class="product-title">${product.name}</h1>
 
                     <table class="size-status-table">
                         <thead>
@@ -34,26 +33,28 @@
                                 <th>Trạng thái</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>80cm</td>
-                                <td>425.000đ</td>
-                                <td>Còn hàng</td>
-                            </tr>
-                            <tr>
-                                <td>1m</td>
-                                <td>550.000đ</td>
-                                <td>Còn hàng</td>
-                            </tr>
-                            <tr>
-                                <td>1m2</td>
-                                <td>650.000đ</td>
-                                <td>Còn hàng</td>
-                            </tr>
-                        </tbody>
+                        <c:forEach var="size" items="${product.sizes}">
+                            <tbody>
+                                <tr>
+                                    <td>${size.name}</td>
+                                    <td>${size.price}đ</td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${size.quantity < 1}">
+                                                Hết Hàng
+                                            </c:when>
+                                            <c:otherwise>
+                                                Còn Hàng
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </c:forEach>
+
                     </table>
 
-                    <div class="product-price">425.000đ </div>
+                    <div class="product-price">${product.sizes[0].price}đ </div>
 
                     <div class="product-actions">
                         <button id="buyButton" class="btn btn-buy">Thêm vào giỏ hàng</button>
@@ -67,43 +68,40 @@
                     </p>
                 </div>
                 <!-- Pop-up chọn size -->
-                <div id="sizePopup" class="popup">
-                    <div class="popup-content">
-                        <span class="close" id="closePopup">&times;</span>
-                        <h2>Chọn kích cỡ sản phẩm</h2>
-                        <select id="productSize">
-                            <option value="S">S</option>
-                            <option value="M">M</option>
-                            <option value="L">L</option>
-                            <option value="XL">XL</option>
-                        </select>
-                        <button id="addToCart">Thêm vào giỏ hàng</button>
+                <form action="" method="get">
+                    <div id="sizePopup" class="popup">
+                        <div class="popup-content">
+                            <span class="close" id="closePopup">&times;</span>
+                            <h2>Chọn kích cỡ sản phẩm</h2>
+                            <select id="productSize" name="size">
+                                <c:forEach var="size" items="${product.sizes}">
+                                    <option value="${size.name}">${size.name}</option>
+                                </c:forEach>
+                            </select>
+                            <button id="addToCart">Thêm vào giỏ hàng</button>
+                        </div>
                     </div>
-                </div>
-                <div id="sizePopup2" class="popup">
-                    <div class="popup-content">
-                        <span class="close" id="closePopup">&times;</span>
-                        <h2>Chọn kích cỡ sản phẩm</h2>
-                        <select id="productSize">
-                            <option value="S">S</option>
-                            <option value="M">M</option>
-                            <option value="L">L</option>
-                            <option value="XL">XL</option>
-                        </select>
-                        <button id="addToCart">Mua Ngay</button>
+                    <div id="sizePopup2" class="popup">
+                        <div class="popup-content">
+                            <span class="close" id="closePopup">&times;</span>
+                            <h2>Chọn kích cỡ sản phẩm</h2>
+                            <select id="productSize" name="size">
+                                <c:forEach var="size" items="${product.sizes}">
+                                    <option value="${size.name}">${size.name}</option>
+                                </c:forEach>
+                            </select>
+                            <button id="addToCart">Mua Ngay</button>
+                        </div>
                     </div>
-                </div>
-                
+                </form>
             </div>
             <div class="small-images">
                 <ul>
-                    <li>
-                        <img src="https://gaubongonline.vn/wp-content/uploads/2024/05/Chuot-capybara-than-tai-2.jpg" alt="Gấu Bông Teddy Socola">
-                    </li>
-                    <li>
-                        <img src="https://gaubongonline.vn/wp-content/uploads/2024/05/Chuot-capybara-than-tai-2.jpg" alt="Gấu Bông Teddy Socola">
-                    </li>
-
+                    <c:forEach var="image" items="${product.images}">
+                        <li>
+                            <a href="${contextPath}/MenuController?service=productView&thumbnail=${image.id}&productId=${product.id}"><img src="${contextPath}/${image.source}" alt="Gấu Bông Teddy Socola"></a>
+                        </li>
+                    </c:forEach>
                 </ul>
             </div>
         </div>
