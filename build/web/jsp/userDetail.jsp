@@ -20,6 +20,136 @@
         rel="stylesheet"
         >
     <link rel="stylesheet" href="${contextPath}/css/editProfile.css" />
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            max-width: 600px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content h2 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+
+        #avatarForm {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        #newAvatar {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            width: 80%;
+            font-size: 16px;
+        }
+
+        #newAvatar:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        #avatarPreviewContainer {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+
+        .avatar-preview {
+            width: 150px;
+            height: 150px;
+            object-fit: cover; 
+            border-radius: 50%; 
+            border: 2px solid #ccc;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .avatar-preview:hover {
+            transform: scale(1.1);
+        }
+
+
+        #newAvatar {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 80%;
+        }
+
+        #newAvatar:focus {
+            outline: none;
+            border-color: #4CAF50; 
+        }
+
+        .modal.show {
+            display: block;
+            opacity: 1;
+        }
+
+    </style>
+
 </head>
 <body>
     <jsp:include page="header.jsp"/>
@@ -94,7 +224,6 @@
             </div>
 
             <div class="form-actions">
-                <button type="button" class="change-image-btn">Change Image</button>
                 <c:choose>
                     <c:when test="${not empty userInfo}">
                         <input type="hidden" name="choosenUser" value="${userInfo.id}"/>
@@ -103,6 +232,7 @@
                     </c:when>
                     <c:otherwise>
                         <c:if test="${user != null}">
+                            <p  onclick="openAvatarModal()" name="service" value="changeImage" class="change-image-btn">Change Image</p>
                             <a href="${contextPath}/jsp/userProfile.jsp"><button type="button" class="cancel-btn">Cancel</button></a>
                             <button type="submit" name="service" value="userInfo" class="save-btn">Save</button>
                         </c:if>
@@ -110,11 +240,89 @@
                 </c:choose>
             </div>
         </form>
+        <div id="avatarModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeAvatarModal()">&times;</span>
+                <h2>Chọn ảnh đại diện mới</h2>
+
+                <div id="avatarPreviewContainer">
+                    <img id="avatarPreview" src="${contextPath}/${user.profilePic}" alt="Preview Image" class="avatar-preview" />
+                </div>
+
+                <form id="avatarForm" enctype="multipart/form-data">
+                    <input type="file" name="avatar" id="newAvatar" required onchange="previewImage(event)" />
+                    <button type="submit" class="btn">Cập nhật ảnh đại diện</button>
+                </form>
+            </div>
+        </div>
     </section>
 
     <footer>
         <jsp:include page="footer.jsp"/>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+                        function previewImage(event) {
+                            var reader = new FileReader();
+                            reader.onload = function () {
+                                var previewImage = document.getElementById("avatarPreview");
+                                previewImage.src = reader.result;
+                            }
+                            reader.readAsDataURL(event.target.files[0]);
+                        }
+                        function openAvatarModal() {
+                            document.getElementById("avatarModal").style.display = "block";
+                        }
 
+                        function closeAvatarModal() {
+                            document.getElementById("avatarModal").style.display = "none";
+                        }
+
+                        window.onclick = function (event) {
+                            var modal = document.getElementById("avatarModal");
+                            if (event.target == modal) {
+                                closeAvatarModal();
+                            }
+                        }
+                        document.getElementById("avatarForm").addEventListener("submit", function (event) {
+                            event.preventDefault();
+
+                            var formData = new FormData(this);
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("POST", "${pageContext.request.contextPath}/updateAvatar", true);
+
+                            xhr.onload = function () {
+                                if (xhr.status === 200) {
+                                    var response = JSON.parse(xhr.responseText);
+                                    if (response.status === "success") {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Cập nhật ảnh đại diện thành công!',
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        });
+                                        closeAvatarModal();
+                                        document.querySelector(".profile-card img.avatar").src = response.avatarPath;
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Có lỗi xảy ra!',
+                                            text: response.message,
+                                        });
+                                    }
+                                } else {
+                                    // Nếu có lỗi từ server
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Có lỗi xảy ra!',
+                                        text: 'Không thể cập nhật ảnh đại diện.',
+                                    });
+                                }
+                            };
+
+                            xhr.send(formData);
+                        });
+
+    </script>
 </body>
 

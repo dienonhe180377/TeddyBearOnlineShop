@@ -42,6 +42,10 @@ public class UserController extends HttpServlet {
             HttpSession session = request.getSession();
             UserDAO userDao = new UserDAO();
 
+            if (service.equalsIgnoreCase("changeImage")) {
+
+            }
+
             if (service.equalsIgnoreCase("editUser")) {
                 String userID = request.getParameter("choosenUser");
                 int userId = Integer.parseInt(userID);
