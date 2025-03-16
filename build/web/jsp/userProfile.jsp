@@ -12,8 +12,16 @@
         <link rel="stylesheet" href="${contextPath}/css/userProfile.css" />
     </head>
     <body>
-        <jsp:include page="header.jsp"/>
-
+        
+        <c:choose>
+            <c:when test="${user.getRole().getUserRole() == 'Customer'}">
+                <jsp:include page="header.jsp"/>
+            </c:when>
+            <c:otherwise>
+                <jsp:include page="../gui/header.jsp" />
+            </c:otherwise>
+        </c:choose>
+        
         <!-- Container chính -->
         <div class="container">
             <div class="profile-card">

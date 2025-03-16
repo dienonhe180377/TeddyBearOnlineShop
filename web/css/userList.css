@@ -8,6 +8,10 @@ and open the template in the editor.
     Author     : ChucNV
 */
 
+label{
+    margin-top: 13px;
+}
+
 #form{
     background: whitesmoke;
     border-radius: 15px;

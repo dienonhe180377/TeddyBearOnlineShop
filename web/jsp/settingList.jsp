@@ -28,24 +28,21 @@
         <div class="wrap">
 
             <%-- Include header page --%>
-
+            <jsp:include page="../gui/header.jsp" />
+            <jsp:include page="../gui/sidebar.jsp"/>
 
             <%-- Check If subjectQuizList,testTypeQuizListis avaiable not, if not redirect to load information --%>
 
-            <div class="row" style="margin-top: 3rem">
+            <div class="row" style="margin-top: 7rem">
                 <div class="col-md-1"></div>
                 <div class="col-md-10" id="form" style="min-height: 600px; ">
                     <div class="container" >
                         <h2 class="text-center">Setting List</h2>
                         <%-- Table Container --%>
                         <div class="form-group" style="width: 50%;float: left">
-                            <h5>Select Number of Rows</h5>
+                            <h5>Search Setting</h5>
                             <%-- Select number of Rows show on table --%>
-                            <select class  ="form-control" name="state" id="maxRows" style="width: 150px;">                               
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="20">20</option>
-                            </select>
+                            <input type="text" class="form-control" name="search" style="width: 150px;">
                         </div>
                         <div class="dropdown" style="width: 50%;float: left">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="float: right; margin-top: auto;margin-bottom: auto">
@@ -73,17 +70,15 @@
                         <%-- Headers of Table--%>
                         <thead>
                             <tr style="background-color: #F0D8D5;">
-                                <th onclick="">Id</th>
-                                <th onclick="">Setting Type</th>
-                                <th onclick="">Name</th>
-                                <th onclick="">Status</th>
-                                <th>Action</th>
+                                <th>Loại Setting</th>
+                                <th>Tên Setting</th>
+                                <th>Trạng thái</th>
+                                <th>Sửa/Xóa</th>
                             </tr>
                         </thead>
                         <tbody>
                             <%-- user role list --%>
                             <tr>
-                                <td>1</td>
                                 <td>User Roles</td>
                                 <td>Manager</td>
                                 <td>Active</td>
@@ -110,6 +105,8 @@
             <div class="col-md-1"></div>
         </div>
         <div class="space" style="min-height: 50vh;"></div>
+        
+        <jsp:include page="footer.jsp"/>
 
     </div>
     <script>
@@ -117,7 +114,7 @@
         getPagination('#table-id');
 
         function getPagination(table) {
-            var maxRows = 7; // Cố định 7 dòng trên 1 trang
+            var maxRows = 5; // Cố định 7 dòng trên 1 trang
             var lastPage = 1;
 
             // Xóa các nút phân trang cũ (giữ nút Prev và Next)
@@ -135,16 +132,25 @@
                 }
             });
 
-            // Tạo nút phân trang nếu số dòng vượt quá maxRows
+            // Nếu tổng số dòng vượt quá maxRows, tạo nút phân trang
             if (totalRows > maxRows) {
                 var pagenum = Math.ceil(totalRows / maxRows);
                 for (var i = 1; i <= pagenum; i++) {
-                    $('.pagination #prev').before(
-                            '<li class="btn btn-info" data-page="' + i + '">\
-                        <div>' + i + '<div></div></div>\
-                    </li>'
-                            ).show();
+                    // Chèn nút trang trước nút Next để giữ thứ tự đúng giữa Prev và Next
+                    $('<li class="btn btn-info" data-page="' + i + '"><div>' + i + '</div></li>')
+                            .insertBefore($('.pagination [data-page="next"]'));
                 }
+            } else {
+                // Nếu số dòng không vượt quá maxRows, đảm bảo nút trang 1 có ở giữa
+                if ($('.pagination [data-page="1"]').length === 0) {
+                    $('<li class="btn btn-info active" data-page="1"><div>1</div></li>')
+                            .insertBefore($('.pagination [data-page="next"]'));
+                }
+                // Vô hiệu hóa nút Prev và Next
+                $('.pagination [data-page="prev"], .pagination [data-page="next"]')
+                        .css('pointer-events', 'none')
+                        .addClass('disabled');
+                return;
             }
 
             // Đánh dấu trang đầu tiên là active
@@ -162,16 +168,18 @@
                     pageNum = --lastPage;
                 }
                 if (pageNum === 'next') {
-                    if (lastPage == $('.pagination li').length - 2)
+                    // Số trang bằng tổng số nút trang (không tính Prev và Next)
+                    var totalPages = $('.pagination li').length - 2;
+                    if (lastPage == totalPages)
                         return;
                     pageNum = ++lastPage;
                 }
                 lastPage = pageNum;
-                var trIndex = 0;
                 $('.pagination li').removeClass('active');
                 $('.pagination [data-page="' + lastPage + '"]').addClass('active');
                 limitPagging();
 
+                var trIndex = 0;
                 $(table + ' tr:gt(0)').each(function () {
                     trIndex++;
                     if (trIndex > maxRows * pageNum || trIndex <= maxRows * pageNum - maxRows) {

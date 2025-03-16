@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -31,8 +32,12 @@ public class SettingController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
+            String service = request.getParameter("service");
+            SettingDAO settingDAO = new SettingDAO();
             
-            
+            if(service.equalsIgnoreCase("allSetting")){
+                
+            }
             
         }
     }

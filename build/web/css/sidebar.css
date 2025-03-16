@@ -1,0 +1,120 @@
+.sidebar-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 1000;
+        transition: all 0.3s ease;
+        display: flex;
+    }
+
+    .sidebar {
+        margin-top: 70px;
+        width: 110px;
+        height: 100%;
+        background-color: #f1f1f1;
+        position: relative;
+        overflow-x: hidden;
+        padding-top: 20px;
+        border-right: 1px solid #e0e0e0;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar-menu {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .menu-item {
+        padding: 15px 0;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .menu-icon {
+        display: block;
+        margin: 0 auto;
+        width: 40px;
+        height: 40px;
+        background-color: #f45642;
+        border-radius: 50%;
+        color: white;
+        text-align: center;
+        line-height: 40px;
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    .content-panel {
+        width: 250px;
+        background-color: white;
+        height: 100%;
+        padding: 90px 20px 20px 20px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        overflow-y: auto;
+    }
+
+    .menu-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .menu-list li {
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+
+    .menu-list li.active {
+        background-color: #e0e0e0;
+    }
+
+    .menu-list li:hover {
+        background-color: #f5f5f5;
+    }
+
+    .check-icon {
+        color: #f45642;
+        margin-right: 15px;
+    }
+
+    h3 {
+        margin-top: 0;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    /* Toggle Button */
+    .sidebar-toggle {
+        position: fixed;
+        top: 70px;
+        left: 0px;
+        background-color: #f45642;
+        color: white;
+        border: none;
+        border-radius: 0 5px 5px 0;
+        padding: 8px 12px;
+        cursor: pointer;
+        z-index: 1001;
+        transition: all 0.3s ease;
+    }
+
+    /* Collapsed State */
+    .sidebar-collapsed {
+        transform: translateX(-360px); /* Move entire sidebar off-screen */
+    }
+
+    .sidebar-collapsed .sidebar-toggle {
+        transform: translateX(360px); /* Move toggle button to edge of screen */
+    }
+
+    /* Menu items with links */
+    .menu-list li a {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }

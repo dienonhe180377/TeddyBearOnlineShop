@@ -20,19 +20,21 @@
 
         <div class="wrap">
             <%-- Include header page --%>
-            <jsp:include page="header.jsp" />
-            <div class="main" style="margin-top: 193px;">
+            <jsp:include page="../gui/header.jsp" />
+            <jsp:include page="../gui/sidebar.jsp"/>
+
+            <div class="main" style="margin-top: 126px;">
 
                 <%--If max page is null, redirect to servlet subjectList--%>
                 <div class="row" style="margin-top: 3rem">
                     <div class="col-md-1"></div>
                     <div class="col-md-2" id="form" style="min-height: 480px">
-                        <h2 class="text-center">Filter</h2>
+                        <h2 class="text-center" style="margin-top: 23px;">Filter</h2>
                         <div style="margin-bottom: 20px;">
                             <%-- Start search form --%>
-                            
+
                             <form action="${contextPath}/UserController" class="navbar-form" method="get">
-                                
+
                                 <%--By name--%>
                                 <label>By Name</label><br>
                                 <div class="input-group">
@@ -54,23 +56,19 @@
                                     <input  class="form-control" type="text" id="content" placeholder="Mobile..." name="phoneFilter"  style="display: inline-block">
                                 </div>
 
-                                <div class="filterForm">
-                                    <%--Role--%>
-                                    <div class="row input-group" class="filter-sellection">
-                                        <div class="col-md-6"><label>Role</label></div>
-                                        <div class="col-md-6">
-                                            <select name="roleFilter">
-                                                <option value="">Not Specify</option>
-                                                <c:forEach var="roles" items="${roleList}">
-                                                    <option value="${roles.id}">${roles.userRole}</option>
-                                                </c:forEach>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="input-group">
-                                        <input type="hidden" name="service" value="filter">
-                                        <input type="submit" value="Filter" class="btn btn-primary" style="margin: 20px auto;">
-                                    </div>
+                                <label>By Role</label>
+                                <div class="input-group">
+                                    <br>
+                                    <select id="content" class="form-control" name="roleFilter" style="display: inline-block">
+                                        <option value="">Not Specify</option>
+                                        <c:forEach var="roles" items="${roleList}">
+                                            <option value="${roles.id}">${roles.userRole}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                                <div class="input-group" style="margin-top: 23px;">
+                                    <input type="hidden" name="service" value="filter">
+                                    <input type="submit" value="Filter" class="btn btn-primary" style="margin: 20px auto;">
                                 </div>
                             </form>
                         </div>
@@ -142,7 +140,7 @@
         getPagination('#table-id');
 
         function getPagination(table) {
-            var maxRows = 7; // Cố định 7 dòng trên 1 trang
+            var maxRows = 5; // Cố định 7 dòng trên 1 trang
             var lastPage = 1;
 
             // Xóa các nút phân trang cũ (giữ nút Prev và Next)
@@ -160,16 +158,25 @@
                 }
             });
 
-            // Tạo nút phân trang nếu số dòng vượt quá maxRows
+            // Nếu tổng số dòng vượt quá maxRows, tạo nút phân trang
             if (totalRows > maxRows) {
                 var pagenum = Math.ceil(totalRows / maxRows);
                 for (var i = 1; i <= pagenum; i++) {
-                    $('.pagination #prev').before(
-                            '<li class="btn btn-info" data-page="' + i + '">\
-                        <div>' + i + '<div></div></div>\
-                    </li>'
-                            ).show();
+                    // Chèn nút trang trước nút Next để giữ thứ tự đúng giữa Prev và Next
+                    $('<li class="btn btn-info" data-page="' + i + '"><div>' + i + '</div></li>')
+                            .insertBefore($('.pagination [data-page="next"]'));
                 }
+            } else {
+                // Nếu số dòng không vượt quá maxRows, đảm bảo nút trang 1 có ở giữa
+                if ($('.pagination [data-page="1"]').length === 0) {
+                    $('<li class="btn btn-info active" data-page="1"><div>1</div></li>')
+                            .insertBefore($('.pagination [data-page="next"]'));
+                }
+                // Vô hiệu hóa nút Prev và Next
+                $('.pagination [data-page="prev"], .pagination [data-page="next"]')
+                        .css('pointer-events', 'none')
+                        .addClass('disabled');
+                return;
             }
 
             // Đánh dấu trang đầu tiên là active
@@ -187,16 +194,18 @@
                     pageNum = --lastPage;
                 }
                 if (pageNum === 'next') {
-                    if (lastPage == $('.pagination li').length - 2)
+                    // Số trang bằng tổng số nút trang (không tính Prev và Next)
+                    var totalPages = $('.pagination li').length - 2;
+                    if (lastPage == totalPages)
                         return;
                     pageNum = ++lastPage;
                 }
                 lastPage = pageNum;
-                var trIndex = 0;
                 $('.pagination li').removeClass('active');
                 $('.pagination [data-page="' + lastPage + '"]').addClass('active');
                 limitPagging();
 
+                var trIndex = 0;
                 $(table + ' tr:gt(0)').each(function () {
                     trIndex++;
                     if (trIndex > maxRows * pageNum || trIndex <= maxRows * pageNum - maxRows) {
@@ -229,5 +238,6 @@
             }
         }
     </script>
+
 
 </html>

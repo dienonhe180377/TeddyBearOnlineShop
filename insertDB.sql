@@ -275,3 +275,11 @@ values('Admin1','Admin1@gmail.com','0334310121','To Huu',5,'Minh553311@')
 
 select * from Voucher
 --Voucher insert
+
+
+select * from Setting
+--Setting Insert
+INSERT INTO [dbo].[Setting] ([name], [status], [content], [description])
+VALUES (N'Số điện thoại', 1, N'0334372394', N'Số điện thoại của trang web');
+INSERT INTO [dbo].[Setting] ([name], [status], [content], [description])
+VALUES (N'Tên trang web', 1, N'TESHO', N'Tên của trang web');

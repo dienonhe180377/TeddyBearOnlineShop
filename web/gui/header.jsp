@@ -46,6 +46,9 @@
                     <div class="dropdown">
                         <button onclick="toggleDropdown()" class="dropbtn">Menu</button>
                         <div id="myDropdown" class="dropdown-content">
+                            <c:if test="${user != null}">
+                                <a href="${contextPath}/jsp/userProfile.jsp">User Info</a>
+                            </c:if>
                             <c:choose>
                                 <c:when test="${user.role.userRole == 'Admin'}">
                                     <a href="${contextPath}/jsp/systemManage.jsp">System Manage</a>
