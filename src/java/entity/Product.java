@@ -5,18 +5,56 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author OS
  */
 public class Product {
+
     private int id;
     private String name;
     private ArrayList<ProductImage> images;
     private ArrayList<Size> sizes;
     private ProductType productType;
     private Category category;
+    private String description;
+    private String purchaseGuide;
+    private String warrantyInfo;
+    private List<Comment> comments;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPurchaseGuide() {
+        return purchaseGuide;
+    }
+
+    public void setPurchaseGuide(String purchaseGuide) {
+        this.purchaseGuide = purchaseGuide;
+    }
+
+    public String getWarrantyInfo() {
+        return warrantyInfo;
+    }
+
+    public void setWarrantyInfo(String warrantyInfo) {
+        this.warrantyInfo = warrantyInfo;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
     public Product() {
     }
@@ -77,11 +115,5 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
-    
-    
-    
-    
 
-    
-    
 }

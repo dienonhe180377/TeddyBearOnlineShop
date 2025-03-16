@@ -20,6 +20,7 @@
         <!-- Navigation Bar (if any) -->
    
         <jsp:include page="/gui/header.jsp"></jsp:include>
+          <jsp:include page="../gui/sidebar.jsp"></jsp:include>
         <!-- Change Password Form -->
         <div class="container d-flex flex-column align-items-center justify-content-center min-vh-100">
             <h1 style="text-align: center"> Manager Page</h1>

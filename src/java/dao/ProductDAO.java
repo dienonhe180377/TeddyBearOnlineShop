@@ -5,6 +5,7 @@
 package dao;
 
 import entity.Category;
+import entity.Comment;
 import entity.Product;
 import entity.ProductImage;
 import entity.ProductType;
@@ -26,14 +27,14 @@ import java.util.Locale;
  * @author OS
  */
 public class ProductDAO extends DBConnection {
-    
+
     private CategoryDAO categoryDAO = new CategoryDAO();
     private ProductTypeDAO productTypeDAO = new ProductTypeDAO();
 
     public ProductDAO() {
     }
-    
-    public ArrayList<ProductImage> getProductImages(int productId) throws Exception{
+
+    public ArrayList<ProductImage> getProductImages(int productId) throws Exception {
         Connection conn = null;
         ResultSet rs = null;
         /* Result set returned by the sqlserver */
@@ -58,8 +59,8 @@ public class ProductDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-    
-    public ArrayList<Size> getProductSizes(int productId) throws Exception{
+
+    public ArrayList<Size> getProductSizes(int productId) throws Exception {
         Connection conn = null;
         ResultSet rs = null;
         /* Result set returned by the sqlserver */
@@ -123,29 +124,39 @@ public class ProductDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-    
+
     public Product getProductById(int productId) throws Exception {
         Connection conn = null;
         ResultSet rs = null;
-        /* Result set returned by the sqlserver */
         PreparedStatement pre = null;
-        /* Prepared statement for executing sql queries */
         Product product = null;
-        String sql = "SELECT * FROM Product where id = " + productId;
+        String sql = "SELECT * FROM Product WHERE id = ?"; // Tránh SQL Injection
+        CommentDAO commentDao = new CommentDAO();
+        List<Comment> comemnts = commentDao.getCommentsByProductId(productId);
         try {
             conn = getConnection();
             pre = conn.prepareStatement(sql);
+            pre.setInt(1, productId); // Tránh SQL Injection
             rs = pre.executeQuery();
+
             if (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
+
                 ArrayList<ProductImage> images = getProductImages(id);
                 ArrayList<Size> sizes = getProductSizes(id);
                 int categoryId = rs.getInt("categoryId");
                 int typeId = rs.getInt("typeId");
+
                 Category category = categoryDAO.getById(categoryId);
                 ProductType type = productTypeDAO.getProductTypeById(typeId);
+
                 product = new Product(id, name, images, sizes, type, category);
+
+                product.setDescription(rs.getString("description"));
+                product.setPurchaseGuide(rs.getString("purchase_guide"));
+                product.setWarrantyInfo(rs.getString("warranty_info"));
+                product.setComments(comemnts);
             }
             return product;
         } catch (Exception e) {
@@ -262,8 +273,7 @@ public class ProductDAO extends DBConnection {
 
     }
 
-    
-     public List<Product> getProductsWithParam(String searchParam, Integer categoryId, Integer typeId, Integer minPrice, Integer maxPrice) {
+    public List<Product> getProductsWithParam(String searchParam, Integer categoryId, Integer typeId, Integer minPrice, Integer maxPrice) {
         List<Product> products = new ArrayList<>();
         List<Object> list = new ArrayList<>();
         ProductTypeDAO productTypeDAO = new ProductTypeDAO();
@@ -389,5 +399,5 @@ public class ProductDAO extends DBConnection {
 
         return products.subList(fromIndex, toIndex);
     }
-    
+
 }

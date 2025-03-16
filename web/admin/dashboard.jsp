@@ -18,12 +18,13 @@
     </head>
     <body>
         <!-- Navigation Bar (if any) -->
-   
+
         <jsp:include page="/gui/header.jsp"></jsp:include>
-        <!-- Change Password Form -->
-        <div class="container d-flex flex-column align-items-center justify-content-center min-vh-100">
-            <h1 style="text-align: center"> Admin Page</h1>
-           Hello ${user.getUserName()}
+        <jsp:include page="../gui/sidebar.jsp"></jsp:include>
+            <!-- Change Password Form -->
+            <div class="container d-flex flex-column align-items-center justify-content-center min-vh-100">
+                <h1 style="text-align: center"> Admin Page</h1>
+                Hello ${user.getUserName()}
         </div>
 
         <!-- Import Bootstrap JS -->

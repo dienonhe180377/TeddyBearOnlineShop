@@ -14,7 +14,8 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </head>
     <body>
-        <jsp:include page="header.jsp"/>
+        <jsp:include page="../gui/header.jsp"/>
+        <jsp:include page="../gui/sidebar.jsp"/>
         <c:if test="${user.role.userRole == 'Seller'}">
             <div class="wrap text-center">
                 <a href="" style="text-decoration: none;color:black" >

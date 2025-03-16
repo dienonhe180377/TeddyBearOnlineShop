@@ -49,11 +49,11 @@
                             <c:choose>
                                 <c:when test="${user.role.userRole == 'Admin'}">
                                     <a href="${contextPath}/jsp/systemManage.jsp">System Manage</a>
-                                     <a href="${contextPath}/admin/dashboard">Dashboard</a>
+                                    <a href="${contextPath}/admin/dashboard">Dashboard</a>
                                 </c:when>
                                 <c:when test="${user.role.userRole == 'Manager'}">
-                                      <a href="${contextPath}/manager/dashboard">Dashboard</a>
-                                      <a href="${contextPath}/manager/product-management">Product management</a>
+                                    <a href="${contextPath}/manager/dashboard">Dashboard</a>
+                                    <a href="${contextPath}/manager/product-management">Product management</a>
                                 </c:when>
                                 <c:when test="${user.role.userRole == 'Seller'}">
                                     <a href="${contextPath}/seller/dashboard">Dashboard</a>
@@ -75,4 +75,3 @@
             </div>
         </header>
         <script src="${contextPath}/js/header.js"></script>
-

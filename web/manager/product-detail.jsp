@@ -69,6 +69,7 @@
 </head>
 <body style="margin-top: 80px">
   <jsp:include page="${contextPath}/gui/header.jsp"></jsp:include>
+    <jsp:include page="../gui/sidebar.jsp"></jsp:include>
   <div class="container" style="background-color: #f3e5f5 !important">
         <h2 class="text-center">${product.name}</h2>
         <br>
