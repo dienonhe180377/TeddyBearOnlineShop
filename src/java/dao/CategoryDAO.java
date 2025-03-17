@@ -21,9 +21,7 @@ public class CategoryDAO extends DBConnection {
     public CategoryDAO() {
     }
     
-   
-
-    //Get all category
+    //Get All Category
     public ArrayList<Category> getAllCategory() throws Exception {
         Connection conn = null;
         ResultSet rs = null;
@@ -39,7 +37,95 @@ public class CategoryDAO extends DBConnection {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
-                categoryList.add(new Category(id, name));
+                boolean status = rs.getBoolean("status");
+                categoryList.add(new Category(id, name, status));
+            }
+            return categoryList;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+    
+    //Get All Category By Text
+    public ArrayList<Category> getAllCategoryByText(String text) throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ArrayList<Category> categoryList = new ArrayList<>();
+        String sql = "SELECT * FROM Category where name like '%" + text + "%'";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                boolean status = rs.getBoolean("status");
+                categoryList.add(new Category(id, name, status));
+            }
+            return categoryList;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+    
+    //Get all active category
+    public ArrayList<Category> getAllInactiveCategory() throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ArrayList<Category> categoryList = new ArrayList<>();
+        String sql = "SELECT * FROM Category where [status] = 0";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                boolean status = rs.getBoolean("status");
+                categoryList.add(new Category(id, name, status));
+            }
+            return categoryList;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+    
+    //Get all active category
+    public ArrayList<Category> getAllActiveCategory() throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ArrayList<Category> categoryList = new ArrayList<>();
+        String sql = "SELECT * FROM Category where [status] = 1";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                boolean status = rs.getBoolean("status");
+                categoryList.add(new Category(id, name, status));
             }
             return categoryList;
         } catch (Exception ex) {
@@ -88,5 +174,13 @@ public class CategoryDAO extends DBConnection {
             System.out.println("Error retrieving categories: " + ex);
         }
         return categories;
+    }
+    
+    public static void main(String[] args) throws Exception {
+        CategoryDAO categoryDAO = new CategoryDAO();
+        List<Category> categoryList = categoryDAO.getAllCategoryByText("a");
+        for (int i = 0; i < categoryList.size(); i++) {
+            System.out.println(categoryList.get(i));
+        }
     }
 }

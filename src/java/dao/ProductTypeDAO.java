@@ -69,6 +69,44 @@ public class ProductTypeDAO extends DBConnection {
         return null;
     }
 
+    public List<ProductType> getAllActiveProductTypes() {
+        List<ProductType> productTypes = new ArrayList<>();
+        String sql = "SELECT * FROM ProductType where status = 1";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                ProductType productType = new ProductType();
+                productType.setId(rs.getInt("id"));
+                productType.setName(rs.getString("name"));
+                productType.setStatus(rs.getBoolean("status"));
+                productTypes.add(productType);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error retrieving product types: " + ex);
+        }
+        return productTypes;
+    }
+    
+    public List<ProductType> getAllInactiveProductTypes() {
+        List<ProductType> productTypes = new ArrayList<>();
+        String sql = "SELECT * FROM ProductType where status = 0";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                ProductType productType = new ProductType();
+                productType.setId(rs.getInt("id"));
+                productType.setName(rs.getString("name"));
+                productType.setStatus(rs.getBoolean("status"));
+                productTypes.add(productType);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error retrieving product types: " + ex);
+        }
+        return productTypes;
+    }
+    
     public List<ProductType> getAllProductTypes() {
         List<ProductType> productTypes = new ArrayList<>();
         String sql = "SELECT * FROM ProductType";
@@ -79,11 +117,40 @@ public class ProductTypeDAO extends DBConnection {
                 ProductType productType = new ProductType();
                 productType.setId(rs.getInt("id"));
                 productType.setName(rs.getString("name"));
+                productType.setStatus(rs.getBoolean("status"));
                 productTypes.add(productType);
             }
         } catch (SQLException ex) {
             System.out.println("Error retrieving product types: " + ex);
         }
         return productTypes;
+    }
+    
+    public List<ProductType> getAllProductTypesByText(String text) {
+        List<ProductType> productTypes = new ArrayList<>();
+        String sql = "SELECT * FROM ProductType where name like '%" + text + "%'";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                ProductType productType = new ProductType();
+                productType.setId(rs.getInt("id"));
+                productType.setName(rs.getString("name"));
+                productType.setStatus(rs.getBoolean("status"));
+                productTypes.add(productType);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error retrieving product types: " + ex);
+        }
+        return productTypes;
+    }
+    
+    public static void main(String[] args) {
+        ProductTypeDAO productTypeDAO = new ProductTypeDAO();
+        List<ProductType> productTypes = productTypeDAO.getAllProductTypesByText("a");
+        for (int i = 0; i < productTypes.size(); i++) {
+            System.out.println(productTypes.get(i));
+        }
+        
     }
 }

@@ -1,13 +1,4 @@
-<%-- 
-    Copyright(C) 2021, Group Tree - SWP391, SE1509, FA21
-    Created on : Oct 24, 2021, 9:01:53 PM
-    Quiz practicing system
 
-    Record of change:
-    Date        Version     Author          Description
-    24/10/21    1.0         DuongNHHE150328 First Deploy
-    24/10/21    1.1         DuongNHHE150328 Complete style
---%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
@@ -15,7 +6,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Question List</title>
+        <title>Danh Sách Settings</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -40,27 +31,29 @@
                         <h2 class="text-center">Setting List</h2>
                         <%-- Table Container --%>
                         <div class="form-group" style="width: 50%;float: left">
-                            <h5>Search Setting</h5>
+                            <h5>Tìm kiếm</h5>
                             <%-- Select number of Rows show on table --%>
-                            <input type="text" class="form-control" name="search" style="width: 150px;">
+                            <form action="SettingController" method="get">
+                                <input type="hidden" name="service" value="search"/>
+                                <input type="text" class="form-control" name="search" style="width: 150px;">
+                            </form>
                         </div>
                         <div class="dropdown" style="width: 50%;float: left">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="float: right; margin-top: auto;margin-bottom: auto">
-                                Filter by
+                                Lọc theo
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="">All</a>
-                                <a class="dropdown-item" href="">User Role</a>
-                                <a class="dropdown-item" href="">Post Category</a>
-                                <a class="dropdown-item" href="">Subject Category</a>
-                                <a class="dropdown-item" href="">Test Type</a>
-                                <a class="dropdown-item" href="">Quiz Level</a>
-                                <a class="dropdown-item" href="">Lesson Type</a>
-                                <a class="dropdown-item" href="">Dimension Type</a>
+                                <a class="dropdown-item" href="${contextPath}/SettingController?service=allSetting">Tất cả</a>
+                                <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=roles">Role Người Dùng</a>
+                                <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=categorys">Category</a>
+                                <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=types">Loại Sản Phẩm</a>
+                                <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=active">Trạng Thái Active</a>
+                                <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=inactive">Trạng Thái Inactive</a>
+                                <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=khac">Khác</a>
                             </div>
 
                             <a href=""><button type="button" class="btn btn-primary" style="float: right; margin-top: auto;margin-bottom: auto;margin-right: 10px;">
-                                    Add setting
+                                    Thêm mới
                                 </button></a>
                         </div>
                     </div>
@@ -71,19 +64,72 @@
                         <thead>
                             <tr style="background-color: #F0D8D5;">
                                 <th>Loại Setting</th>
-                                <th>Tên Setting</th>
+                                <th>Nội Dung</th>
                                 <th>Trạng thái</th>
                                 <th>Sửa/Xóa</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <%-- user role list --%>
-                            <tr>
-                                <td>User Roles</td>
-                                <td>Manager</td>
-                                <td>Active</td>
-                                <td><a href=""><button class="btn btn-success">Edit</button></a></td>
-                            </tr>
+                            <%-- setting list --%>
+                            <c:forEach var="settings" items="${settings}">
+                                <tr>
+                                    <td>${settings.name}</td>
+                                    <td>${settings.content}</td>
+                                    <c:if test="${settings.status}">
+                                        <td>Active</td>
+                                    </c:if>
+                                    <c:if test="${!settings.status}">
+                                        <td>Inactive</td>
+                                    </c:if>
+                                    <td><a href=""><button class="btn btn-success">Edit</button></a></td>
+                                </tr>
+                            </c:forEach>
+
+                            <%-- category list --%>
+                            <c:forEach var="category" items="${categoryList}">
+                                <tr>
+                                    <td>Category</td>
+                                    <td>${category.name}</td>
+                                    <c:if test="${category.status}">
+                                        <td>Active</td>
+                                    </c:if>
+                                    <c:if test="${!category.status}">
+                                        <td>Inactive</td>
+                                    </c:if>
+                                    <td><a href=""><button class="btn btn-success">Edit</button></a></td>
+                                </tr>
+                            </c:forEach>
+
+                            <%-- productType list --%>
+                            <c:forEach var="productType" items="${productTypes}">
+                                <tr>
+                                    <td>Product Type</td>
+                                    <td>${productType.name}</td>
+                                    <c:if test="${productType.status}">
+                                        <td>Active</td>
+                                    </c:if>
+                                    <c:if test="${!productType.status}">
+                                        <td>Inactive</td>
+                                    </c:if>
+                                    <td><a href=""><button class="btn btn-success">Edit</button></a></td>
+                                </tr>
+                            </c:forEach>
+
+                            <%-- role list --%>
+                            <c:forEach var="role" items="${userRoles}">
+                                <tr>
+                                    <td>User Role</td>
+                                    <td>${role.userRole}</td>
+                                    <c:if test="${role.status}">
+                                        <td>Active</td>
+                                    </c:if>
+                                    <c:if test="${!role.status}">
+                                        <td>Inactive</td>
+                                    </c:if>
+                                    <td><a href=""><button class="btn btn-success">Edit</button></a></td>
+                                </tr>
+                            </c:forEach>
+
                         </tbody>
                     </table>
                     <%--Start Pagination --%>
@@ -105,7 +151,7 @@
             <div class="col-md-1"></div>
         </div>
         <div class="space" style="min-height: 50vh;"></div>
-        
+
         <jsp:include page="footer.jsp"/>
 
     </div>

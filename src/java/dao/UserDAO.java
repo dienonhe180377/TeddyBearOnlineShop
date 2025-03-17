@@ -9,6 +9,7 @@ import entity.User;
 import entity.UserRole;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO extends DBConnection {
 
@@ -159,8 +160,8 @@ public class UserDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-
-    //Get all user role
+    
+    //Get all active user role
     public ArrayList<UserRole> getAllUserRole() throws Exception {
         Connection conn = null;
         ResultSet rs = null;
@@ -176,7 +177,95 @@ public class UserDAO extends DBConnection {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String roleName = rs.getString("roleName");
-                roles.add(new UserRole(id, roleName));
+                boolean status = rs.getBoolean("status");
+                roles.add(new UserRole(id, roleName, status));
+            }
+            return roles;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+    
+    //Get all active user role
+    public ArrayList<UserRole> getAllUserRoleByText(String text) throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ArrayList<UserRole> roles = new ArrayList<>();
+        String sql = "select * from [UserRole] where roleName like '%" + text + "%'";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String roleName = rs.getString("roleName");
+                boolean status = rs.getBoolean("status");
+                roles.add(new UserRole(id, roleName, status));
+            }
+            return roles;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+
+    //Get all active user role
+    public ArrayList<UserRole> getAllActiveUserRole() throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ArrayList<UserRole> roles = new ArrayList<>();
+        String sql = "select * from [UserRole] where status = 1";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String roleName = rs.getString("roleName");
+                boolean status = rs.getBoolean("status");
+                roles.add(new UserRole(id, roleName, status));
+            }
+            return roles;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+    
+    //Get all active user role
+    public ArrayList<UserRole> getAllInactiveUserRole() throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ArrayList<UserRole> roles = new ArrayList<>();
+        String sql = "select * from [UserRole] where status = 0";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String roleName = rs.getString("roleName");
+                boolean status = rs.getBoolean("status");
+                roles.add(new UserRole(id, roleName, status));
             }
             return roles;
         } catch (Exception ex) {
@@ -378,8 +467,11 @@ public class UserDAO extends DBConnection {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         UserDAO userDAO = new UserDAO();
-        System.out.println(userDAO.checkLogin("johndoe@example.com", "Abc123@@"));
+        List<UserRole> roles = userDAO.getAllUserRoleByText("a");
+        for (int i = 0; i < roles.size(); i++) {
+            System.out.println(roles.get(i));
+        }
     }
 }

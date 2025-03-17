@@ -25,7 +25,7 @@
                 <ul class="menu-list">
                     <li><a href="${pageContext.request.contextPath}/admin/dashboard"><i class="fa-solid fa-chart-line" style="color: #e15b5b;"></i> Thống kê </a></li>
                     <li><a href="${pageContext.request.contextPath}/UserController?service=getAllUser"><i class="fa-solid fa-user" style="color: #d96d6d;"></i> Quản lý người dùng</a></li>
-                    <li><a href="${pageContext.request.contextPath}/admin/sales"><i class="fa-solid fa-gears" style="color: #dd6e6e;"></i> Quản lý Settings</a></li>
+                    <li><a href="${pageContext.request.contextPath}/SettingController?service=allSetting"><i class="fa-solid fa-gears" style="color: #dd6e6e;"></i> Quản lý Settings</a></li>
                 </ul>
             </c:when>
             <c:when test="${userRole == 'manager'}">

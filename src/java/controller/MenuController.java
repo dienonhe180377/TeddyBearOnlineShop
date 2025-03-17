@@ -47,7 +47,7 @@ public class MenuController extends HttpServlet {
             ProductTypeDAO typeDAO = new ProductTypeDAO();
 
             if (service.equalsIgnoreCase("productInformation")) {
-                ArrayList<Category> categoryList = categoryDAO.getAllCategory();
+                ArrayList<Category> categoryList = categoryDAO.getAllActiveCategory();
                 ArrayList<Product> productList = productDAO.getAllProduct();
                 ArrayList<Product> products = new ArrayList<>();
                 for (int i = 0; i < categoryList.size(); i++) {
@@ -149,7 +149,7 @@ public class MenuController extends HttpServlet {
     public static void main(String[] args) throws Exception {
         CategoryDAO categoryDAO = new CategoryDAO();
         ProductDAO productDAO = new ProductDAO();
-        ArrayList<Category> categoryList = categoryDAO.getAllCategory();
+        ArrayList<Category> categoryList = categoryDAO.getAllActiveCategory();
         ArrayList<Product> productList = productDAO.getAllProduct();
 //        for (int i = 0; i < productList.size(); i++) {
 //            System.out.println(productList.get(i).getCategory().getName());

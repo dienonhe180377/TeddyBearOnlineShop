@@ -42,9 +42,6 @@ public class UserController extends HttpServlet {
             HttpSession session = request.getSession();
             UserDAO userDao = new UserDAO();
 
-            if (service.equalsIgnoreCase("changeImage")) {
-
-            }
 
             if (service.equalsIgnoreCase("editUser")) {
                 String userID = request.getParameter("choosenUser");
@@ -205,7 +202,7 @@ public class UserController extends HttpServlet {
                 String phone = request.getParameter("phoneFilter");
                 String roleId = request.getParameter("roleFilter");
                 ArrayList<User> users = userDao.getUserByFilter(roleId, username, email, phone);
-                ArrayList<UserRole> roles = userDao.getAllUserRole();
+                ArrayList<UserRole> roles = userDao.getAllActiveUserRole();
                 request.setAttribute("roleList", roles);
                 request.setAttribute("userList", users);
                 request.getRequestDispatcher("jsp/userList.jsp").forward(request, response);
@@ -219,7 +216,12 @@ public class UserController extends HttpServlet {
             }
 
             if (service.equalsIgnoreCase("getAddUserFiller")) {
-                ArrayList<UserRole> roles = userDao.getAllUserRole();
+                ArrayList<UserRole> roles = userDao.getAllActiveUserRole();
+                for (int i = 0; i < roles.size(); i++) {
+                    if(roles.get(i).getUserRole().equals("Customer")){
+                        roles.remove(i);
+                    }
+                }
                 request.setAttribute("roleList", roles);
                 request.getRequestDispatcher("jsp/addUser.jsp").forward(request, response);
             }
@@ -275,7 +277,7 @@ public class UserController extends HttpServlet {
                     if (locationError == "") {
                         request.setAttribute("locationInputted", location);
                     }
-                    ArrayList<UserRole> roles = userDao.getAllUserRole();
+                    ArrayList<UserRole> roles = userDao.getAllActiveUserRole();
                     request.setAttribute("roleList", roles);
                     request.getRequestDispatcher("jsp/addUser.jsp").forward(request, response);
                 } else {
