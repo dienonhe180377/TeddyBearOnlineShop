@@ -147,6 +147,11 @@ public class SettingController extends HttpServlet {
                 
                 request.getRequestDispatcher("jsp/settingList.jsp").forward(request, response);
             }
+            
+            if(service.equalsIgnoreCase("addNewSetting")){
+                request.setAttribute("text", "test");
+                request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+            }
 
         } catch (Exception ex) {
             Logger.getLogger(SettingController.class.getName()).log(Level.SEVERE, null, ex);

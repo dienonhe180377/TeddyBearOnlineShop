@@ -117,8 +117,8 @@
         .avatar-preview {
             width: 150px;
             height: 150px;
-            object-fit: cover; 
-            border-radius: 50%; 
+            object-fit: cover;
+            border-radius: 50%;
             border: 2px solid #ccc;
             margin-bottom: 20px;
             transition: transform 0.3s ease;
@@ -140,7 +140,7 @@
 
         #newAvatar:focus {
             outline: none;
-            border-color: #4CAF50; 
+            border-color: #4CAF50;
         }
 
         .modal.show {
@@ -152,7 +152,15 @@
 
 </head>
 <body>
-    <jsp:include page="header.jsp"/>
+    <c:choose>
+        <c:when test="${user.getRole().getUserRole() == 'Customer'}">
+            <jsp:include page="header.jsp"/>
+        </c:when>
+        <c:otherwise>
+            <jsp:include page="../gui/header.jsp"/>
+            <jsp:include page="../gui/sidebar.jsp"/>
+        </c:otherwise>
+    </c:choose>
 
     <section class="edit-profile-container">
         <form class="profile-form" action="${contextPath}/UserController" method="post">

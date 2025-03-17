@@ -19,6 +19,7 @@
             </c:when>
             <c:otherwise>
                 <jsp:include page="../gui/header.jsp" />
+                <jsp:include page="../gui/sidebar.jsp"/>
             </c:otherwise>
         </c:choose>
         

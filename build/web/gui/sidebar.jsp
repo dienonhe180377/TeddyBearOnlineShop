@@ -18,7 +18,7 @@
     </div>
 
     <div class="content-panel">
-        <h3>Sales Data</h3>
+        <h3>Chức năng</h3>
 
         <c:choose>
             <c:when test="${userRole == 'admin'}">

@@ -18,20 +18,22 @@
     <body>
 
         <%-- Include header page --%>
-        <jsp:include page="header.jsp"/>
+        <jsp:include page="../gui/header.jsp"/>
+        <jsp:include page="../gui/sidebar.jsp"/>
 
 
-        <div class="main" style="margin-top: 185px;">
+        <div class="main" style="margin-top: 108px;">
             <%-- Login form --%>
             <div class="container" style="align-self: center; min-height: 50vh">
                 <%-- Start form --%>
                 <div class="row">
                     <%-- Bootstrap to center form --%>
                     <div class="col-md-3"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-6" style="border: solid lightblue;padding: 55px; border-radius: 36px;">
                         <h1 style="margin-bottom: 50px;">Add User</h1>
                         <form action="${contextPath}/UserController" method="POST">
                             <input type="hidden" name="service" value="addUser">
+                            
                             <label class="label control-label">User Role</label>
                             <div class="form-group">
                                 <span class="input-group-addon">

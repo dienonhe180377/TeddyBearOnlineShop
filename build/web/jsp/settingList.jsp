@@ -17,7 +17,6 @@
     </head>
     <body>
         <div class="wrap">
-
             <%-- Include header page --%>
             <jsp:include page="../gui/header.jsp" />
             <jsp:include page="../gui/sidebar.jsp"/>
@@ -52,7 +51,7 @@
                                 <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=khac">Khác</a>
                             </div>
 
-                            <a href=""><button type="button" class="btn btn-primary" style="float: right; margin-top: auto;margin-bottom: auto;margin-right: 10px;">
+                            <a href="${contextPath}/SettingController?service=addNewSetting"><button type="button" class="btn btn-primary" style="float: right; margin-top: auto;margin-bottom: auto;margin-right: 10px;">
                                     Thêm mới
                                 </button></a>
                         </div>
