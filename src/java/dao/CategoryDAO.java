@@ -58,7 +58,7 @@ public class CategoryDAO extends DBConnection {
         PreparedStatement pre = null;
         /* Prepared statement for executing sql queries */
         ArrayList<Category> categoryList = new ArrayList<>();
-        String sql = "SELECT * FROM Category where name like '%" + text + "%'";
+        String sql = "SELECT * FROM Category where name COLLATE Latin1_General_CI_AI like '%" + text + "%'";
         try {
             conn = getConnection();
             pre = conn.prepareStatement(sql);

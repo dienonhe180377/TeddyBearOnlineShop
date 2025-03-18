@@ -691,14 +691,27 @@
                 <div class="popup-content">
                     <span class="close">&times;</span>
                     <h2>Chọn kích cỡ sản phẩm</h2>
-                    <select id="productSize" name="size">
-                        <c:forEach var="size" items="${product.sizes}">
-                            <option value="${size.name}">${size.name}</option>
-                        </c:forEach>
-                    </select>
-                    <button id="addToCart">Thêm vào giỏ hàng</button>
+                    <form action="cart" method="post">
+                        <!-- Xác định action "add" để servlet phân biệt thao tác -->
+                        <input type="hidden" name="action" value="add" />
+                        <!-- Gửi id của sản phẩm -->
+                        <input type="hidden" name="productId" value="${product.id}" />
+
+                        <label for="productSize">Kích cỡ:</label>
+                        <select id="productSize" name="size">
+                            <c:forEach var="size" items="${product.sizes}">
+                                <option value="${size.name}">${size.name}</option>
+                            </c:forEach>
+                        </select>
+                        <br/>
+                        <label for="quantity">Số lượng:</label>
+                        <input type="number" name="quantity" id="quantity" value="1" min="1" />
+                        <br/>
+                        <button type="submit">Thêm vào giỏ hàng</button>
+                    </form>
                 </div>
             </div>
+
 
             <div id="sizePopup2" class="popup">
                 <div class="popup-content">

@@ -34,24 +34,34 @@
                             <%-- Select number of Rows show on table --%>
                             <form action="SettingController" method="get">
                                 <input type="hidden" name="service" value="search"/>
-                                <input type="text" class="form-control" name="search" style="width: 150px;">
+                                <input type="hidden" name="searchType" value="${settingType}"/>
+                                <input type="text" class="form-control" name="search" style="width: 150px;" <c:if test="${not empty inputted}"> value="${inputted}"</c:if>>
                             </form>
                         </div>
                         <div class="dropdown" style="width: 50%;float: left">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="float: right; margin-top: auto;margin-bottom: auto">
-                                Lọc theo
+                                <c:choose>
+                                    <c:when test="${choosenValue == 'all'}">
+                                        Tất Cả
+                                    </c:when>
+                                    <c:when test="${choosenValue == 'active'}">
+                                        Active
+                                    </c:when>
+                                    <c:when test="${choosenValue == 'inactive'}">
+                                        Inactive
+                                    </c:when>
+                                    <c:otherwise>
+                                        Lọc theo
+                                    </c:otherwise>
+                                </c:choose>
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="${contextPath}/SettingController?service=allSetting">Tất cả</a>
-                                <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=roles">Role Người Dùng</a>
-                                <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=categorys">Category</a>
-                                <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=types">Loại Sản Phẩm</a>
-                                <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=active">Trạng Thái Active</a>
-                                <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=inactive">Trạng Thái Inactive</a>
-                                <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=khac">Khác</a>
+                                <a class="dropdown-item" href="${contextPath}/SettingController?service=allSetting&type=${settingType}">Tất cả</a>
+                                <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=active&type=${settingType}&valueChoosen=active">Trạng Thái Active</a>
+                                <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=inactive&type=${settingType}&valueChoosen=inactive">Trạng Thái Inactive</a>
                             </div>
 
-                            <a href="${contextPath}/jsp/addSetting.jsp"><button type="button" class="btn btn-primary" style="float: right; margin-top: auto;margin-bottom: auto;margin-right: 10px;">
+                            <a href="${contextPath}/SettingController?service=addSettingRedirect&type=${settingType}"><button type="button" class="btn btn-primary" style="float: right; margin-top: auto;margin-bottom: auto;margin-right: 10px;">
                                     Thêm mới
                                 </button></a>
                         </div>
@@ -70,64 +80,72 @@
                         </thead>
                         <tbody>
                             <%-- setting list --%>
-                            <c:forEach var="settings" items="${settings}">
-                                <tr>
-                                    <td>${settings.name}</td>
-                                    <td>${settings.content}</td>
-                                    <c:if test="${settings.status}">
-                                        <td>Active</td>
-                                    </c:if>
-                                    <c:if test="${!settings.status}">
-                                        <td>Inactive</td>
-                                    </c:if>
-                                    <td><a href=""><button class="btn btn-success">Edit</button></a></td>
-                                </tr>
-                            </c:forEach>
 
-                            <%-- category list --%>
-                            <c:forEach var="category" items="${categoryList}">
-                                <tr>
-                                    <td>Category</td>
-                                    <td>${category.name}</td>
-                                    <c:if test="${category.status}">
-                                        <td>Active</td>
-                                    </c:if>
-                                    <c:if test="${!category.status}">
-                                        <td>Inactive</td>
-                                    </c:if>
-                                    <td><a href=""><button class="btn btn-success">Edit</button></a></td>
-                                </tr>
-                            </c:forEach>
-
-                            <%-- productType list --%>
-                            <c:forEach var="productType" items="${productTypes}">
-                                <tr>
-                                    <td>Product Type</td>
-                                    <td>${productType.name}</td>
-                                    <c:if test="${productType.status}">
-                                        <td>Active</td>
-                                    </c:if>
-                                    <c:if test="${!productType.status}">
-                                        <td>Inactive</td>
-                                    </c:if>
-                                    <td><a href=""><button class="btn btn-success">Edit</button></a></td>
-                                </tr>
-                            </c:forEach>
-
-                            <%-- role list --%>
-                            <c:forEach var="role" items="${userRoles}">
-                                <tr>
-                                    <td>User Role</td>
-                                    <td>${role.userRole}</td>
-                                    <c:if test="${role.status}">
-                                        <td>Active</td>
-                                    </c:if>
-                                    <c:if test="${!role.status}">
-                                        <td>Inactive</td>
-                                    </c:if>
-                                    <td><a href=""><button class="btn btn-success">Edit</button></a></td>
-                                </tr>
-                            </c:forEach>
+                            <c:choose>
+                                <c:when test="${settingType == 'setting'}">
+                                    <c:forEach var="settings" items="${settings}">
+                                        <tr>
+                                            <td>${settings.name}</td>
+                                            <td>${settings.content}</td>
+                                            <c:if test="${settings.status}">
+                                                <td>Active</td>
+                                            </c:if>
+                                            <c:if test="${!settings.status}">
+                                                <td>Inactive</td>
+                                            </c:if>
+                                            <td><a href=""><button class="btn btn-success">Edit</button></a></td>
+                                        </tr>
+                                    </c:forEach>
+                                </c:when>
+                                <c:when test="${settingType == 'productType'}">
+                                    <%-- productType list --%>
+                                    <c:forEach var="productType" items="${productTypes}">
+                                        <tr>
+                                            <td>Product Type</td>
+                                            <td>${productType.name}</td>
+                                            <c:if test="${productType.status}">
+                                                <td>Active</td>
+                                            </c:if>
+                                            <c:if test="${!productType.status}">
+                                                <td>Inactive</td>
+                                            </c:if>
+                                            <td><a href=""><button class="btn btn-success">Edit</button></a></td>
+                                        </tr>
+                                    </c:forEach>
+                                </c:when>
+                                <c:when test="${settingType == 'category'}">
+                                    <%-- category list --%>
+                                    <c:forEach var="category" items="${categoryList}">
+                                        <tr>
+                                            <td>Category</td>
+                                            <td>${category.name}</td>
+                                            <c:if test="${category.status}">
+                                                <td>Active</td>
+                                            </c:if>
+                                            <c:if test="${!category.status}">
+                                                <td>Inactive</td>
+                                            </c:if>
+                                            <td><a href=""><button class="btn btn-success">Edit</button></a></td>
+                                        </tr>
+                                    </c:forEach>
+                                </c:when>
+                                <c:otherwise>
+                                    <%-- role list --%>
+                                    <c:forEach var="role" items="${userRoles}">
+                                        <tr>
+                                            <td>User Role</td>
+                                            <td>${role.userRole}</td>
+                                            <c:if test="${role.status}">
+                                                <td>Active</td>
+                                            </c:if>
+                                            <c:if test="${!role.status}">
+                                                <td>Inactive</td>
+                                            </c:if>
+                                            <td><a href=""><button class="btn btn-success">Edit</button></a></td>
+                                        </tr>
+                                    </c:forEach>
+                                </c:otherwise>
+                            </c:choose>
 
                         </tbody>
                     </table>

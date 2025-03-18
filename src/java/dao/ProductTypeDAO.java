@@ -128,7 +128,7 @@ public class ProductTypeDAO extends DBConnection {
     
     public List<ProductType> getAllProductTypesByText(String text) {
         List<ProductType> productTypes = new ArrayList<>();
-        String sql = "SELECT * FROM ProductType where name like '%" + text + "%'";
+        String sql = "SELECT * FROM ProductType where name COLLATE Latin1_General_CI_AI like '%" + text + "%'";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();

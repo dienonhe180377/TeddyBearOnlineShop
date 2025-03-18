@@ -1,4 +1,4 @@
-﻿create database TeddyBearOnlineShop
+﻿
 
 
 select * from UserRole
@@ -16,7 +16,7 @@ insert into ProductType values(N'Móc Khóa')
 insert into ProductType values(N'Gối Ôm')
 
 
-select * from Category where status = 1
+select * from Category
 --Category insert
 insert into Category values(N'Gấu Bông May Mắn')
 insert into Category values(N'Gấu bông Ghi Âm')
@@ -283,5 +283,3 @@ INSERT INTO [dbo].[Setting] ([name], [status], [content], [description])
 VALUES (N'Số điện thoại', 1, N'0334372394', N'Số điện thoại của trang web');
 INSERT INTO [dbo].[Setting] ([name], [status], [content], [description])
 VALUES (N'Tên trang web', 1, N'TESHO', N'Tên của trang web');
-INSERT INTO [dbo].[Setting] ([name], [status], [content], [description])
-VALUES (N'Email', 0, N'TESHO@gmail.com', N'Email của trang web');

@@ -25,13 +25,16 @@
                 <ul class="menu-list">
                     <li><a href="${pageContext.request.contextPath}/admin/dashboard"><i class="fa-solid fa-chart-line" style="color: #e15b5b;"></i> Thống kê </a></li>
                     <li><a href="${pageContext.request.contextPath}/UserController?service=getAllUser"><i class="fa-solid fa-user" style="color: #d96d6d;"></i> Quản lý người dùng</a></li>
-                    <li><a href="${pageContext.request.contextPath}/SettingController?service=allSetting"><i class="fa-solid fa-gears" style="color: #dd6e6e;"></i> Quản lý Settings</a></li>
+                    <li><a href="${pageContext.request.contextPath}/SettingController?service=allSetting&type=setting"><i class="fa-solid fa-gears" style="color: #dd6e6e;"></i> Quản lý Header Footer</a></li>
+                    <li><a href="${pageContext.request.contextPath}/SettingController?service=allSetting&type=productType"><i class="fa-solid fa-gears" style="color: #dd6e6e;"></i> Quản lý ProductType</a></li>
+                    <li><a href="${pageContext.request.contextPath}/SettingController?service=allSetting&type=category"><i class="fa-solid fa-gears" style="color: #dd6e6e;"></i> Quản lý Category</a></li>
+                    <li><a href="${pageContext.request.contextPath}/SettingController?service=allSetting&type=role"><i class="fa-solid fa-gears" style="color: #dd6e6e;"></i> Quản lý Role</a></li>
                 </ul>
             </c:when>
             <c:when test="${userRole == 'manager'}">
                 <ul class="menu-list">
                     <li><a href="${pageContext.request.contextPath}/manager/sales"><span class="check-icon">✓</span> Quản lý khách hàng</a></li>
-                    <li><a href="${pageContext.request.contextPath}/manager/product-details"><span class="check-icon">✓</span> Quản lý sản phẩm</a></li>
+                    <li><a href="${pageContext.request.contextPath}/manager/product-manage"><span class="check-icon">✓</span> Quản lý sản phẩm</a></li>
                     <li><a href="${pageContext.request.contextPath}/manager/sales-report"><span class="check-icon">✓</span> Quản lý đơn hàng</a></li>
                     <li><a href="${pageContext.request.contextPath}/manager/employee-performance"><span class="check-icon">✓</span> Nhân viên</a></li>
                     <li><a href="${pageContext.request.contextPath}/admin/dashboard"><span class="check-icon">✓</span> Thống kê </a></li>

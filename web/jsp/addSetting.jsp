@@ -11,10 +11,10 @@
         <link rel="stylesheet" href="${contextPath}/css/settingDetail.css"/>
     </head>
     <body>
-        
+
         <jsp:include page="../gui/header.jsp"/>
         <jsp:include page="../gui/sidebar.jsp"/>
-        
+
         <div class="container" style="margin-top: 118px">
             <h2 style="margin-bottom: 33px">Thêm Cài Đặt Mới</h2>
             <form id="addSettingForm" action="SettingController">
@@ -22,9 +22,9 @@
                 <div class="form-group">
                     <label for="settingNameSelect">Loại Cài Đặt</label>
                     <select id="settingNameSelect" name="settingName">
-                        <option value="Category" selected>Category</option>
-                        <option value="ProductType">ProductType</option>
-                        <option value="UserRole" >UserRole</option>
+                        <option value="Category" <c:if test="${type == 'category'}">selected</c:if>>Category</option>
+                        <option value="ProductType" <c:if test="${type == 'productType'}">selected</c:if>>ProductType</option>
+                        <option value="UserRole" <c:if test="${type == 'role'}">selected</c:if>>UserRole</option>
                         <!-- Set option "Khác" là mặc định được chọn -->
                         <option value="Khác">Khác</option>
                     </select>

@@ -60,7 +60,8 @@
                             </c:if>
                             <c:if test="${user.role.userRole == 'Customer'}">
                                 <a href="#">Orders</a>
-                                <a href="#">Cart</a>
+                                <a href="${contextPath}/cart"> Cart <c:if test="${not empty cartCount}"> <span class="badge badge-danger">${cartCount}</span> </c:if> </a>
+
                             </c:if>
                             <c:if test="${user.role.userRole == 'Seller' ||
                                           user.role.userRole == 'Marketing' ||

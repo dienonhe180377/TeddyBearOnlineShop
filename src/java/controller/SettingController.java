@@ -49,106 +49,165 @@ public class SettingController extends HttpServlet {
             CategoryDAO categoryDAO = new CategoryDAO();
             UserDAO userDAO = new UserDAO();
 
+            //Lấy tất cả setting
             if (service.equalsIgnoreCase("allSetting")) {
-                List<Setting> settings = settingDAO.getAllSetting();
-                List<ProductType> productTypes = typeDAO.getAllProductTypes();
-                List<Category> categoryList = categoryDAO.getAllCategory();
-                List<UserRole> userRoles = userDAO.getAllUserRole();
 
-                request.setAttribute("settings", settings);
-                request.setAttribute("productTypes", productTypes);
-                request.setAttribute("categoryList", categoryList);
-                request.setAttribute("userRoles", userRoles);
+                String settingType = request.getParameter("type");
 
-                request.getRequestDispatcher("jsp/settingList.jsp").forward(request, response);
-            }
-
-            if (service.equalsIgnoreCase("filterBy")) {
-                String filter = request.getParameter("filter");
-
-                if (filter.equalsIgnoreCase("roles")) {
-                    List<UserRole> userRoles = userDAO.getAllUserRole();
-                    request.setAttribute("userRoles", userRoles);
+                if (settingType.equals("setting")) {
+                    List<Setting> settings = settingDAO.getAllSetting();
+                    request.setAttribute("settings", settings);
                 }
 
-                if (filter.equalsIgnoreCase("categorys")) {
+                if (settingType.equals("productType")) {
+                    List<ProductType> productTypes = typeDAO.getAllProductTypes();
+                    request.setAttribute("productTypes", productTypes);
+                }
+
+                if (settingType.equals("category")) {
                     List<Category> categoryList = categoryDAO.getAllCategory();
                     request.setAttribute("categoryList", categoryList);
                 }
 
-                if (filter.equalsIgnoreCase("types")) {
-                    List<ProductType> productTypes = typeDAO.getAllProductTypes();
-                    request.setAttribute("productTypes", productTypes);
+                if (settingType.equals("role")) {
+                    List<UserRole> userRoles = userDAO.getAllUserRole();
+                    request.setAttribute("userRoles", userRoles);
+                }
+
+                request.setAttribute("settingType", settingType);
+                request.getRequestDispatcher("jsp/settingList.jsp").forward(request, response);
+            }
+
+            //Trường filter cho setting list
+            if (service.equalsIgnoreCase("filterBy")) {
+                String filter = request.getParameter("filter");
+                String type = request.getParameter("type");
+                String valueChoosen = request.getParameter("valueChoosen");
+
+                if (valueChoosen.equals("all")) {
+                    request.setAttribute("choosenValue", "all");
+                } else if (valueChoosen.equals("active")) {
+                    request.setAttribute("choosenValue", "active");
+                } else {
+                    request.setAttribute("choosenValue", "inactive");
                 }
 
                 if (filter.equalsIgnoreCase("active")) {
-                    List<Setting> settings = settingDAO.getAllSetting();
-                    List<ProductType> productTypes = typeDAO.getAllProductTypes();
-                    List<Category> categoryList = categoryDAO.getAllCategory();
-                    List<UserRole> userRoles = userDAO.getAllUserRole();
-                    for (int i = 0; i < settings.size(); i++) {
-                        if (!settings.get(i).isStatus()) {
-                            settings.remove(i);
+
+                    if (type.equals("setting")) {
+                        List<Setting> settings = settingDAO.getAllSetting();
+                        for (int i = 0; i < settings.size(); i++) {
+                            if (!settings.get(i).isStatus()) {
+                                settings.remove(i);
+                            }
                         }
+                        request.setAttribute("settingType", "setting");
+                        request.setAttribute("settings", settings);
                     }
-                    for (int i = 0; i < productTypes.size(); i++) {
-                        if (!productTypes.get(i).isStatus()) {
-                            productTypes.remove(i);
-                        }
+                    if (type.equals("productType")) {
+                        List<ProductType> productTypes = typeDAO.getAllActiveProductTypes();
+                        request.setAttribute("settingType", "productType");
+                        request.setAttribute("productTypes", productTypes);
                     }
-                    for (int i = 0; i < categoryList.size(); i++) {
-                        if (!categoryList.get(i).isStatus()) {
-                            categoryList.remove(i);
-                        }
+                    if (type.equals("category")) {
+                        List<Category> categoryList = categoryDAO.getAllActiveCategory();
+                        request.setAttribute("settingType", "category");
+                        request.setAttribute("categoryList", categoryList);
                     }
-                    for (int i = 0; i < userRoles.size(); i++) {
-                        if (!userRoles.get(i).isStatus()) {
-                            userRoles.remove(i);
-                        }
+                    if (type.equals("role")) {
+                        List<UserRole> userRoles = userDAO.getAllActiveUserRole();
+                        request.setAttribute("settingType", "role");
+                        request.setAttribute("userRoles", userRoles);
                     }
-                    request.setAttribute("settings", settings);
-                    request.setAttribute("productTypes", productTypes);
-                    request.setAttribute("categoryList", categoryList);
-                    request.setAttribute("userRoles", userRoles);
+
                 }
 
                 if (filter.equalsIgnoreCase("inactive")) {
-                    List<Setting> settings = settingDAO.getAllInactiveSetting();
-                    List<ProductType> productTypes = typeDAO.getAllInactiveProductTypes();
-                    List<Category> categoryList = categoryDAO.getAllInactiveCategory();
-                    List<UserRole> userRoles = userDAO.getAllInactiveUserRole();
+                    if (type.equals("setting")) {
+                        List<Setting> settings = settingDAO.getAllInactiveSetting();
+                        request.setAttribute("settingType", "setting");
+                        request.setAttribute("settings", settings);
+                    }
+                    if (type.equals("productType")) {
+                        List<ProductType> productTypes = typeDAO.getAllInactiveProductTypes();
+                        request.setAttribute("settingType", "productType");
+                        request.setAttribute("productTypes", productTypes);
+                    }
+                    if (type.equals("category")) {
+                        List<Category> categoryList = categoryDAO.getAllInactiveCategory();
+                        request.setAttribute("settingType", "category");
+                        request.setAttribute("categoryList", categoryList);
+                    }
+                    if (type.equals("role")) {
+                        List<UserRole> userRoles = userDAO.getAllInactiveUserRole();
+                        request.setAttribute("settingType", "role");
+                        request.setAttribute("userRoles", userRoles);
+                    }
 
+                }
+
+                request.getRequestDispatcher("jsp/settingList.jsp").forward(request, response);
+            }
+
+            //Tìm kiếm setting theo text
+            if (service.equalsIgnoreCase("search")) {
+                String text = request.getParameter("search");
+                String settingType = request.getParameter("searchType");
+
+                if (text.equalsIgnoreCase("Gấu")) {
+                    text = "Gau";
+                } else if (text.equalsIgnoreCase("Chó")) {
+                    text = "Cho";
+                } else if (text.equalsIgnoreCase("Mèo")) {
+                    text = "Meo";
+                }
+
+                if (settingType.equals("setting")) {
+                    List<Setting> settings = settingDAO.getAllSettingByText(text);
                     request.setAttribute("settings", settings);
+                }
+
+                if (settingType.equals("productType")) {
+                    List<ProductType> productTypes = typeDAO.getAllProductTypesByText(text);
                     request.setAttribute("productTypes", productTypes);
+                }
+
+                if (settingType.equals("category")) {
+                    List<Category> categoryList = categoryDAO.getAllCategoryByText(text);
                     request.setAttribute("categoryList", categoryList);
+                }
+
+                if (settingType.equals("role")) {
+                    List<UserRole> userRoles = userDAO.getAllUserRoleByText(text);
                     request.setAttribute("userRoles", userRoles);
                 }
 
-                if (filter.equalsIgnoreCase("khac")) {
-                    List<Setting> settings = settingDAO.getAllSetting();
-                    request.setAttribute("settings", settings);
+                request.setAttribute("inputted", text);
+                request.setAttribute("settingType", settingType);
+                request.getRequestDispatcher("jsp/settingList.jsp").forward(request, response);
+            }
+
+            //Chuyển hướng đến Add Setting
+            if (service.equalsIgnoreCase("addSettingRedirect")) {
+                String settingType = request.getParameter("type");
+
+                if (settingType.equals("productType")) {
+                    request.setAttribute("type", "productType");
                 }
 
-                request.getRequestDispatcher("jsp/settingList.jsp").forward(request, response);
+                if (settingType.equals("category")) {
+                    request.setAttribute("type", "category");
+                }
+
+                if (settingType.equals("role")) {
+                    request.setAttribute("type", "role");
+                }
+
+                request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
             }
 
-            if (service.equalsIgnoreCase("search")) {
-                String text = request.getParameter("search");
-
-                List<Setting> settings = settingDAO.getAllSettingByText(text);
-                List<ProductType> productTypes = typeDAO.getAllProductTypesByText(text);
-                List<Category> categoryList = categoryDAO.getAllCategoryByText(text);
-                List<UserRole> userRoles = userDAO.getAllUserRoleByText(text);
-
-                request.setAttribute("settings", settings);
-                request.setAttribute("productTypes", productTypes);
-                request.setAttribute("categoryList", categoryList);
-                request.setAttribute("userRoles", userRoles);
-                
-                request.getRequestDispatcher("jsp/settingList.jsp").forward(request, response);
-            }
-            
-            if(service.equalsIgnoreCase("addSetting")){
+            //Thêm setting mới
+            if (service.equalsIgnoreCase("addSetting")) {
                 request.setAttribute("text", "test");
                 request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
             }
