@@ -17,31 +17,31 @@
         
         <div class="container" style="margin-top: 118px">
             <h2 style="margin-bottom: 33px">Thêm Cài Đặt Mới</h2>
-            <form id="addSettingForm">
+            <form id="addSettingForm" action="SettingController">
                 <!-- Drop-down cho Tên Cài Đặt -->
                 <div class="form-group">
-                    <label for="settingNameSelect">Tên Cài Đặt</label>
+                    <label for="settingNameSelect">Loại Cài Đặt</label>
                     <select id="settingNameSelect" name="settingName">
-                        <option value="Category">Category</option>
+                        <option value="Category" selected>Category</option>
                         <option value="ProductType">ProductType</option>
                         <option value="UserRole" >UserRole</option>
                         <!-- Set option "Khác" là mặc định được chọn -->
-                        <option value="Khác" selected>Khác</option>
+                        <option value="Khác">Khác</option>
                     </select>
                 </div>
                 <!-- Trường nhập tên cài đặt mới khi chọn "Khác" -->
                 <div class="form-group hidden" id="customSettingNameGroup">
                     <label for="customSettingName">Nhập Tên Cài Đặt Mới</label>
-                    <input type="text" id="customSettingName" name="customSettingName" placeholder="Nhập tên cài đặt mới...">
+                    <input type="text" id="customSettingName" name="newSettingName" placeholder="Nhập tên cài đặt mới...">
                 </div>
                 <!-- Trường Giá Trị -->
                 <div class="form-group">
-                    <label for="settingValue">Giá Trị</label>
+                    <label for="settingValue">Nội dung</label>
                     <input type="text" id="settingValue" name="settingValue" placeholder="Nhập giá trị cài đặt..." required>
                 </div>
                 <!-- Drop-down cho Status -->
                 <div class="form-group">
-                    <label for="settingStatus">Status</label>
+                    <label for="settingStatus">Trạng thái</label>
                     <select id="settingStatus" name="settingStatus">
                         <option value="Active">Active</option>
                         <option value="Inactive">Inactive</option>
@@ -73,7 +73,7 @@
             document.addEventListener("DOMContentLoaded", function () {
                 if (settingNameSelect.value === 'Khác') {
                     customSettingNameGroup.classList.remove('hidden');
-                    customSettingName.value = "${text}";
+                    customSettingName.value = "a";
                 }
             });
         </script>

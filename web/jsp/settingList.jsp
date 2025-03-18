@@ -51,7 +51,7 @@
                                 <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=khac">Khác</a>
                             </div>
 
-                            <a href="${contextPath}/SettingController?service=addNewSetting"><button type="button" class="btn btn-primary" style="float: right; margin-top: auto;margin-bottom: auto;margin-right: 10px;">
+                            <a href="${contextPath}/jsp/addSetting.jsp"><button type="button" class="btn btn-primary" style="float: right; margin-top: auto;margin-bottom: auto;margin-right: 10px;">
                                     Thêm mới
                                 </button></a>
                         </div>
