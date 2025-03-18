@@ -283,3 +283,5 @@ INSERT INTO [dbo].[Setting] ([name], [status], [content], [description])
 VALUES (N'Số điện thoại', 1, N'0334372394', N'Số điện thoại của trang web');
 INSERT INTO [dbo].[Setting] ([name], [status], [content], [description])
 VALUES (N'Tên trang web', 1, N'TESHO', N'Tên của trang web');
+INSERT INTO [dbo].[Setting] ([name], [status], [content], [description])
+VALUES (N'Email', 0, N'TESHO@gmail.com', N'Email của trang web');
