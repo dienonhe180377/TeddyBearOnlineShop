@@ -18,14 +18,7 @@ insert into ProductType values(N'Gối Ôm')
 
 select * from Category
 --Category insert
-insert into Category values(N'Gấu Bông May Mắn')
-insert into Category values(N'Gấu bông Ghi Âm')
-insert into Category values(N'Pikachu')
-insert into Category values(N'Stitch')
-insert into Category values(N'Cinnamaroll')
-insert into Category values(N'Thú Bông Cảm Xúc')
-insert into Category values(N'Gối Ôm Dài')
-insert into Category values(N'Gối Ôm Béo')
+INSERT INTO [dbo].[Category] ([name], [status]) VALUES (N'Evanligion',0)
 
 
 select * from Product

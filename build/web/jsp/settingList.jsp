@@ -27,7 +27,20 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-10" id="form" style="min-height: 600px; ">
                     <div class="container" >
-                        <h2 class="text-center">Setting List</h2>
+                        <c:choose>
+                            <c:when test="${settingType == 'setting'}">
+                                <h2 class="text-center">Header Footer Settings</h2>
+                            </c:when>
+                            <c:when test="${settingType == 'productType'}">
+                                <h2 class="text-center">Product Type Settings</h2>
+                            </c:when>
+                            <c:when test="${settingType == 'category'}">
+                                <h2 class="text-center">Category Settings</h2>
+                            </c:when>
+                            <c:otherwise>
+                                <h2 class="text-center">Role Settings</h2>
+                            </c:otherwise>
+                        </c:choose>
                         <%-- Table Container --%>
                         <div class="form-group" style="width: 50%;float: left">
                             <h5>Tìm kiếm</h5>
@@ -36,10 +49,10 @@
                                 <input type="hidden" name="service" value="search"/>
                                 <input type="hidden" name="searchType" value="${settingType}"/>
                                 <input type="text" class="form-control" name="search" style="width: 150px;" <c:if test="${not empty inputted}"> value="${inputted}"</c:if>>
-                            </form>
-                        </div>
-                        <div class="dropdown" style="width: 50%;float: left">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="float: right; margin-top: auto;margin-bottom: auto">
+                                </form>
+                            </div>
+                            <div class="dropdown" style="width: 50%;float: left">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="float: right; margin-top: auto;margin-bottom: auto">
                                 <c:choose>
                                     <c:when test="${choosenValue == 'all'}">
                                         Tất Cả
@@ -61,11 +74,11 @@
                                 <a class="dropdown-item" href="${contextPath}/SettingController?service=filterBy&filter=inactive&type=${settingType}&valueChoosen=inactive">Trạng Thái Inactive</a>
                             </div>
 
-                            <a href="${contextPath}/SettingController?service=addSettingRedirect&type=${settingType}"><button type="button" class="btn btn-primary" style="float: right; margin-top: auto;margin-bottom: auto;margin-right: 10px;">
-                                    Thêm mới
-                                </button></a>
+                            <a href="${contextPath}/SettingController?service=addSettingRedirect&type=${settingType}" <c:if test="${settingType == 'setting'}">style="display: none;"</c:if>><button type="button" class="btn btn-primary" style="float: right; margin-top: auto;margin-bottom: auto;margin-right: 10px;">
+                                        Thêm mới
+                                    </button></a>
+                            </div>
                         </div>
-                    </div>
 
                     <%-- Table of QuestionList--%>
                     <table id="table-id" class="table table-bordered table-striped tab1">

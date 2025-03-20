@@ -208,8 +208,49 @@ public class SettingController extends HttpServlet {
 
             //Thêm setting mới
             if (service.equalsIgnoreCase("addSetting")) {
-                request.setAttribute("text", "test");
-                request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+
+                String settingName = request.getParameter("settingName");
+                String content = request.getParameter("settingValue");
+                String status = request.getParameter("settingStatus");
+                String destription = request.getParameter("settingDescription");
+
+                if (settingName.equals("category")) {
+                    if (status.equals("active")) {
+                        boolean duplicateCheck = categoryDAO.checkCategoryExisted(content);
+                        if (duplicateCheck) {
+                            request.setAttribute("inputtedValue", content);
+                            request.setAttribute("type", "category");
+                            request.setAttribute("duplicateMessage", "Category Duplicated!!");
+                            request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+                        } else {
+                            categoryDAO.addCategory(content, true);
+                            List<Category> categoryList = categoryDAO.getAllCategory();
+                            request.setAttribute("categoryList", categoryList);
+                            request.setAttribute("settingType", settingName);
+                            request.getRequestDispatcher("jsp/settingList.jsp").forward(request, response);
+                        }
+                    } else {
+                        boolean duplicateCheck = categoryDAO.checkCategoryExisted(content);
+                        if (duplicateCheck) {
+                            request.setAttribute("inputtedValue", content);
+                            request.setAttribute("type", "category");
+                            request.setAttribute("duplicateMessage", "Category duplicated!!");
+                            request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+                        } else {
+                            categoryDAO.addCategory(content, false);
+                            List<Category> categoryList = categoryDAO.getAllCategory();
+                            request.setAttribute("categoryList", categoryList);
+                            request.setAttribute("settingType", settingName);
+                            request.getRequestDispatcher("jsp/settingList.jsp").forward(request, response);
+                        }
+                    }
+                } else if (settingName.equals("productType")) {
+                    if (status.equals("active")) {
+
+                    } else {
+
+                    }
+                }
             }
 
         } catch (Exception ex) {

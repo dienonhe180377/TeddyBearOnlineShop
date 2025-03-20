@@ -21,6 +21,29 @@ public class ProductTypeDAO extends DBConnection {
 
     public ProductTypeDAO() {
     }
+    
+    //Add New Category
+    public void addProductType(String name , boolean status) throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        String sql = "INSERT INTO [dbo].[ProductType] ([name], [status]) VALUES (?,?)";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            pre.setString(1, name);
+            pre.setBoolean(2, status);
+            pre.executeUpdate();
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
 
     public ProductType getProductTypeById(int typeId) throws Exception {
         Connection conn = null;

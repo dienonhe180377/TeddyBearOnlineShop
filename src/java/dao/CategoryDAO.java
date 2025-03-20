@@ -21,6 +21,30 @@ public class CategoryDAO extends DBConnection {
     public CategoryDAO() {
     }
     
+    //Add New Category
+    public void addCategory(String name , boolean status) throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ArrayList<Category> categoryList = new ArrayList<>();
+        String sql = "INSERT INTO [dbo].[Category] ([name], [status]) VALUES (?,?)";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            pre.setString(1, name);
+            pre.setBoolean(2, status);
+            pre.executeUpdate();
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+    
     //Get All Category
     public ArrayList<Category> getAllCategory() throws Exception {
         Connection conn = null;
@@ -174,6 +198,18 @@ public class CategoryDAO extends DBConnection {
             System.out.println("Error retrieving categories: " + ex);
         }
         return categories;
+    }
+    
+    public boolean checkCategoryExisted(String content) throws Exception{
+        ArrayList<Category> categoryExisted = getAllCategory();
+        for (int i = 0; i < categoryExisted.size(); i++) {
+            String category = categoryExisted.get(i).getName().toLowerCase().trim();
+            content = content.toLowerCase().trim();
+            if(category.equals(content)){
+                return true;
+            }
+        }
+        return false;
     }
     
     public static void main(String[] args) throws Exception {
