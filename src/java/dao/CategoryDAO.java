@@ -21,6 +21,35 @@ public class CategoryDAO extends DBConnection {
     public CategoryDAO() {
     }
     
+    //Get Category By Id
+    public Category getCategoryById(int id) throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        Category category = null;
+        String sql = "SELECT * FROM Category where id = " + id;
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int iD = rs.getInt("id");
+                String name = rs.getString("name");
+                boolean status = rs.getBoolean("status");
+                category = new Category(iD, name, status);
+            }
+            return category;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+    
     //Add New Category
     public void addCategory(String name , boolean status) throws Exception {
         Connection conn = null;

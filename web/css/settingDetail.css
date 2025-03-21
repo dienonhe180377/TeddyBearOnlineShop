@@ -38,7 +38,12 @@ button {
     cursor: pointer;
 }
 .cancel-btn{
-    padding: 10px 20px;
+    font-size: 15px;
+    text-decoration: none;
+    padding-top: 8px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
     background: red;
     border: none;
     color: #fff;

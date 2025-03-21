@@ -276,6 +276,35 @@ public class UserDAO extends DBConnection {
             closeConnection(conn);
         }
     }
+    
+    //Get Role By Id
+    public UserRole getRoleById(int id) throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        UserRole role = null;
+        String sql = "SELECT * FROM UserRole where id = " + id;
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int iD = rs.getInt("id");
+                String name = rs.getString("roleName");
+                boolean status = rs.getBoolean("status");
+                role = new UserRole(iD, name, status);
+            }
+            return role;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
 
     //Get all users
     public ArrayList<User> getAllUser() throws Exception {
@@ -466,12 +495,49 @@ public class UserDAO extends DBConnection {
         }
         return false;
     }
+    
+    //Add New UserRole
+    public void addUserRole(String name , boolean status) throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        String sql = "INSERT INTO [dbo].[UserRole] ([name], [status]) VALUES (?,?)";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            pre.setString(1, name);
+            pre.setBoolean(2, status);
+            pre.executeUpdate();
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+    
+    
+    //Check duplicated user role
+    public boolean checkRoleExisted(String content) throws Exception{
+        List<UserRole> roleExisted = getAllUserRole();
+        for (int i = 0; i < roleExisted.size(); i++) {
+            String role = roleExisted.get(i).getName().toLowerCase().trim();
+            content = content.toLowerCase().trim();
+            if(role.equals(content)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static void main(String[] args) throws Exception {
         UserDAO userDAO = new UserDAO();
-        List<UserRole> roles = userDAO.getAllUserRoleByText("a");
-        for (int i = 0; i < roles.size(); i++) {
-            System.out.println(roles.get(i));
-        }
+        UserRole roles = userDAO.getRoleById(1);
+        System.out.println(roles);
     }
+    
+    
 }

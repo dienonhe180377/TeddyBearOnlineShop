@@ -224,33 +224,118 @@ public class SettingController extends HttpServlet {
                             request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
                         } else {
                             categoryDAO.addCategory(content, true);
-                            List<Category> categoryList = categoryDAO.getAllCategory();
-                            request.setAttribute("categoryList", categoryList);
-                            request.setAttribute("settingType", settingName);
-                            request.getRequestDispatcher("jsp/settingList.jsp").forward(request, response);
+                            Category newCategory = categoryDAO.getAllCategoryByText(content).get(0);
+                            request.setAttribute("successMessage", "Category Add Successfully!");
+                            request.setAttribute("type", settingName);
+                            request.setAttribute("valueCheck", newCategory);
+                            request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
                         }
                     } else {
                         boolean duplicateCheck = categoryDAO.checkCategoryExisted(content);
                         if (duplicateCheck) {
                             request.setAttribute("inputtedValue", content);
                             request.setAttribute("type", "category");
-                            request.setAttribute("duplicateMessage", "Category duplicated!!");
+                            request.setAttribute("duplicateMessage", "Category Duplicated!!");
                             request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
                         } else {
                             categoryDAO.addCategory(content, false);
-                            List<Category> categoryList = categoryDAO.getAllCategory();
-                            request.setAttribute("categoryList", categoryList);
-                            request.setAttribute("settingType", settingName);
-                            request.getRequestDispatcher("jsp/settingList.jsp").forward(request, response);
+                            Category newCategory = categoryDAO.getAllCategoryByText(content).get(0);
+                            request.setAttribute("successMessage", "Category Add Successfully!");
+                            request.setAttribute("type", settingName);
+                            request.setAttribute("valueCheck", newCategory);
+                            request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
                         }
                     }
                 } else if (settingName.equals("productType")) {
                     if (status.equals("active")) {
-
+                        boolean duplicateCheck = typeDAO.checkProductTypeExisted(content);
+                        if (duplicateCheck) {
+                            request.setAttribute("inputtedValue", content);
+                            request.setAttribute("type", "productType");
+                            request.setAttribute("duplicateMessage", "Type Duplicated!!");
+                            request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+                        } else {
+                            typeDAO.addProductType(content, true);
+                            ProductType newType = typeDAO.getAllProductTypesByText(content).get(0);
+                            request.setAttribute("successMessage", "Product Type Add Successfully!");
+                            request.setAttribute("type", settingName);
+                            request.setAttribute("valueCheck", newType);
+                            request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+                        }
                     } else {
-
+                        boolean duplicateCheck = typeDAO.checkProductTypeExisted(content);
+                        if (duplicateCheck) {
+                            request.setAttribute("inputtedValue", content);
+                            request.setAttribute("type", "productType");
+                            request.setAttribute("duplicateMessage", "Type Duplicated!!");
+                            request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+                        } else {
+                            typeDAO.addProductType(content, false);
+                            ProductType newType = typeDAO.getAllProductTypesByText(content).get(0);
+                            request.setAttribute("successMessage", "Product Type Add Successfully!");
+                            request.setAttribute("type", settingName);
+                            request.setAttribute("valueCheck", newType);
+                            request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+                        }
+                    }
+                } else {
+                    if (status.equals("active")) {
+                        boolean duplicateCheck = userDAO.checkRoleExisted(content);
+                        if (duplicateCheck) {
+                            request.setAttribute("inputtedValue", content);
+                            request.setAttribute("type", "productType");
+                            request.setAttribute("duplicateMessage", "Role Duplicated!!");
+                            request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+                        } else {
+                            userDAO.addUserRole(content, true);
+                            UserRole newRole = userDAO.getAllUserRoleByText(content).get(0);
+                            request.setAttribute("successMessage", "Role Add Successfully!");
+                            request.setAttribute("type", settingName);
+                            request.setAttribute("valueCheck", newRole);
+                            request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+                        }
+                    } else {
+                        boolean duplicateCheck = userDAO.checkRoleExisted(content);
+                        if (duplicateCheck) {
+                            request.setAttribute("inputtedValue", content);
+                            request.setAttribute("type", "productType");
+                            request.setAttribute("duplicateMessage", "Role Duplicated!!");
+                            request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+                        } else {
+                            userDAO.addUserRole(content, true);
+                            UserRole newRole = userDAO.getAllUserRoleByText(content).get(0);
+                            request.setAttribute("successMessage", "Role Add Successfully!");
+                            request.setAttribute("type", settingName);
+                            request.setAttribute("valueCheck", newRole);
+                            request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+                        }
                     }
                 }
+            }
+
+            //Edit setting Redirect
+            if (service.equalsIgnoreCase("editSettingRedirect")) {
+                String type = request.getParameter("type");
+                int id = Integer.parseInt(request.getParameter("id"));
+
+                if (type.equalsIgnoreCase("setting")) {
+                    Setting setting = settingDAO.getSettingById(id);
+                    request.setAttribute("type", type);
+                    request.setAttribute("settingCheck", setting);
+                } else if (type.equalsIgnoreCase("category")) {
+                    Category category = categoryDAO.getCategoryById(id);
+                    request.setAttribute("type", type);
+                    request.setAttribute("valueCheck", category);
+                } else if (type.equalsIgnoreCase("productType")){
+                    ProductType productType = typeDAO.getProductTypeById(id);
+                    request.setAttribute("type", type);
+                    request.setAttribute("valueCheck", productType);
+                } else {
+                    UserRole role = userDAO.getRoleById(id);
+                    request.setAttribute("type", type);
+                    request.setAttribute("valueCheck", role);
+                }
+                request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
             }
 
         } catch (Exception ex) {

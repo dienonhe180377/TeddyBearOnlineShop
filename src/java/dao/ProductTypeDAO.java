@@ -22,7 +22,7 @@ public class ProductTypeDAO extends DBConnection {
     public ProductTypeDAO() {
     }
     
-    //Add New Category
+    //Add New ProductType
     public void addProductType(String name , boolean status) throws Exception {
         Connection conn = null;
         ResultSet rs = null;
@@ -60,8 +60,10 @@ public class ProductTypeDAO extends DBConnection {
             if (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
+                boolean status = rs.getBoolean("status");
                 type.setId(id);
                 type.setName(name);
+                type.setStatus(status);
             }
             return type;
         } catch (Exception e) {
@@ -166,6 +168,20 @@ public class ProductTypeDAO extends DBConnection {
             System.out.println("Error retrieving product types: " + ex);
         }
         return productTypes;
+    }
+    
+    
+    
+    public boolean checkProductTypeExisted(String content) throws Exception{
+        List<ProductType> typeExisted = getAllProductTypes();
+        for (int i = 0; i < typeExisted.size(); i++) {
+            String type = typeExisted.get(i).getName().toLowerCase().trim();
+            content = content.toLowerCase().trim();
+            if(type.equals(content)){
+                return true;
+            }
+        }
+        return false;
     }
     
     public static void main(String[] args) {

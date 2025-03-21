@@ -106,7 +106,7 @@
                                             <c:if test="${!settings.status}">
                                                 <td>Inactive</td>
                                             </c:if>
-                                            <td><a href=""><button class="btn btn-success">Edit</button></a></td>
+                                            <td><a href="${contextPath}/SettingController?service=editSettingRedirect&type=${settingType}&id=${settings.id}"><button class="btn btn-success">Edit</button></a></td>
                                         </tr>
                                     </c:forEach>
                                 </c:when>
@@ -122,7 +122,7 @@
                                             <c:if test="${!productType.status}">
                                                 <td>Inactive</td>
                                             </c:if>
-                                            <td><a href=""><button class="btn btn-success">Edit</button></a></td>
+                                            <td><a href="${contextPath}/SettingController?service=editSettingRedirect&type=${settingType}&id=${productType.id}"><button class="btn btn-success">Edit</button></a></td>
                                         </tr>
                                     </c:forEach>
                                 </c:when>
@@ -138,7 +138,7 @@
                                             <c:if test="${!category.status}">
                                                 <td>Inactive</td>
                                             </c:if>
-                                            <td><a href=""><button class="btn btn-success">Edit</button></a></td>
+                                            <td><a href="${contextPath}/SettingController?service=editSettingRedirect&type=${settingType}&id=${category.id}"><button class="btn btn-success">Edit</button></a></td>
                                         </tr>
                                     </c:forEach>
                                 </c:when>
@@ -154,7 +154,7 @@
                                             <c:if test="${!role.status}">
                                                 <td>Inactive</td>
                                             </c:if>
-                                            <td><a href=""><button class="btn btn-success">Edit</button></a></td>
+                                            <td><a href="${contextPath}/SettingController?service=editSettingRedirect&type=${settingType}&id=${role.id}"><button class="btn btn-success">Edit</button></a></td>
                                         </tr>
                                     </c:forEach>
                                 </c:otherwise>

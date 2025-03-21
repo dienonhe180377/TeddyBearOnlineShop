@@ -10,7 +10,7 @@ package entity;
  */
 public class UserRole {
     private int id;
-    private String userRole;
+    private String name;
     private boolean status;
 
     public UserRole() {
@@ -19,12 +19,12 @@ public class UserRole {
     
     public UserRole(int id, String userRole) {
         this.id = id;
-        this.userRole = userRole;
+        this.name = userRole;
     }
 
     public UserRole(int id, String userRole, boolean status) {
         this.id = id;
-        this.userRole = userRole;
+        this.name = userRole;
         this.status = status;
     }
 
@@ -32,16 +32,24 @@ public class UserRole {
         return id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
 
     public String getUserRole() {
-        return userRole;
+        return name;
     }
 
     public void setUserRole(String userRole) {
-        this.userRole = userRole;
+        this.name = userRole;
     }
 
     public boolean isStatus() {
@@ -56,7 +64,7 @@ public class UserRole {
 
     @Override
     public String toString() {
-        return "UserRole{" + "id=" + id + ", userRole=" + userRole + ", status=" + status + '}';
+        return "UserRole{" + "id=" + id + ", userRole=" + name + ", status=" + status + '}';
     }
     
 }
