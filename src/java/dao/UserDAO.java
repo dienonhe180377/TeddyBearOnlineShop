@@ -12,6 +12,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO extends DBConnection {
+    
+    //Update a role
+    public int editUserRole(int id, String name, boolean status) throws Exception {
+        Connection conn = null;
+        PreparedStatement pre = null;
+
+        String sql = "update UserRole\n"
+                + "set status = ? , roleName = ?\n"
+                + "where id = ?";
+        
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            pre.setBoolean(1, status);
+            pre.setString(2, name);
+            pre.setInt(3, id);
+            int success = pre.executeUpdate();
+            return success;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            closeConnection(conn);
+            closePreparedStatement(pre);
+        }
+    }
 
     //Add an user
     public void addUser(String name, String email, String password, String phone, String location, int role) throws Exception {
@@ -503,7 +528,7 @@ public class UserDAO extends DBConnection {
         /* Result set returned by the sqlserver */
         PreparedStatement pre = null;
         /* Prepared statement for executing sql queries */
-        String sql = "INSERT INTO [dbo].[UserRole] ([name], [status]) VALUES (?,?)";
+        String sql = "INSERT INTO [dbo].[UserRole] ([roleName], [status]) VALUES (?,?)";
         try {
             conn = getConnection();
             pre = conn.prepareStatement(sql);

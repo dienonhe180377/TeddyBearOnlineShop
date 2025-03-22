@@ -305,4 +305,11 @@ public class ProductDAO extends DBConnection {
         return products.subList(fromIndex, toIndex);
     }
 
+    public static void main(String[] args) throws Exception {
+        ProductDAO productDAO = new ProductDAO();
+        List<Product> products = productDAO.getAllProduct();
+        for (int i = 0; i < products.size(); i++) {
+            System.out.println(products.get(i).getName());
+        }
+    }
 }

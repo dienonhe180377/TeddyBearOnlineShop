@@ -22,8 +22,33 @@ public class ProductTypeDAO extends DBConnection {
     public ProductTypeDAO() {
     }
     
+    //Update a type
+    public int editType(int id, String name, boolean status) throws Exception {
+        Connection conn = null;
+        PreparedStatement pre = null;
+
+        String sql = "update ProductType\n"
+                + "set status = ? , name = ?\n"
+                + "where id = ?";
+        
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            pre.setBoolean(1, status);
+            pre.setString(2, name);
+            pre.setInt(3, id);
+            int success = pre.executeUpdate();
+            return success;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            closeConnection(conn);
+            closePreparedStatement(pre);
+        }
+    }
+
     //Add New ProductType
-    public void addProductType(String name , boolean status) throws Exception {
+    public void addProductType(String name, boolean status) throws Exception {
         Connection conn = null;
         ResultSet rs = null;
         /* Result set returned by the sqlserver */
@@ -112,7 +137,7 @@ public class ProductTypeDAO extends DBConnection {
         }
         return productTypes;
     }
-    
+
     public List<ProductType> getAllInactiveProductTypes() {
         List<ProductType> productTypes = new ArrayList<>();
         String sql = "SELECT * FROM ProductType where status = 0";
@@ -131,7 +156,7 @@ public class ProductTypeDAO extends DBConnection {
         }
         return productTypes;
     }
-    
+
     public List<ProductType> getAllProductTypes() {
         List<ProductType> productTypes = new ArrayList<>();
         String sql = "SELECT * FROM ProductType";
@@ -150,46 +175,51 @@ public class ProductTypeDAO extends DBConnection {
         }
         return productTypes;
     }
-    
-    public List<ProductType> getAllProductTypesByText(String text) {
-        List<ProductType> productTypes = new ArrayList<>();
+
+    public List<ProductType> getAllProductTypesByText(String text) throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ArrayList<ProductType> typeList = new ArrayList<>();
         String sql = "SELECT * FROM ProductType where name COLLATE Latin1_General_CI_AI like '%" + text + "%'";
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet rs = statement.executeQuery();
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
             while (rs.next()) {
-                ProductType productType = new ProductType();
-                productType.setId(rs.getInt("id"));
-                productType.setName(rs.getString("name"));
-                productType.setStatus(rs.getBoolean("status"));
-                productTypes.add(productType);
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                boolean status = rs.getBoolean("status");
+                typeList.add(new ProductType(id, name, status));
             }
-        } catch (SQLException ex) {
-            System.out.println("Error retrieving product types: " + ex);
+            return typeList;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
         }
-        return productTypes;
     }
-    
-    
-    
-    public boolean checkProductTypeExisted(String content) throws Exception{
+
+    public boolean checkProductTypeExisted(String content) throws Exception {
         List<ProductType> typeExisted = getAllProductTypes();
         for (int i = 0; i < typeExisted.size(); i++) {
             String type = typeExisted.get(i).getName().toLowerCase().trim();
             content = content.toLowerCase().trim();
-            if(type.equals(content)){
+            if (type.equals(content)) {
                 return true;
             }
         }
         return false;
     }
-    
+
     public static void main(String[] args) {
         ProductTypeDAO productTypeDAO = new ProductTypeDAO();
-        List<ProductType> productTypes = productTypeDAO.getAllProductTypesByText("a");
-        for (int i = 0; i < productTypes.size(); i++) {
-            System.out.println(productTypes.get(i));
-        }
-        
+        List<ProductType> productTypes = productTypeDAO.getAllProductTypes();
+        System.out.println(productTypes.size());
+
     }
 }

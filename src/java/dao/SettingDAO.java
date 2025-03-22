@@ -1,6 +1,4 @@
-
 package dao;
-
 
 import entity.Setting;
 import java.sql.Connection;
@@ -18,7 +16,33 @@ public class SettingDAO extends DBConnection {
 
     public SettingDAO() {
     }
-    
+
+    //Update a setting
+    public int editSetting(int id, String content, boolean status, String description) throws Exception {
+        Connection conn = null;
+        PreparedStatement pre = null;
+
+        String sql = "update Setting\n"
+                + "set status = ? , content = ?, description = ?\n"
+                + "where id = ?";
+        
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            pre.setBoolean(1, status);
+            pre.setString(2, content);
+            pre.setString(3, description);
+            pre.setInt(4, id);
+            int success = pre.executeUpdate();
+            return success;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            closeConnection(conn);
+            closePreparedStatement(pre);
+        }
+    }
+
     //Get all setting
     public ArrayList<Setting> getAllSetting() throws Exception {
         Connection conn = null;
@@ -50,7 +74,7 @@ public class SettingDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-    
+
     public ArrayList<Setting> getAllSettingByText(String text) throws Exception {
         Connection conn = null;
         ResultSet rs = null;
@@ -81,7 +105,7 @@ public class SettingDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-    
+
     public Setting getSettingById(int id) throws Exception {
         Connection conn = null;
         ResultSet rs = null;
@@ -112,7 +136,7 @@ public class SettingDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-    
+
     //Get all inactive setting
     public ArrayList<Setting> getAllInactiveSetting() throws Exception {
         Connection conn = null;
@@ -144,19 +168,19 @@ public class SettingDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-    
-    public boolean checkSettingExisted(String content) throws Exception{
+
+    public boolean checkSettingExisted(String content) throws Exception {
         List<Setting> settingExisted = getAllSetting();
         for (int i = 0; i < settingExisted.size(); i++) {
-            String setting = settingExisted.get(i).getName().toLowerCase().trim();
+            String setting = settingExisted.get(i).getContent().toLowerCase().trim();
             content = content.toLowerCase().trim();
-            if(setting.equals(content)){
+            if (setting.equals(content)) {
                 return true;
             }
         }
         return false;
     }
-    
+
     public static void main(String[] args) throws Exception {
         SettingDAO settingDAO = new SettingDAO();
         List<Setting> settingList = settingDAO.getAllSettingByText("a");

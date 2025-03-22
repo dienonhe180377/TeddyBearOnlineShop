@@ -21,6 +21,31 @@ public class CategoryDAO extends DBConnection {
     public CategoryDAO() {
     }
     
+    //Update a category
+    public int editCategory(int id, String name, boolean status) throws Exception {
+        Connection conn = null;
+        PreparedStatement pre = null;
+
+        String sql = "update Category\n"
+                + "set status = ? , name = ?\n"
+                + "where id = ?";
+        
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            pre.setBoolean(1, status);
+            pre.setString(2, name);
+            pre.setInt(3, id);
+            int success = pre.executeUpdate();
+            return success;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            closeConnection(conn);
+            closePreparedStatement(pre);
+        }
+    }
+    
     //Get Category By Id
     public Category getCategoryById(int id) throws Exception {
         Connection conn = null;

@@ -283,7 +283,7 @@ public class SettingController extends HttpServlet {
                         boolean duplicateCheck = userDAO.checkRoleExisted(content);
                         if (duplicateCheck) {
                             request.setAttribute("inputtedValue", content);
-                            request.setAttribute("type", "productType");
+                            request.setAttribute("type", "role");
                             request.setAttribute("duplicateMessage", "Role Duplicated!!");
                             request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
                         } else {
@@ -298,11 +298,11 @@ public class SettingController extends HttpServlet {
                         boolean duplicateCheck = userDAO.checkRoleExisted(content);
                         if (duplicateCheck) {
                             request.setAttribute("inputtedValue", content);
-                            request.setAttribute("type", "productType");
+                            request.setAttribute("type", "role");
                             request.setAttribute("duplicateMessage", "Role Duplicated!!");
                             request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
                         } else {
-                            userDAO.addUserRole(content, true);
+                            userDAO.addUserRole(content, false);
                             UserRole newRole = userDAO.getAllUserRoleByText(content).get(0);
                             request.setAttribute("successMessage", "Role Add Successfully!");
                             request.setAttribute("type", settingName);
@@ -326,7 +326,7 @@ public class SettingController extends HttpServlet {
                     Category category = categoryDAO.getCategoryById(id);
                     request.setAttribute("type", type);
                     request.setAttribute("valueCheck", category);
-                } else if (type.equalsIgnoreCase("productType")){
+                } else if (type.equalsIgnoreCase("productType")) {
                     ProductType productType = typeDAO.getProductTypeById(id);
                     request.setAttribute("type", type);
                     request.setAttribute("valueCheck", productType);
@@ -336,6 +336,132 @@ public class SettingController extends HttpServlet {
                     request.setAttribute("valueCheck", role);
                 }
                 request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+            }
+
+            //Edit a setting
+            if (service.equalsIgnoreCase("editSetting")) {
+                String type = request.getParameter("type");
+                int id = Integer.parseInt(request.getParameter("id"));
+                String content = request.getParameter("settingValue");
+                String settingStatus = request.getParameter("settingStatus");
+                String description = request.getParameter("settingDescription");
+
+                boolean status;
+                if (settingStatus.equals("active")) {
+                    status = true;
+                } else {
+                    status = false;
+                }
+
+                if (type.equalsIgnoreCase("setting")) {
+                    Setting settingCheck = settingDAO.getSettingById(id);
+                    boolean checkDup = settingDAO.checkSettingExisted(content);
+
+                    if (settingCheck.getContent().equalsIgnoreCase(content)) {
+                        checkDup = false;
+                    }
+
+                    if (checkDup) {
+                        Setting setting = settingDAO.getSettingById(id);
+                        request.setAttribute("type", type);
+                        request.setAttribute("settingCheck", setting);
+                        request.setAttribute("duplicateMessage", "Setting Duplicated!!");
+                    } else {
+                        int checkSuccess = settingDAO.editSetting(id, content, status, description);
+                        Setting setting = settingDAO.getSettingById(id);
+                        request.setAttribute("type", type);
+                        request.setAttribute("settingCheck", setting);
+                        if (checkSuccess >= 1) {
+                            request.setAttribute("successMessage", "Setting Edited Successfully!");
+                        } else {
+                            request.setAttribute("duplicateMessage", "Setting Edited Failed!");
+                        }
+                    }
+                }
+
+                if (type.equalsIgnoreCase("productType")) {
+                    ProductType typeCheck = typeDAO.getProductTypeById(id);
+                    boolean checkDup = typeDAO.checkProductTypeExisted(content);
+
+                    if (typeCheck.getName().equalsIgnoreCase(content)) {
+                        checkDup = false;
+                    }
+
+                    if (checkDup) {
+                        ProductType productType = typeDAO.getProductTypeById(id);
+                        request.setAttribute("type", type);
+                        request.setAttribute("valueCheck", productType);
+                        request.setAttribute("duplicateMessage", "Type Duplicated!!");
+                    } else {
+                        int checkSuccess = typeDAO.editType(id, content, status);
+                        ProductType productType = typeDAO.getProductTypeById(id);
+                        request.setAttribute("type", type);
+                        request.setAttribute("valueCheck", productType);
+                        if (checkSuccess >= 1) {
+                            request.setAttribute("successMessage", "Type Edited Successfully!");
+                        } else {
+                            request.setAttribute("duplicateMessage", "Type Edited Failed!");
+                        }
+                    }
+                }
+
+                if (type.equalsIgnoreCase("category")) {
+                    Category categoryCheck = categoryDAO.getCategoryById(id);
+                    boolean checkDup = categoryDAO.checkCategoryExisted(content);
+
+                    if (categoryCheck.getName().equalsIgnoreCase(content)) {
+                        checkDup = false;
+                    }
+
+                    if (checkDup) {
+                        Category category = categoryDAO.getCategoryById(id);
+                        request.setAttribute("type", type);
+                        request.setAttribute("valueCheck", category);
+                        request.setAttribute("duplicateMessage", "Category Duplicated!!");
+                    } else {
+                        int checkSuccess = categoryDAO.editCategory(id, content, status);
+                        Category category = categoryDAO.getCategoryById(id);
+                        request.setAttribute("type", type);
+                        request.setAttribute("valueCheck", category);
+                        if (checkSuccess >= 1) {
+                            request.setAttribute("successMessage", "Category Edited Successfully!");
+                        } else {
+                            request.setAttribute("duplicateMessage", "Category Edited Failed!");
+                        }
+                    }
+                }
+
+                if (type.equalsIgnoreCase("role")) {
+                    UserRole roleCheck = userDAO.getRoleById(id);
+                    boolean checkDup = userDAO.checkRoleExisted(content);
+
+                    if (roleCheck.getName().equalsIgnoreCase(content)) {
+                        checkDup = false;
+                    }
+
+                    if (checkDup) {
+                        UserRole role = userDAO.getRoleById(id);
+                        request.setAttribute("type", type);
+                        request.setAttribute("valueCheck", role);
+                        request.setAttribute("duplicateMessage", "Role Duplicated!!");
+                    } else {
+                        int checkSuccess = userDAO.editUserRole(id, content, status);
+                        UserRole role = userDAO.getRoleById(id);
+                        request.setAttribute("type", type);
+                        request.setAttribute("valueCheck", role);
+                        if (checkSuccess >= 1) {
+                            request.setAttribute("successMessage", "Role Edited Successfully!");
+                        } else {
+                            request.setAttribute("duplicateMessage", "Role Edited Failed!");
+                        }
+                    }
+                }
+
+                request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+            }
+            
+            if(service.equalsIgnoreCase("delete")){
+                
             }
 
         } catch (Exception ex) {
