@@ -5,12 +5,15 @@
 package controller;
 
 import dao.CategoryDAO;
+import dao.ProductDAO;
 import dao.ProductTypeDAO;
 import dao.SettingDAO;
 import dao.UserDAO;
 import entity.Category;
+import entity.Product;
 import entity.ProductType;
 import entity.Setting;
+import entity.User;
 import entity.UserRole;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -48,6 +51,7 @@ public class SettingController extends HttpServlet {
             ProductTypeDAO typeDAO = new ProductTypeDAO();
             CategoryDAO categoryDAO = new CategoryDAO();
             UserDAO userDAO = new UserDAO();
+            ProductDAO productDAO = new ProductDAO();
 
             //Lấy tất cả setting
             if (service.equalsIgnoreCase("allSetting")) {
@@ -459,9 +463,56 @@ public class SettingController extends HttpServlet {
 
                 request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
             }
-            
-            if(service.equalsIgnoreCase("delete")){
-                
+
+            if (service.equalsIgnoreCase("delete")) {
+                String type = request.getParameter("type");
+                int id = Integer.parseInt(request.getParameter("id"));
+                if (type.equalsIgnoreCase("category")) {
+                    List<Product> products = productDAO.getProductByCategory(id);
+                    if (products.size() == 0) {
+                        categoryDAO.deleteCategory(id);
+                        List<Category> categoryList = categoryDAO.getAllCategory();
+                        request.setAttribute("categoryList", categoryList);
+                        request.setAttribute("settingType", type);
+                        request.getRequestDispatcher("jsp/settingList.jsp").forward(request, response);
+                    } else {
+                        Category category = categoryDAO.getCategoryById(id);
+                        request.setAttribute("type", type);
+                        request.setAttribute("valueCheck", category);
+                        request.setAttribute("duplicateMessage", "This category have a product!!");
+                        request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+                    }
+                } else if (type.equalsIgnoreCase("productType")) {
+                    List<Product> products = productDAO.getProductByType(id);
+                    if (products.size() == 0) {
+                        typeDAO.deleteType(id);
+                        List<ProductType> productTypes = typeDAO.getAllProductTypes();
+                        request.setAttribute("productTypes", productTypes);
+                        request.setAttribute("settingType", type);
+                        request.getRequestDispatcher("jsp/settingList.jsp").forward(request, response);
+                    } else {
+                        ProductType productType = typeDAO.getProductTypeById(id);
+                        request.setAttribute("type", type);
+                        request.setAttribute("valueCheck", productType);
+                        request.setAttribute("duplicateMessage", "This type have a product!!");
+                        request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+                    }
+                } else {
+                    List<User> users = userDAO.getUsersByRole(id);
+                    if (users.size() == 0) {
+                        userDAO.deleteUserRole(id);
+                        List<UserRole> userRoles = userDAO.getAllUserRole();
+                        request.setAttribute("userRoles", userRoles);
+                        request.setAttribute("settingType", type);
+                        request.getRequestDispatcher("jsp/settingList.jsp").forward(request, response);
+                    } else {
+                        UserRole role = userDAO.getRoleById(id);
+                        request.setAttribute("type", type);
+                        request.setAttribute("valueCheck", role);
+                        request.setAttribute("duplicateMessage", "This role have an user!!");
+                        request.getRequestDispatcher("jsp/addSetting.jsp").forward(request, response);
+                    }
+                }
             }
 
         } catch (Exception ex) {

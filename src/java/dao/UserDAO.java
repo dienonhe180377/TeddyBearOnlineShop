@@ -13,6 +13,60 @@ import java.util.List;
 
 public class UserDAO extends DBConnection {
     
+    //Delete a role
+    public int deleteUserRole(int id) throws Exception{
+        Connection conn = null;
+        PreparedStatement pre = null;
+        
+        String sql = "delete from UserRole where id = ?";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            pre.setInt(1, id);
+            int successCheck = pre.executeUpdate();
+            return successCheck;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            closeConnection(conn);
+            closePreparedStatement(pre);
+        }
+    }
+
+    //Get User By Role
+    public List<User> getUsersByRole(int roleId) throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        List<User> users = new ArrayList<>();
+        String sql = "select * from [User] where roleId = " + roleId;
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String userName = rs.getString("userName");
+                String profilePic = rs.getString("profilePic");
+                String email = rs.getString("email");
+                String phoneNumber = rs.getString("phoneNumber");
+                String location = rs.getString("location");
+                Date createdDate = rs.getDate("createdDate");
+                UserRole role = getRoleByUserID(id);
+                users.add(new User(id, userName, profilePic, email, phoneNumber, location, createdDate, role));
+            }
+            return users;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+
     //Update a role
     public int editUserRole(int id, String name, boolean status) throws Exception {
         Connection conn = null;
@@ -21,7 +75,7 @@ public class UserDAO extends DBConnection {
         String sql = "update UserRole\n"
                 + "set status = ? , roleName = ?\n"
                 + "where id = ?";
-        
+
         try {
             conn = getConnection();
             pre = conn.prepareStatement(sql);
@@ -98,7 +152,7 @@ public class UserDAO extends DBConnection {
         return null;
     }
 
-    public void updateUserAvatar(int userId, String avatarPath) throws SQLException {
+    public void updateUserAvatar(int userId, String avatarPath) throws SQLException, Exception {
         Connection conn = null;
         PreparedStatement pre = null;
         String sql = "UPDATE [User] SET profilePic = ? WHERE Id = ?";
@@ -111,6 +165,9 @@ public class UserDAO extends DBConnection {
             pre.executeUpdate();
         } catch (SQLException ex) {
             throw ex;
+        } finally {
+            closeConnection(conn);
+            closePreparedStatement(pre);
         }
     }
 
@@ -185,7 +242,7 @@ public class UserDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-    
+
     //Get all active user role
     public ArrayList<UserRole> getAllUserRole() throws Exception {
         Connection conn = null;
@@ -214,7 +271,7 @@ public class UserDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-    
+
     //Get all active user role
     public ArrayList<UserRole> getAllUserRoleByText(String text) throws Exception {
         Connection conn = null;
@@ -272,7 +329,7 @@ public class UserDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-    
+
     //Get all active user role
     public ArrayList<UserRole> getAllInactiveUserRole() throws Exception {
         Connection conn = null;
@@ -301,7 +358,7 @@ public class UserDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-    
+
     //Get Role By Id
     public UserRole getRoleById(int id) throws Exception {
         Connection conn = null;
@@ -520,9 +577,9 @@ public class UserDAO extends DBConnection {
         }
         return false;
     }
-    
+
     //Add New UserRole
-    public void addUserRole(String name , boolean status) throws Exception {
+    public void addUserRole(String name, boolean status) throws Exception {
         Connection conn = null;
         ResultSet rs = null;
         /* Result set returned by the sqlserver */
@@ -543,15 +600,14 @@ public class UserDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-    
-    
+
     //Check duplicated user role
-    public boolean checkRoleExisted(String content) throws Exception{
+    public boolean checkRoleExisted(String content) throws Exception {
         List<UserRole> roleExisted = getAllUserRole();
         for (int i = 0; i < roleExisted.size(); i++) {
             String role = roleExisted.get(i).getName().toLowerCase().trim();
             content = content.toLowerCase().trim();
-            if(role.equals(content)){
+            if (role.equals(content)) {
                 return true;
             }
         }
@@ -560,9 +616,8 @@ public class UserDAO extends DBConnection {
 
     public static void main(String[] args) throws Exception {
         UserDAO userDAO = new UserDAO();
-        UserRole roles = userDAO.getRoleById(1);
+        List<User> roles = userDAO.getUsersByRole(1);
         System.out.println(roles);
     }
-    
-    
+
 }

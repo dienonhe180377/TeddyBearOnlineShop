@@ -167,7 +167,7 @@ public class ProductDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-
+    
     public ArrayList<Product> getProductByCategory(int categoryID) throws Exception {
         Connection conn = null;
         ResultSet rs = null;
@@ -307,9 +307,7 @@ public class ProductDAO extends DBConnection {
 
     public static void main(String[] args) throws Exception {
         ProductDAO productDAO = new ProductDAO();
-        List<Product> products = productDAO.getAllProduct();
-        for (int i = 0; i < products.size(); i++) {
-            System.out.println(products.get(i).getName());
-        }
+        List<Product> products = productDAO.getProductByType(1);
+        System.out.println(products.size());
     }
 }

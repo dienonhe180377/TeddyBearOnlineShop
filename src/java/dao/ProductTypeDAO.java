@@ -22,6 +22,26 @@ public class ProductTypeDAO extends DBConnection {
     public ProductTypeDAO() {
     }
     
+    //Delete a product type
+    public int deleteType(int id) throws Exception{
+        Connection conn = null;
+        PreparedStatement pre = null;
+        
+        String sql = "delete from ProductType where id = ?";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            pre.setInt(1, id);
+            int successCheck = pre.executeUpdate();
+            return successCheck;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            closeConnection(conn);
+            closePreparedStatement(pre);
+        }
+    }
+    
     //Update a type
     public int editType(int id, String name, boolean status) throws Exception {
         Connection conn = null;
@@ -157,23 +177,32 @@ public class ProductTypeDAO extends DBConnection {
         return productTypes;
     }
 
-    public List<ProductType> getAllProductTypes() {
-        List<ProductType> productTypes = new ArrayList<>();
+    public List<ProductType> getAllProductTypes() throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ArrayList<ProductType> typeList = new ArrayList<>();
         String sql = "SELECT * FROM ProductType";
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet rs = statement.executeQuery();
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
             while (rs.next()) {
-                ProductType productType = new ProductType();
-                productType.setId(rs.getInt("id"));
-                productType.setName(rs.getString("name"));
-                productType.setStatus(rs.getBoolean("status"));
-                productTypes.add(productType);
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                boolean status = rs.getBoolean("status");
+                typeList.add(new ProductType(id, name, status));
             }
-        } catch (SQLException ex) {
-            System.out.println("Error retrieving product types: " + ex);
+            return typeList;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
         }
-        return productTypes;
     }
 
     public List<ProductType> getAllProductTypesByText(String text) throws Exception {
@@ -216,7 +245,7 @@ public class ProductTypeDAO extends DBConnection {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         ProductTypeDAO productTypeDAO = new ProductTypeDAO();
         List<ProductType> productTypes = productTypeDAO.getAllProductTypes();
         System.out.println(productTypes.size());

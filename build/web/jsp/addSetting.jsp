@@ -66,7 +66,7 @@
                     </div>
                     <button type="submit" class="save-btn">Lưu Cài Đặt</button>
                     <a class="cancel-btn" href="${contextPath}/SettingController?service=allSetting&type=${type}">Hủy</a>
-                <a class="cancel-btn" href="" <c:if test="${type == 'setting'}">hidden</c:if> >Xóa</a>
+                <a class="cancel-btn" href="${contextPath}/SettingController?service=delete&type=${type}&id=${valueCheck.id}" <c:if test="${type == 'setting' || empty valueCheck && empty settingCheck}">hidden</c:if> >Xóa</a>
                 <c:if test="${not empty duplicateMessage}">
                     <P style="color: red; float: right;">${duplicateMessage}</P>
                     </c:if>

@@ -99,4 +99,9 @@ public class User {
         this.role = role;
     }
 
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", userName=" + userName + ", profilePic=" + profilePic + ", email=" + email + ", phoneNumber=" + phoneNumber + ", location=" + location + ", createdDate=" + createdDate + ", role=" + role + '}';
+    }
+    
 }
