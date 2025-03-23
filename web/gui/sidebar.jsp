@@ -33,8 +33,8 @@
             </c:when>
             <c:when test="${userRole == 'manager'}">
                 <ul class="menu-list">
-                    <li><a href="${pageContext.request.contextPath}/manager/sales"><span class="check-icon">✓</span> Quản lý khách hàng</a></li>
-                    <li><a href="${pageContext.request.contextPath}/manager/product-manage"><span class="check-icon">✓</span> Quản lý sản phẩm</a></li>
+                    <li><a href="${pageContext.request.contextPath}/CustomerController?service=list"><span class="check-icon">✓</span> Quản lý khách hàng</a></li>
+                    <li><a href="${pageContext.request.contextPath}/product-manage"><span class="check-icon">✓</span> Quản lý sản phẩm</a></li>
                     <li><a href="${pageContext.request.contextPath}/manager/sales-report"><span class="check-icon">✓</span> Quản lý đơn hàng</a></li>
                     <li><a href="${pageContext.request.contextPath}/manager/employee-performance"><span class="check-icon">✓</span> Nhân viên</a></li>
                     <li><a href="${pageContext.request.contextPath}/admin/dashboard"><span class="check-icon">✓</span> Thống kê </a></li>

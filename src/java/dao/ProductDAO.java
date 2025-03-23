@@ -307,7 +307,7 @@ public class ProductDAO extends DBConnection {
 
     public static void main(String[] args) throws Exception {
         ProductDAO productDAO = new ProductDAO();
-        List<Product> products = productDAO.getProductByType(1);
+        List<Product> products = productDAO.getProductByCategory(18);
         System.out.println(products.size());
     }
 }

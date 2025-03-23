@@ -44,11 +44,6 @@
                                             </span>
                                         </h6>
                                     </div>
-                                    <div class="new">
-                                        <span>
-                                            New
-                                        </span>
-                                    </div>
                                 </a>
                             </div>
                         </div>

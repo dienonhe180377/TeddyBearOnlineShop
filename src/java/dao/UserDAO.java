@@ -13,6 +13,40 @@ import java.util.List;
 
 public class UserDAO extends DBConnection {
     
+    //Get all Customer
+    public ArrayList<User> getAllCustomer() throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ArrayList<User> users = new ArrayList<>();
+        String sql = "select * from [User] where roleId = 1";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String userName = rs.getString("userName");
+                String profilePic = rs.getString("profilePic");
+                String email = rs.getString("email");
+                String phoneNumber = rs.getString("phoneNumber");
+                String location = rs.getString("location");
+                Date createdDate = rs.getDate("createdDate");
+                UserRole role = getRoleByUserID(id);
+                users.add(new User(id, userName, profilePic, email, phoneNumber, location, createdDate, role));
+            }
+            return users;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
+    }
+    
     //Delete a role
     public int deleteUserRole(int id) throws Exception{
         Connection conn = null;
@@ -616,7 +650,7 @@ public class UserDAO extends DBConnection {
 
     public static void main(String[] args) throws Exception {
         UserDAO userDAO = new UserDAO();
-        List<User> roles = userDAO.getUsersByRole(1);
+        List<User> roles = userDAO.getAllUser();
         System.out.println(roles);
     }
 

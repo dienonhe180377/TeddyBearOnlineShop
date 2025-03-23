@@ -1,5 +1,5 @@
 ﻿
-
+delete from Category where id = ?
 
 select * from UserRole
 --UserRole insert
@@ -246,7 +246,7 @@ insert into Size values ('55cm',300,65000,39)
 insert into Size values ('70cm',300,85000,39)
 insert into Size values ('90cm',300,115000,39)
 
-select * from [User]
+select * from [User] where roleId = 1
 --User insert
 insert into [User](userName,email,phoneNumber,location,roleId,password)
 values('User1','User1@gmail.com','0334372394','To Huu',1,'Minh553311@')

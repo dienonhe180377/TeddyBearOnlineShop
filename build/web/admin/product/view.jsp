@@ -7,7 +7,11 @@
     <title>View Product</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body style="margin-top: 122px;">
+    
+    <jsp:include page="../../gui/header.jsp" />
+    <jsp:include page="../../gui/sidebar.jsp" />
+    
     <div class="container mt-5">
         <div class="row mb-3">
             <div class="col">
@@ -63,7 +67,7 @@
                                     <tr>
                                         <td>${size.name}</td>
                                         <td>${size.quantity}</td>
-                                        <td>$${size.price}</td>
+                                        <td>${size.price}₫</td>
                                     </tr>
                                 </c:forEach>
                             </tbody>

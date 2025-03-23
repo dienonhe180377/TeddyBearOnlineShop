@@ -34,7 +34,7 @@
         </style>
     </head>
     <body style="margin-top: 80px">
-        <jsp:include page="${contextPath}/gui/header.jsp"></jsp:include>
+        
           <jsp:include page="../gui/sidebar.jsp"></jsp:include>
             <div class="container mt-4" >
                 <h2 class="text-center">Products Management</h2>

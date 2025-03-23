@@ -5,6 +5,7 @@
 package dao;
 
 import entity.Category;
+import entity.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +20,41 @@ import java.util.List;
 public class CategoryDAO extends DBConnection {
 
     public CategoryDAO() {
+    }
+    
+    //Get Active Category where product > 0
+    public ArrayList<Category> getActiveCategoryHaveProduct() throws Exception{
+        Connection conn = null;
+        ResultSet rs = null;
+        /* Result set returned by the sqlserver */
+        PreparedStatement pre = null;
+        /* Prepared statement for executing sql queries */
+        ProductDAO productDAO = new ProductDAO();
+        ArrayList<Category> categoryList = new ArrayList<>();
+        String sql = "SELECT * FROM Category where [status] = 1";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                boolean status = rs.getBoolean("status");
+                ArrayList<Product> products = productDAO.getProductByCategory(id);
+                if(products.isEmpty()){
+                    continue;
+                } else {
+                    categoryList.add(new Category(id, name, status));
+                }
+            }
+            return categoryList;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
     }
     
     //Delete a category
@@ -288,7 +324,7 @@ public class CategoryDAO extends DBConnection {
     
     public static void main(String[] args) throws Exception {
         CategoryDAO categoryDAO = new CategoryDAO();
-        List<Category> categoryList = categoryDAO.getAllCategoryByText("a");
+        List<Category> categoryList = categoryDAO.getActiveCategoryHaveProduct();
         for (int i = 0; i < categoryList.size(); i++) {
             System.out.println(categoryList.get(i));
         }

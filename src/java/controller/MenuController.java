@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,7 +48,7 @@ public class MenuController extends HttpServlet {
             ProductTypeDAO typeDAO = new ProductTypeDAO();
 
             if (service.equalsIgnoreCase("productInformation")) {
-                ArrayList<Category> categoryList = categoryDAO.getAllActiveCategory();
+                ArrayList<Category> categoryList = categoryDAO.getActiveCategoryHaveProduct();
                 ArrayList<Product> productList = productDAO.getAllProduct();
                 ArrayList<Product> products = new ArrayList<>();
                 for (int i = 0; i < categoryList.size(); i++) {

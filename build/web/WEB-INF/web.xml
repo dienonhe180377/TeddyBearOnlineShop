@@ -4,6 +4,10 @@
         <servlet-name>SettingController</servlet-name>
         <servlet-class>controller.SettingController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CustomerController</servlet-name>
+        <servlet-class>controller.CustomerController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
         <url-pattern>/UserController</url-pattern>
@@ -11,6 +15,10 @@
     <servlet-mapping>
         <servlet-name>SettingController</servlet-name>
         <url-pattern>/SettingController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CustomerController</servlet-name>
+        <url-pattern>/CustomerController</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>jsp/menu.jsp</welcome-file>
