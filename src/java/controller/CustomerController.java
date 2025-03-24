@@ -44,6 +44,19 @@ public class CustomerController extends HttpServlet {
                 request.setAttribute("userList", customers);
                 request.getRequestDispatcher("jsp/customerList.jsp").forward(request, response);
             }
+            
+            if(service.equalsIgnoreCase("filter")){
+                String nameFilter = request.getParameter("nameFilter");
+                String emailFilter = request.getParameter("emailFilter");
+                String phoneFilter = request.getParameter("phoneFilter");
+                List<User> customers = userDao.getUserByFilter("1", nameFilter, emailFilter, phoneFilter);
+                request.setAttribute("userList", customers);
+                request.getRequestDispatcher("jsp/customerList.jsp").forward(request, response);
+            }
+            
+            if(service.equalsIgnoreCase("detail")){
+                
+            }
 
         } catch (Exception ex) {
             Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);

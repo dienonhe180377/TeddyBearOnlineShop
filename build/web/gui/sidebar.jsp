@@ -35,14 +35,14 @@
                 <ul class="menu-list">
                     <li><a href="${pageContext.request.contextPath}/CustomerController?service=list"><span class="check-icon">✓</span> Quản lý khách hàng</a></li>
                     <li><a href="${pageContext.request.contextPath}/product-manage"><span class="check-icon">✓</span> Quản lý sản phẩm</a></li>
-                    <li><a href="${pageContext.request.contextPath}/manager/sales-report"><span class="check-icon">✓</span> Quản lý đơn hàng</a></li>
+                    <li><a href="${pageContext.request.contextPath}/manager/orders"><span class="check-icon">✓</span> Quản lý đơn hàng</a></li>
                     <li><a href="${pageContext.request.contextPath}/manager/employee-performance"><span class="check-icon">✓</span> Nhân viên</a></li>
                     <li><a href="${pageContext.request.contextPath}/admin/dashboard"><span class="check-icon">✓</span> Thống kê </a></li>
                 </ul>
             </c:when>
             <c:when test="${userRole == 'seller' || userRole == 'sale'}">
                 <ul class="menu-list">
-                    <li><a href="${pageContext.request.contextPath}/seller/sales"><span class="check-icon">✓</span> Quản lý đơn hàng</a></li>
+                    <li><a href="${pageContext.request.contextPath}/seller/orders"><span class="check-icon">✓</span> Quản lý đơn hàng</a></li>
                     <li><a href="${pageContext.request.contextPath}/seller/product-details"><span class="check-icon">✓</span> Quản lý sản phẩm</a></li>
                     <li><a href="${pageContext.request.contextPath}/seller/sales-report"><span class="check-icon">✓</span> Thống kê</a></li>
                     <li><a href="${pageContext.request.contextPath}/seller/product-b"><span class="check-icon">✓</span> Product B</a></li>

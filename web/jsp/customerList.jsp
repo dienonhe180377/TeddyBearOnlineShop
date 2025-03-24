@@ -33,7 +33,7 @@
                         <div style="margin-bottom: 20px;">
                             <%-- Start search form --%>
 
-                            <form action="${contextPath}/UserController" class="navbar-form" method="get">
+                            <form action="${contextPath}/CustomerController" class="navbar-form" method="get">
 
                                 <%--By name--%>
                                 <label>By Name</label><br>
@@ -74,7 +74,6 @@
                                     <thead>
                                         <%-- Headers of Table--%>
                                         <tr style="background-color: #F0D8D5;">
-                                            <th>User Id</th>
                                             <th>User Name</th>
                                             <th>Email</th>
                                             <th>Mobile</th>
@@ -85,12 +84,11 @@
                                     <tbody>
                                         <c:forEach var="users" items="${userList}">
                                             <tr>
-                                                <td>${users.id}</td>
                                                 <td>${users.userName}</td>
                                                 <td>${users.email}</td>
                                                 <td>${users.phoneNumber}</td>
                                                 <td>${users.createdDate}</td>
-                                                <td><a href=""><div class="btn btn-success">Detail</div></a></td>
+                                                <td><a href="${contextPath}/jsp/customerDetail.jsp"><div class="btn btn-success">Detail</div></a></td>
                                             </tr>
                                         </c:forEach>
                                     </tbody>

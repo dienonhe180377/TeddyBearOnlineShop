@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO extends DBConnection {
-    
+
     //Get all Customer
     public ArrayList<User> getAllCustomer() throws Exception {
         Connection conn = null;
@@ -46,12 +46,12 @@ public class UserDAO extends DBConnection {
             closeConnection(conn);
         }
     }
-    
+
     //Delete a role
-    public int deleteUserRole(int id) throws Exception{
+    public int deleteUserRole(int id) throws Exception {
         Connection conn = null;
         PreparedStatement pre = null;
-        
+
         String sql = "delete from UserRole where id = ?";
         try {
             conn = getConnection();
@@ -646,6 +646,144 @@ public class UserDAO extends DBConnection {
             }
         }
         return false;
+    }
+
+    public List<User> getAllUsersWithParam(String searchParam, Integer role) throws Exception {
+        List<User> users = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
+        StringBuilder query = new StringBuilder("select * from [User] u where (roleId = 3 or roleId = 2)");
+
+        PreparedStatement preparedStatement;
+        if (searchParam != null && !searchParam.trim().isEmpty()) {
+            query.append(" AND (u.userName LIKE ? OR u.email LIKE ? OR u.phoneNumber LIKE ? ) ");
+            String searchPattern = "%" + searchParam.trim() + "%";
+            list.add(searchPattern);  // For fullName
+            list.add(searchPattern);  // For email
+            list.add(searchPattern);  // For account
+        }
+
+        if (role != null) {
+            query.append(" AND u.roleId = ? ");
+            list.add(role);
+        }
+
+        query.append(" ORDER BY u.id DESC ");
+        preparedStatement = connection.prepareStatement(query.toString());
+
+        // Map the parameters
+        mapParams(preparedStatement, list);
+        try (ResultSet rs = preparedStatement.executeQuery()) {
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String userName = rs.getString("userName");
+                String profilePic = rs.getString("profilePic");
+                String email = rs.getString("email");
+                String phoneNumber = rs.getString("phoneNumber");
+                String location = rs.getString("location");
+                Date createdDate = rs.getDate("createdDate");
+                UserRole roles = getRoleByUserID(id);
+                users.add(new User(id, userName, profilePic, email, phoneNumber, location, createdDate, roles));
+            }
+            return users;
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+// In your UserDAO class
+
+    public void updateUser(int userId, String userName, String email, String phone, String location, int role) throws Exception {
+        Connection conn = null;
+        PreparedStatement pre = null;
+        String sql = "UPDATE [User] SET userName = ?, email = ?, phoneNumber = ?, location = ?, roleId = ? WHERE id = ?";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            pre.setString(1, userName);
+            pre.setString(2, email);
+            pre.setString(3, phone);
+            pre.setString(4, location);
+            pre.setInt(5, role);
+            pre.setInt(6, userId);
+            pre.executeUpdate();
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
+    public void mapParams(PreparedStatement ps, List<Object> args) throws SQLException {
+        int i = 1;
+        for (Object arg : args) {
+            if (arg instanceof java.util.Date) {
+                ps.setTimestamp(i++, new Timestamp(((java.util.Date) arg).getTime()));
+            } else if (arg instanceof Integer) {
+                ps.setInt(i++, (Integer) arg);
+            } else if (arg instanceof Long) {
+                ps.setLong(i++, (Long) arg);
+            } else if (arg instanceof Double) {
+                ps.setDouble(i++, (Double) arg);
+            } else if (arg instanceof Float) {
+                ps.setFloat(i++, (Float) arg);
+            } else {
+                ps.setString(i++, (String) arg);
+            }
+
+        }
+    }
+
+    public List<User> Paging(List<User> users, int page, int pageSize) {
+        int fromIndex = (page - 1) * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, users.size());
+
+        if (fromIndex > toIndex) {
+            // Handle the case where fromIndex is greater than toIndex
+            fromIndex = toIndex;
+        }
+
+        return users.subList(fromIndex, toIndex);
+    }
+
+    /**
+     * Gets all users with customer role
+     *
+     * @return List<User> List of customers
+     * @throws Exception if a database error occurs
+     */
+    public List<User> getAllCustomers() throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement pre = null;
+        List<User> customers = new ArrayList<>();
+
+        // Find users with roleId = 2 (customer role)
+        String sql = "SELECT * FROM [User] WHERE roleId = 1";
+        try {
+            conn = getConnection();
+            pre = conn.prepareStatement(sql);
+            rs = pre.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String userName = rs.getString("userName");
+                String profilePic = rs.getString("profilePic");
+                String email = rs.getString("email");
+                String phoneNumber = rs.getString("phoneNumber");
+                String location = rs.getString("location");
+                Date createdDate = rs.getDate("createdDate");
+
+                // Get the user role object using existing helper method
+                UserRole role = getRoleByUserID(id);
+
+                customers.add(new User(id, userName, profilePic, email, phoneNumber, location, createdDate, role));
+            }
+            return customers;
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pre);
+            closeConnection(conn);
+        }
     }
 
     public static void main(String[] args) throws Exception {

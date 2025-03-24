@@ -447,6 +447,15 @@ public class OrderDAO extends DBConnection {
         }
     }
 
+    public void updateSizeStock(int sizeId, int quantity) throws Exception {
+        String sql = "UPDATE Size SET quantity = quantity - ? WHERE id = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, quantity);
+            ps.setInt(2, sizeId);
+            ps.executeUpdate();
+        }
+    }
+
     public static void main(String[] args) {
         OrderDAO o = new OrderDAO();
         try {
